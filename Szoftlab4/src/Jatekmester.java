@@ -1,5 +1,5 @@
 
 public class Jatekmester {
-	int c;
+	int b;
 	int megtobbC;
 }
