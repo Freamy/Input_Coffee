@@ -16,7 +16,7 @@ public class Robot implements Mezonallo{
 		megtettUt = 0;
 	}
 	
-	//Kész
+	//K�sz
 	public void lep(Sebesseg valtozas, boolean olajfoltotTesz, boolean ragacsotTesz){
 		System.out.println("// Ha volt rá igény akkor lerak olajfoltot vagy ragacsot aztán leregisztrál a mezőről.");
 		System.out.println("// Meghívja a sebesség hozzáad függvényét és a robot ugrik függvényét.");
