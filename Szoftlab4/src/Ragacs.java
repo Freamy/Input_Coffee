@@ -4,6 +4,9 @@ public class Ragacs implements Mezonallo{
 	
 	public Ragacs(Mezo mezo){
 		this.mezo = mezo;
+		System.out.println("[ragacs: Ragacs] ---  beregisztral(ragacs)  ---> [mezo: Mezo]");
+		mezo.beregisztral(this);
+		System.out.println("[ragacs: Ragacs]<---return beregisztral ---[mezo: Mezo]");
 	}
 	
 	@Override

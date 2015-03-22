@@ -1,9 +1,12 @@
 public class Olajfolt implements Mezonallo{
-	
+
 	private Mezo mezo;
 	
 	public Olajfolt(Mezo mezo){
 		this.mezo = mezo;
+		System.out.println("[olajfolt: Olajfolt] --- beregisztral(olajfolt) ---> [mezo: Mezo]");
+		mezo.beregisztral(this);
+		System.out.println("[olajfolt: Olajfolt] <--- return beregisztral --- [mezo: Mezo]");
 	}
 	
 	@Override
