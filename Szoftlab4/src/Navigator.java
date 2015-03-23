@@ -1,12 +1,24 @@
-import java.util.Collection;
+import java.util.ArrayList;
 
 
 public class Navigator {
 	
-	Collection<Mezo> terkep;
+	ArrayList<Mezo> terkep;
+	
+	public Navigator(){
+		terkep = new ArrayList<Mezo>();
+		terkep.add(new Mezo());
+		terkep.add(new Mezo());
+		terkep.add(new Mezo());
+	}
+	
+	public Mezo getMezo(int id){
+		if(id < 0 && id > terkep.size()) throw new IndexOutOfBoundsException();
+		return terkep.get(id);
+	}
 	
 	Mezo athelyez(Mezo honnan, Sebesseg sebesseg){
-		Mezo hova = null;
+		Mezo hova = terkep.get(terkep.indexOf(honnan)+1);
 		System.out.println("[navigator: Navigator]");
 		System.out.println("A honnan és a sebesseg paraméterekbõl kiszámolja, hogy melyik mezõre érkezik a robot és azzal visszatér.");
 		System.out.println("[navigator: Navigator] <--- return athelyez: hova ---");
