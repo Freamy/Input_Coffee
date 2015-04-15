@@ -4,6 +4,7 @@ public class Olajfolt implements Mezonallo{
 	
 	public Olajfolt(Mezo mezo){
 		this.mezo = mezo;
+		mezo.beregisztral(this);
 	}
 	
 	@Override

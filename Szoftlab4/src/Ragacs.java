@@ -4,6 +4,7 @@ public class Ragacs implements Mezonallo{
 	
 	public Ragacs(Mezo mezo){
 		this.mezo = mezo;
+		mezo.beregisztral(this);
 	}
 	
 	@Override
