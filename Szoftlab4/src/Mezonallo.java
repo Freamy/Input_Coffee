@@ -9,4 +9,14 @@ public interface Mezonallo {
 	
 	void robotraLeptem(Robot kireLeptem);
 	
+	void kisrobotraLeptem(Kisrobot kireLeptem);
+	
+	boolean szennyezodesVagyok();
+	
+	Mezo getpozicio();
+	
+	void setpozicio(Mezo m);
+	
+	void tick();
+	
 }
