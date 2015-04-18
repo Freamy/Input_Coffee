@@ -20,7 +20,7 @@ public class Robot implements Mezonallo{
 		this.olajDb = 5;
 		this.megtettUt = 0;
 		this.ugrottMar = false;
-		sebesseg = new Sebesseg();
+		sebesseg = new Sebesseg(0,0);
 		mezo.beregisztral(this);
 	}
 	
@@ -102,7 +102,7 @@ public class Robot implements Mezonallo{
 	// a sebessége a két robot sebességének vektorátalaga lesz.
 	// Az ugró robotra meghívódik a vesztettél attribútum.
 	public void nyertel(Robot robot){
-		atlag(robot.getsebesseg());
+		sebesseg.atlag(robot.getsebesseg());
 		robot.vesztettel();
 	}
 	
@@ -110,6 +110,8 @@ public class Robot implements Mezonallo{
 	@Override
 	public void ragacsraLeptem(Ragacs kireLeptem){
 		sebesseg.felez();
+		int kopas = kireLeptem.getkopas() - 1;
+		kireLeptem.setkopas(kopas);
 	}
 	
 	// A robot ragacsra lépett, a sebesség változójának modosithato attribútumát beállítja hamisra.
@@ -132,7 +134,7 @@ public class Robot implements Mezonallo{
 	@Override
 	public void robotraLeptem(Robot kireLeptem){
 		if(hasonlit(kireLeptem.getsebesseg())){
-			atlag(kireLeptem.getsebesseg());
+			sebesseg.atlag(kireLeptem.getsebesseg());
 			kireLeptem.vesztettel();
 		}
 		else {
