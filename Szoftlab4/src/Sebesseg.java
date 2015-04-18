@@ -1,4 +1,3 @@
-
 public class Sebesseg {
 	
 	private int x;
