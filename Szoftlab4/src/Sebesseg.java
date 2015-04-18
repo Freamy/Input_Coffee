@@ -1,4 +1,3 @@
-
 public class Sebesseg {
 	
 	private int x;
@@ -87,3 +86,5 @@ public class Sebesseg {
 		//Például ha lenne súrlódás, ami adott idõközönként csökkenti a sebességet az ide kerülhetne.
 	}
 }
+
+//Teszt komment.
