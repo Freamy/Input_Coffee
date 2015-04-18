@@ -24,28 +24,29 @@ public class Jatekmester {
 				
 				int index = 0;
 				int kezdo = 0;
-				int tobbparamater = 0;
+				int tobbparameter = 0;
+				String parancs;
 				String[] parameterek = new String[10];
 				
-				for(char c : bemenet){
+				for(index=0; index<bemenet.length(); index++){
+					char c = bemenet.charAt(index);
 					if(c=='('){ //Ha zárójelet is beolvastunk, akkor paraméter is van két részre bontjuk
-						String parancs = bemenet.substring(0, index); //Parancs részre, ami alapján értelnezzük a bemenetet.
+						parancs = bemenet.substring(0, index); //Parancs részre, ami alapján értelnezzük a bemenetet.
 						kezdo = index + 1;
 					}
 					
 					else if(c==',' || c==')'){ //illetve paraméter részre, amiket tömben tárolunk, mert lehet több is (max 10)
-						parameter[tobbparameter] = bemenet.substring(kezdo, index); 
+						parameterek[tobbparameter] = bemenet.substring(kezdo, index); 
 						tobbparameter++;
 						kezdo = index + 1;
 						if(c==')') break;
 					}
-					index++;
 				}
 				
 				if(parancs.equals("Start")){ //Elindítja a játékot
 					running = true;
 				}
-				else if(paranacs.equals("Stop")){ //Megállítja a játékot, startal újraindítható
+				else if(parancs.equals("Stop")){ //Megállítja a játékot, startal újraindítható
 					running = false;
 				}
 				else if(parancs.equals("Exit")){ //Leáll a program futása
@@ -57,38 +58,33 @@ public class Jatekmester {
 				}
 				else if(parancs.equals("AdatokMindenki") && running){
 					
-					ArrayList<Mezonallo> elemek;
-					elemek = navigator.getOsszesElem(); //Visszaadja az összes elemet, ami a pályán van és egy listába menti.
+					//Ha a lenti TODO-k kész vannak az alábbi sor kommentezése feloldható:
+					//navigator.adatKiirasa("");
 					
-					for(Mezonallo m : elemek){ //Itt hogy kéne kíírni?
-						
-					}
+					// TODO:
+					// Navigator: adatKiirasa(String) Kiírja a saját adatait (ha a param =  ""), majd ha param= " meghívja minden Mezõre az adatKiirasa(param) függvényt ami benne van.
+					// Mezo: adatKiirasa(String param) Kiírja a saját adatait (ha a param =  a nevével, vagy "") majd meghívja minden Mezonallora az adatKiirasa(param) függvényt ami benne van.
+					// Mezonallok: adatKiirasa(String param) Kiírja a saját adatait (ha a param = a nevével, vagy "").
 				}
-				else if(parancs.equals("AdatokNev") && runnning){
+				else if(parancs.equals("AdatokNev") && running){
 					
-					String uj = parameter[0];
-					ArrayList<Mezonallo> elemek;
-					elemek = navigator.getOsszesElem();
 					
-					for(Mezonallo m : elemek){
-						String vizsgalt = (String) m;
-						if(vizsgalt.equals(uj)){ //Itt sem tudom, hogy milyen adatokat kéne kíírni és hogyan.
-							
-						}
-					}
+					//Ha a függvény implementálva van az alábbi sor kommentezése feloldható:
+					//navigator.adatKiirasa(parameterek[0]);
+					
 				}
-				else if(parancs.equals("AdatokMezo") && runnning){
+				else if(parancs.equals("AdatokMezo") && running){
 					
-					String uj = parameter[0];
-					ArrayList<Mezonallo> elemek;
-					elemek = navigator.getOsszesElem();
+					int x = Integer.parseInt(parameterek[0]);
+					int y = Integer.parseInt(parameterek[1]);
 					
-					for(Mezonallo m : elemek){
-						String vizsgalt = (String) m.getpozicio();
-						if(vizsgalt.equals(uj)){ //Itt sem tudom, hogy milyen adatokat kéne kíírni és hogyan.
-							
-						}
-					}
+					//Ha a lenti TODO-k kész vannak az alábbi sor kommentezése feloldható:
+					//navigator.adatKiirasa(x,y);
+					
+					//TODO:
+					//Navigator: adatKiirasa(int x, int y) meghívja az (x,y) kordinátán lévõ mezõre az adatKiirasa("") függvényt.
+					
+					
 				}
 				else if(parancs.equals("Torol") && running){ // Törli a pályán lévõ összes elemet
 					

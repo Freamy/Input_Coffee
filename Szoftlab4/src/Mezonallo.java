@@ -16,7 +16,10 @@ public interface Mezonallo {
 	Mezo getpozicio();
 	
 	void setpozicio(Mezo m);
+
+	void adataimKiirasa();
 	
 	void tick();
+
 	
 }

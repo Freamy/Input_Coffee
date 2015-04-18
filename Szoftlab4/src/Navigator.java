@@ -32,4 +32,5 @@ public class Navigator {
 		System.out.println("[navigator: Navigator] <--- return kulsoMezo: kulso ---");
 		return kulso;
 	}
+	
 }
