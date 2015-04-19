@@ -1,4 +1,3 @@
-
 public interface Mezonallo {
 	
 	void jottValaki(Mezonallo joveveny);
@@ -13,13 +12,11 @@ public interface Mezonallo {
 	
 	boolean szennyezodesVagyok();
 	
-	Mezo getpozicio();
+	Mezo getPozicio();
 	
-	void setpozicio(Mezo m);
-
-	void adataimKiirasa();
+	void setPozicio(Mezo m);
+	
+	String getNev();
 	
 	void tick();
-
-	
 }

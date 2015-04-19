@@ -1,175 +1,231 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 public class Robot implements Mezonallo{
 	private Mezo pozicio;
 	private Navigator navigator;
 	private Sebesseg sebesseg;
+	private boolean vesztettem;
+	private int ragacsDb;
+	private int olajDb;
+	private double megtettUt;
+	private boolean ugrottMar;
+	
+	private String nev;
 	
 	public Robot(Mezo mezo, Navigator navigator){
 		this.pozicio = mezo;
 		this.navigator = navigator;
-		
-		sebesseg = new Sebesseg();
+		this.vesztettem = false;
+		this.ragacsDb = 5;
+		this.olajDb = 5;
+		this.megtettUt = 0;
+		this.ugrottMar = false;
+		sebesseg = new Sebesseg(0,0);
 		mezo.beregisztral(this);
 	}
 	
-	//KÃ©sz
+	// Ha az olajfoltotTesz igaz, akkor meghívja az olajfoltotTesz függvényét,
+	// ha pedig a ragacsotTesz igaz, akkor meghívja a ragacsotTesz függvényét.
+	// Ezután meghívja a sebessegvaltoztatas függvénye, aminek
+	// átadja a paraméterül kaporr valtozas -t. Ha ez is kész akkor meghívódik az ugrik függvény.
 	public void lep(Sebesseg valtozas, boolean olajfoltotTesz, boolean ragacsotTesz){
-		System.out.println("// Ha volt rá igény akkor lerak olajfoltot vagy ragacsot aztán leregisztrál a mezõrõll.");
-		System.out.println("// Meghívja a sebesség hozzáad függvényt és a robot ugrik függvényét.");
 		if(olajfoltotTesz){
-			System.out.println("[robot: Robot]--->   olajfoltotTesz()  --->[robot: Robot]");
 			olajfoltotTesz();
-			System.out.println("[robot: Robot]<---return olajfoltotTesz<---[robot: Robot]");
+			olajDb--;
 		}
 		else if(ragacsotTesz){
-			System.out.println("[robot: Robot]--->   ragacsotTesz()  --->[robot: Robot]");
 			ragacsotTesz();
-			System.out.println("[robot: Robot]<---return ragacsotTesz<---[robot: Robot]");
+			ragacsDb--;
 		}
-		System.out.println("[robot: Robot]--->leregisztral(robot)--->[pozicio: Mezo]");
 		pozicio.leregisztral(this);
-		System.out.println("[robot: Robot]<---return leregisztral<---[pozicio: Mezo]");
-		System.out.println("[robot: Robot]--->hozzaad(Sebesseg valtozas)--->[sebesseg: Sebesseg]");
 		sebesseg.hozzaad(valtozas);
-		System.out.println("[robot: Robot]<---      return hozzaad      <---[sebesseg: Sebesseg]");
-		System.out.println("[robot: Robot]--->   ugrik()  --->[robot: Robot]");
 		ugrik();
-		System.out.println("[robot: Robot]<---return ugrik<---[robot: Robot]");
+		ugrottMar = true;
 	}
 
-	//Szerintem ez a fÃ¼ggvÃ©ny nem szÃ¼ksÃ©ges.
+	//Szerintem ez a függvény még mindig nem szükséges.
 	public void sebessegvaltozas(Sebesseg valtozas){}
 	
-	//Meggtett Ãºt kiszÃ¡mÃ­tÃ¡sa mÃ©g hiÃ¡nyzik, SebessÃ©g osztÃ¡ly get() fÃ¼ggvÃ©nyei kellenek hozzÃ¡
-	public void ugrik(){
-		System.out.println("// Meghívja a Navigátor athelyez függvényét, a visszatérési értékként kapott pozíciót beállítja");
-		System.out.println("// az új pozíciójának. Sebességét módosíthatóvá teszi. A Navigátor kulsomezo függvénye segítségével");
-		System.out.println("// leelenõrzi hogy kûlsõ mezõre lépett-e: ");
-		System.out.println("//    ha igen akkor beállítja a vesztettem attríbútumát igazra.");
-		System.out.println("//    ha nem akkor beregisztrál arra a mezõre ahová kerûlt.");
-		
-		System.out.println("[robot: Robot]--->athelyez(pozicio,sebesseg)--->[navigator: Navigator]");
+	// Letesz egy ragacsot az aktuális helyére.
+	public void ragacsotTesz(){
+		Ragacs ragacs = new Ragacs(pozicio, 5);
+		pozicio.beregisztral(ragacs);
+	}
+	
+	// Letesz egy olajfoltot az aktuális helyére.
+	public void olajfoltotTesz(){
+		Olajfolt olajfolt = new Olajfolt(pozicio, 5);
+		pozicio.beregisztral(olajfolt);
+	}
+	
+	// Meghívja a Navigátor athelyez függvényét, a visszatérési értékként kapott pozíciót beállítja
+	// az új pozíciójának. Sebességét módosíthatóvá teszi. A Navigátor kulsomezo függvénye segítségével
+	// leelenõrzi hogy kûlsõ mezõre lépett-e: 
+	//    ha igen akkor beállítja a vesztettem attríbútumát igazra.
+	//    ha nem akkor beregisztrál arra a mezõre ahová került.
+	public void ugrik(){	
 		pozicio = navigator.athelyez(pozicio,sebesseg);
-		System.out.println("[robot: Robot]<---         Mezo hova        <---[navigator: Navigator]");
-		
-		System.out.println("[robot: Robot]--->modosithato()--->[sebesseg: Sebesseg]");
 		sebesseg.modosithato();
-		System.out.println("[robot: Robot]<---modosithato()<---[sebesseg: Sebesseg]");
-		
-		System.out.println("[robot: Robot]--->kulsomezo(pozicio)--->[navigator: Navigator]");
 		if(navigator.kulsoMezo(pozicio)){
-			System.out.println("[robot: Robot]<---        igaz      <---[navigator: Navigator]");
-			System.out.println("// BeÃ¡llÃ­tja a robot vesztettem attribÃºtumÃ¡t igazra.");
+			vesztettem = true;
 		}
 		else{
-			System.out.println("[robot: Robot]<---       hamis      <---[navigator: Navigator]");
-			System.out.println("[robot: Robot]--->beregisztral(robot)--->[pozicio: Mezo]");
 			pozicio.beregisztral(this);
-			System.out.println("[robot: Robot]<---return beregisztral<---[pozicio: Mezo]");
 		}
-		//Ehhez kellenek mÃ©g a SebessÃ©g osztÃ¡ly get() fÃ¼ggvÃ©nyei.
 	}
 	
-	//KÃ©sz
-	public void ragacsotTesz(){
-		System.out.println("// Letesz egy ragacsot az aktuális helyére.");
-		System.out.println("? Maradt ragacs a roboton?: (y/n)");
-		String bemenet = bemenetBekerese();
-		if(bemenet.equals("y")){
-			Ragacs ragacs = new Ragacs(navigator.getMezo(0));
-			System.out.println("[robot Robot]--->beregisztral(ragacs)--->[pozicio Mezo]");
-			pozicio.beregisztral(ragacs);
-			System.out.println("[robot Robot]<---return beregisztral <---[pozicio Mezo]");
-		}
-		else
-			System.out.println("// Sajnálom, elfogyott a ragacsod.");
+
+	
+	// Az ellökött robot sebessége megváltozik az õt ellökö robot sebességének a felére.
+	// A sebesség megváltoztatása és az érkezési mezõ kiszámítása után
+	// meghívja magára az ugrik függvényt.
+	//		public void lokodik(Sebesseg ujsebesseg){
+	//			this.sebesseg = ujsebesseg;
+	//			pozicio.leregisztral(this);
+	//			ugrik();
+	//		}
+	
+	// A sebességek összehasonlításában vesztes robotra hívják meg ezt a függvényt.
+	// A robot akire meghívják leregisztrál a mezõrõl.
+	public void vesztettel(){
+		pozicio.leregisztral(this);
+		vesztettem = true;
 	}
 	
-	//KÃ©sz
-	public void olajfoltotTesz(){
-		System.out.println("// Letesz egy olajfoltot az aktuális helyére");
-		System.out.println("? Maradt olaj a roboton?: (y/n)");
-		String bemenet = bemenetBekerese();
-		if(bemenet.equals("y")){
-			Olajfolt olajfolt = new Olajfolt(navigator.getMezo(0));
-			System.out.println("[robot Robot]--->beregisztral(olajfolt)--->[pozicio Mezo]");
-			pozicio.beregisztral(olajfolt);
-			System.out.println("[robot Robot]<---return beregisztral <---[pozicio Mezo]");
-		}
-		else
-			System.out.println("// Sajnálom, elfogyott a olajfoltod.");
+	// A sebességek összehasonlításában az a robot nyert, akire ráugrottak,
+	// a sebessége a két robot sebességének vektorátalaga lesz.
+	// Az ugró robotra meghívódik a vesztettél attribútum.
+	public void nyertel(Robot robot){
+		sebesseg.atlag(robot.getsebesseg());
+		robot.vesztettel();
 	}
 	
-	//KÃ©sz, visszatÃ©rÃ©si Ã©rtÃ©k alapjÃ¡n kell a JÃ¡tÃ©kmesternek eljÃ¡rnia.
-	public boolean getVesztett(){
-		System.out.println("// Visszaadja hogy vesztett-e.");
+	// A robot ragacsra lépett, a sebessége lefelezõdik.
+	@Override
+	public void ragacsraLeptem(Ragacs kireLeptem){
+		sebesseg.felez();
+		int kopas = kireLeptem.getkopas() - 1;
+		kireLeptem.setkopas(kopas);
+	}
+	
+	// A robot ragacsra lépett, a sebesség változójának modosithato attribútumát beállítja hamisra.
+	@Override
+	public void olajfoltraLeptem(Olajfolt kireLeptem){
+		sebesseg.modosithatatlan();
+	}
+	
+	// A paraméterül kapott kisrobot mezo attribútumának
+	// meghívja a leregisztrál függvényét és a Kisrobot megsemmisül.
+	public void kisrobotraLeptem(Kisrobot kireLeptem){
+		pozicio.leregisztral(kireLeptem);
+	}
+	
+	// Ilyenkor a robot a kireLeptem robottal ütközött.
+	// Meghívódik a robot sebesseg attribútumának a hasonlít függvénye, hogy összehasonlítsa
+	// a saját sebességét a kireLeptem robotéval.
+	// A gyõztes sebessége a két robot sebességének vektorátlaga lesz, a vesztes leregisztrál
+	// a mezõrõl és beállítja a saját vesztettem attribútúmának értékét igazra.
+	@Override
+	public void robotraLeptem(Robot kireLeptem){
+		if(sebesseg.hasonlit(kireLeptem.getsebesseg())){
+			sebesseg.atlag(kireLeptem.getsebesseg());
+			kireLeptem.vesztettel();
+		}
+		else {
+			kireLeptem.nyertel(this);
+		}	
+	}
+	
+	// A mezõn ahol a robot áll, jött valaki. A robot szól neki hogy robotra léptél.
+	@Override
+	public void jottValaki(Mezonallo joveveny){
+		joveveny.robotraLeptem(this);
+	}
+	
+	// Visszatér hamis értékkel.
+	public boolean szennyezodesVagyok(){
 		return false;
 	}
 	
-	//KÃ©sz
-	public void lokodik(Sebesseg ujsebesseg){
-		System.out.println("// Az ellökött robot sebessége megváltozik az õt ellökö robot sebességének a felére.");
-		System.out.println("// A sebesség megváltoztatása és az érkezési mezõ kiszámítása után");
-		System.out.println("// meghívja magára az ugrik függvényt.");
-		this.sebesseg = ujsebesseg;
-		System.out.println("[kireLeptem Robot]--->leregisztral(kireLeptem)--->[pozicio Mezo]");
-		pozicio.leregisztral(this);
-		System.out.println("[kireLeptem Robot]<---  return leregisztral  <---[pozicio Mezo]");
-		System.out.println("[kireLeptem Robot]--->   ugrik()  --->[kireLeptem Robot]");
-		ugrik();
-		System.out.println("[kireLeptem Robot]<---return ugrik<---[kireLeptem Robot]");
+	// Visszatér a sebesseg attribútummal.
+	Sebesseg getsebesseg(){
+		return sebesseg;
 	}
 	
-	//KÃ©sz
+	// Beállítja a sebesség attribútumot.
+	void setSebesseg(Sebesseg sebesseg){
+		this.sebesseg = sebesseg;
+	}
+	
+	// Visszatér a mezo attribútummal.
+	public Mezo getPozicio(){
+		return pozicio;
+	}
+	
+	// Beállítja a mezo attribútumot.
+	public void setPozicio(Mezo poz){
+		this.pozicio = poz;
+	}
+	
+	// int getkorSzam(){return 0;}
+	
+	// A függvény visszatérési értéke a vesztettem attribútum értéke.
+	// Igaz: már vesztett, kikerült már a játékból. 
+	// Hamis: még játékban van.
+	public boolean getVesztett(){
+		return vesztettem;
+	}
+	
+	// Beállítja a vesztettem attribútumot.
+	void setVesztett(boolean vesztett){
+		this.vesztettem = vesztett;
+	}
+	
+	// Visszatér a ragacsDb attribútummal.
+	public int getRagacsDb(){
+		return ragacsDb;
+	}
+	
+	// Beállítja a ragacsDb attribútumot.
+	public void setRagacsDb(int darab){
+		this.ragacsDb = darab;
+	}
+	
+	// Visszatér az olajDb attribútummal.
+	public int getOlajDb(){
+		return olajDb;
+	}
+	
+	// Beállítja a olajDb attribútumot.
+	public void setOlajDb(int darab){
+		this.olajDb = darab;
+	}
+	
+	// Visszatér a megtettUt attribútummal.
+	public double getmegtettUt(){
+		return megtettUt;
+	}
+	
+	// Beállítja a megtettUt attribútumot.
+	public void setmegtettUt(double tav){
+		this.megtettUt = tav;
+	}
+	
+	// Új kört kezd.
+	public void tick(){
+		ugrottMar = false;
+	}
+
+	public String getNev() {
+		return nev;
+	}
+
+	public void setNev(String nev) {
+		this.nev = nev;
+	}
+
 	@Override
-	public void ragacsraLeptem(Ragacs kireLeptem){
-		System.out.println("// Az aktuális sebességet lefelezi a felére és ehhez a");
-		System.out.println("// Sebesseg osztálynak a felez metódusát hívja meg.");
-		System.out.println("[robot Robot]--->   lefelez()  --->[sebesseg Sebesseg]");
-		sebesseg.felez();
-		System.out.println("[robot Robot]<---return lefelez<---[sebesseg Sebesseg]");
+	public void setkopas(Integer kop) {
+		// TODO Auto-generated method stub
+		
 	}
 	
-	//KÃ©sz
-	@Override
-	public void olajfoltraLeptem(Olajfolt kireLeptem){
-		System.out.println("// Beállítja a sebességének valtoztathato attribútumát hamisra.");
-		System.out.println("[robot Robot]--->   modosithatatlan()  --->[sebesseg Sebesseg]");
-		sebesseg.modosithatatlan();
-		System.out.println("[robot Robot]<---return modosithatatlan<---[sebesseg Sebesseg]");
-	}
-	
-	//MÃ©g kell a SebessÃ©g fÃ¼ggvÃ©ny get() (esetleg set()) fÃ¼ggvÃ©nye
-	@Override
-	public void robotraLeptem(Robot kireLeptem){
-		System.out.println("// Ez hívódik meg ha a robot robottal találkozik.");
-		//Itt mÃ©g lesz nÃ©hÃ¡ny fÃ¼ggvÃ©ny.
-		Sebesseg ujsebesseg = new Sebesseg();
-		System.out.println("[robot Robot]--->lokodik(ujsebesseg)--->[kireLeptem: Robot]");
-		kireLeptem.lokodik(ujsebesseg);
-		System.out.println("[robot Robot]<---   return lokodik  <---[kireLeptem: Robot]");
-	}
-	
-	//KÃ©sz
-	@Override
-	public void jottValaki(Mezonallo joveveny){
-		System.out.println("// A paraméterül kapott jövevénynek meghívja a robotraLeptem metódusát.");
-		System.out.println("[robot Robot]--->robotraLeptem(robot)--->[sebesseg Sebesseg]");
-		joveveny.robotraLeptem(this);
-		System.out.println("[robot Robot]<---return robotraLeptem<---[sebesseg Sebesseg]");
-	}
-	
-	private String bemenetBekerese(){
-		try {
-			System.out.print("? ");
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			return br.readLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 }

@@ -1,38 +1,94 @@
 public class Olajfolt implements Mezonallo{
 	
-	private Mezo mezo;
+	private Mezo pozicio;		//Az olajfolt tartózkodási mezõje.
+	private int kopas;			//Megmutatja, hogy hány kör múlva szívódik fel az olajfolt
+								//takarítás nélkül.
 	
-	public Olajfolt(Mezo mezo){
-		this.mezo = mezo;
-		mezo.beregisztral(this);
+	private String nev;
+	
+	public Olajfolt(Mezo mezo,int kopas){
+		this.pozicio = mezo;
+		this.kopas = kopas;
+		pozicio.beregisztral(this);
 	}
 	
+	//Az olajfolt pozíciójára érkezõ elemnek szól, hogy olajfoltra lépett.
 	@Override
 	public void jottValaki(Mezonallo joveveny) {
-		System.out.println("[olajfolt: Olajfolt] --- olajfoltraLeptem(olajfolt) ---> [joveveny: Mezonallo]");
-		System.out.println("//Az ottlévõ olajfolt szól, hogy olajfoltra lépett a jövevény.");
 		joveveny.olajfoltraLeptem(this);
-		System.out.println("[olajfolt: Olajfolt] <--- return olajfoltraLeptem --- [joveveny: Mezonallo]");
 	}
 
+	//A pozícióra újonnan érkezett olajfolt, leregisztrálja már a mezõn lévõ ragacsot.
 	@Override
 	public void ragacsraLeptem(Ragacs kireLeptem) {
-		System.out.println("[olajfolt: Olajfolt] --- leregisztral(ragacs) ---> [mezo: Mezo]");
-		System.out.println("// Az új olajfolt leregisztrálja a ragacsot a mezõrõl.");
-		mezo.leregisztral(kireLeptem);
-		System.out.println("[olajfolt: Olajfolt] <--- return leregisztral --- [mezo: Mezo]");
+		pozicio.leregisztral(kireLeptem);
 	}
 
+	//A mezõre újonnan érkezett olajfolt, leregisztrálja már a mezõn lévõ olajfoltot.
 	@Override
 	public void olajfoltraLeptem(Olajfolt kireLeptem) {
-		System.out.println("[olajfolt: Olajfolt] --- leregisztral(regiolajfolt) ---> [mezo: Mezo]");
-		System.out.println("// Az új olajfolt leregisztrálja a régi olajfoltot a mezõrõl.");
-		mezo.leregisztral(kireLeptem);
-		System.out.println("[olajfolt: Olajfolt] <--- return leregisztral --- [mezo: Mezo]");
+		pozicio.leregisztral(kireLeptem);
+	}
+
+	//Nem hajt végre feladatot.
+	@Override
+	public void robotraLeptem(Robot kireLeptem) {	
+	}
+	
+	//Nem hajt végre feladatot.
+	@Override
+	public void kisrobotraLeptem(Kisrobot kireLeptem){
+	}
+	
+	//Új kört kezd.Csökkenti a kopás értékét eggyel és ha nulla vagy az allati értéket vett fel
+	//akkor leregisztrálja a pozicio-rol az olajfoltot.
+	@Override
+	public void tick() {
+		kopas -= 1;
+		if(kopas <= 0 ){
+			pozicio.leregisztral(this);
+		}
+	}
+	
+	//Visszatér igaz értékel, mert az olajfoltot szenyezõdésnek tekintjük.
+	@Override
+	public boolean szennyezodesVagyok(){
+		return true;
+	}
+	
+	//Viasszaadja az olajfolt pozicio attribútumát. 
+	@Override
+	public Mezo getPozicio() {
+		return pozicio;
+	}
+
+	//Beaállítja az olajfolt pozicio attribútumát.
+	@Override
+	public void setPozicio(Mezo m) {
+		pozicio = m;
+	}
+	
+	//Visszatér a kopas attribútum értékével.
+	public int getkopas(){
+		return kopas;
+	}
+	
+	//Beállítja a kopas attribútum értékét.
+	public void setkopas(int kopas){
+		this.kopas=kopas;
+	}
+	
+	public String getNev() {
+		return nev;
+	}
+
+	public void setNev(String nev) {
+		this.nev = nev;
 	}
 
 	@Override
-	public void robotraLeptem(Robot kireLeptem) {
+	public void setkopas(Integer kop) {
+		// TODO Auto-generated method stub
 		
 	}
 }
