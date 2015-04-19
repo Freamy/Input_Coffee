@@ -37,7 +37,7 @@ public class Kisrobot implements Mezonallo {
 	@Override
 	public void ragacsraLeptem(Ragacs kireLeptem) {
 		if(!lekoppant){
-			kireLeptem.getPozicio().leregisztral(kireLeptem);
+			pozicio.leregisztral(kireLeptem);
 		}
 		
 	}
@@ -46,8 +46,8 @@ public class Kisrobot implements Mezonallo {
 	@Override
 	public void olajfoltraLeptem(Olajfolt kireLeptem) {
 		if(!lekoppant){
-			kireLeptem.getPozicio().leregisztral(kireLeptem);
-		}
+			pozicio.leregisztral(kireLeptem);
+		}	
 	}
 
 	//A kisrobot ellökõdik.Beállítja lekoppant attribútumát true-ba.

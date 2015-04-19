@@ -84,7 +84,9 @@ public class Olajfolt implements Mezonallo{
 	//Beállítja a kopas attribútum értékét.
 	@Override
 	public void setkopas(Integer kop) {
-		// TODO Auto-generated method stub
-		
+		kopas = kop;
+		if(kopas <= 0 ){
+			pozicio.leregisztral(this);
+		}		
 	}
 }
