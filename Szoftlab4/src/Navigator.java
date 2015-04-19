@@ -185,6 +185,7 @@ public class Navigator {
 		//Elnevezzük a mezõket, azért mi csináljuk mert mi tudjuk a kordinátáikat és az része a névnek.
 		for (int i = 0; i<n; i++) {
 			for(int j=0; j<k; j++) {
+				terkep[i][j] = new Mezo();
 				terkep[i][j].setNev("Mezo("+i+","+j+")");
 			}
 		}

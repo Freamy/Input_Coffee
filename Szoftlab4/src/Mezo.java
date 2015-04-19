@@ -17,11 +17,9 @@ public class Mezo {
 		
 		rajtamAllok.add(joveveny);
 		for(Mezonallo mezonallo: rajtamAllok){
-			mezonallo.jottValaki(joveveny);
+			if(!mezonallo.equals(joveveny))
+				mezonallo.jottValaki(joveveny);
 		}
-		
-		
-		
 	}
 	
 	void leregisztral(Mezonallo joveveny){
