@@ -5,10 +5,17 @@ public class Ragacs implements Mezonallo {
 								//mielõtt elkopna a ragacs takarítás nélkül.
 	
 	private String nev;
+	private static int autoincrement = 0;
 	
 	public Ragacs(Mezo mezo,int kopas){
 		pozicio = mezo;
 		this.kopas = kopas;
+		
+		autoincrement++;
+		nev = "ragacs" + autoincrement;
+		int[] kord = navigator.koordinataKonverter(mezo);
+		System.out.println("["+nev+"] létrejött x=("+kord[0]+","+kord[1]+"), "+kopas+" kopás.");
+		
 		mezo.beregisztral(this);
 	}
 	
@@ -45,7 +52,13 @@ public class Ragacs implements Mezonallo {
 	public boolean szennyezodesVagyok() {
 		return true;
 	}
-
+	
+	//Megsemmisíti a ragacsot.
+	public void megsemmisul () {
+		pozicio.leregisztral();
+		System.out.println("["+nev+"] megsemmisült.");
+	}
+	
 	//Visszaadja a ragacs pozicio attribútumát.
 	@Override
 	public Mezo getPozicio() {
@@ -86,11 +99,7 @@ public class Ragacs implements Mezonallo {
 		this.nev = nev;
 	}
 
-	@Override
-	public void setkopas(Integer kop) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	
 }

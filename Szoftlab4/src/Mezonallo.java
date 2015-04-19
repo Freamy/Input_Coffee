@@ -18,5 +18,9 @@ public interface Mezonallo {
 	
 	String getNev();
 	
+	void setNev(String nev);
+	
 	void tick();
+	
+	void megsemmisult();
 }

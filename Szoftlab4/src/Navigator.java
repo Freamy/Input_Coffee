@@ -7,13 +7,17 @@ public class Navigator {
 	private boolean[][] kulsoMezok;
 	
 	public Navigator(){
+		
 	}
 	
 	public Mezo getMezo(int id){
 		int x = id%terkep.length;
 		int y = id/terkep[0].length;
 		if(x > 0 && y > 0 && x < terkep.length && y < terkep[0].length) return terkep[x][y];
-		else throw new IndexOutOfBoundsException();
+		else {
+			System.out.println("Hiba: [Palya] nem létezõ mezõ.");
+			throw new IndexOutOfBoundsException();
+		}
 	}
 	
 	public Mezo getMezo(int x, int y){
@@ -176,14 +180,27 @@ public class Navigator {
 	public void palyaKeszites(Integer n, Integer k) {
 		terkep = new Mezo[n][k];
 		kulsoMezok = new boolean[n][k];
+		System.out.println("[Palya] létrejött, "+n+"*"+k+".");
+		
+		//Elnevezzük a mezõket, azért mi csináljuk mert mi tudjuk a kordinátáikat és az része a névnek.
+		for (int i = 0; i<n; i++) {
+			for(int j=0; j<k; j++) {
+				Mezo[i][j].setNev("Mezo("+i+","+j+")");
+			}
+		}
 		
 	}
 
 	public void tick() {
-		
+		for (int i = 0; i<n; i++) {
+			for(int j=0; j<k; j++) {
+				Mezo[i][j].tick();
+			}
+		}
 	}
 
 	public void setKulsoMezo(int x, int y, boolean kulso) {
 		kulsoMezok[x][y] = kulso;
+		System.out.println("["+Mezo[x][y].getNev()+"] külsõ mezõ lett.");
 	}
 }

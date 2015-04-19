@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> branch 'master' of https://github.com/Freamy/Input_Coffee.git
 import java.io.*;
 import java.util.ArrayList;
 
@@ -62,9 +58,11 @@ public class Jatekmester {
 				
 				if(parancs.equals("Start")){ //Elindítja a játékot
 					running = true;
+					System.out.println("[Jatek] indulás.");
 				}
 				else if(parancs.equals("Stop")){ //Megállítja a játékot, startal újraindítható
 					running = false;
+					System.out.println("[Jatek] megállás.");
 				}
 				else if(parancs.equals("Exit")){ //Leáll a program futása
 					running = false;
@@ -223,7 +221,7 @@ public class Jatekmester {
 				else if(parancs.equals("UjOlajfolt") && running){
 					Integer x = Integer.parseInt(parameterek[1]);
 					Integer y = Integer.parseInt(parameterek[2]);
-					Olajfolt uj = new Olajfolt(jatekMester.navigator.getMezo(x, y), Integer.parseInt(parameterek[3]));
+					Olajfolt uj = new Olajfolt(jatekMester.navigator.getMezo(x, y), Integer.parseInt(parameterek[3]), "");
 					uj.setPozicio(jatekMester.navigator.getMezo(x, y));
 					uj.setNev(parameterek[0]);
 					uj.getPozicio().beregisztral(uj);
@@ -363,7 +361,7 @@ public class Jatekmester {
 					for(Robot r : jatekMester.robotok){
 						String vizsgalt = r.getNev();
 						if(vizsgalt.equals(uj)){
-							r.ragacsotTesz();
+							r.olajfoltotTesz();
 						}
 					}
 				}
@@ -421,16 +419,9 @@ public class Jatekmester {
 	
 	void tick(){
 		
+		System.out.println("[Jatek] új kör.");
 		korszam++;
 		navigator.tick();
-		
-		for(Robot r : robotok){
-			r.tick();
-		}
-		
-		for(Kisrobot kr : kisrobotok){
-			kr.tick();
-		}
 	}
 	
 	/*boolean running = true;

@@ -5,10 +5,21 @@ public class Olajfolt implements Mezonallo{
 								//takarítás nélkül.
 	
 	private String nev;
+	private static int autoincrement = 0;
 	
-	public Olajfolt(Mezo mezo,int kopas){
+	public Olajfolt(Mezo mezo,int kopas, String kisrobotneve){
 		this.pozicio = mezo;
 		this.kopas = kopas;
+		
+		if(kisrobotneve != "") {
+			nev = kisrobotneve+"olajfoltja";
+		} else {
+		autoincrement++;
+		nev = "olajfolt" + autoincrement;
+		}
+		
+		int[] kord = navigator.koordinataKonverter(mezo);
+		System.out.println("["+nev+"] létrejött x=("+kord[0]+","+kord[1]+"), "+kopas+" kopás.");
 		pozicio.beregisztral(this);
 	}
 	
@@ -54,6 +65,12 @@ public class Olajfolt implements Mezonallo{
 	@Override
 	public boolean szennyezodesVagyok(){
 		return true;
+	}
+	
+	//Megsemmisíti az olajfoltot.
+	public void megsemmisul () {
+		pozicio.leregisztral();
+		System.out.println("["+nev+"] megsemmisült.");
 	}
 	
 	//Viasszaadja az olajfolt pozicio attribútumát. 
