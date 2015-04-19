@@ -16,17 +16,14 @@ public class Navigator {
 		else throw new IndexOutOfBoundsException();
 	}
 	
+	public Mezo getMezo(int x, int y){
+		return terkep[x][y];
+	}
+	
 	Mezo athelyez(Mezo honnan, Sebesseg sebesseg){
-		int x = 0;
-		int y = 0;
-		for(int i = 0; i < terkep.length; i++){
-			for(int j = 0; j < terkep[i].length; j++){
-				if(honnan.equals(terkep[i][j])) {
-					x = j;
-					y = i;
-				}
-			}
-		}
+		int[] koordinatak = koordinataKonverter(honnan);
+		int x = koordinatak[0];
+		int y = koordinatak[1];
 		x += sebesseg.getx();
 		y += sebesseg.gety();
 		return terkep[x][y];
@@ -35,7 +32,7 @@ public class Navigator {
 	public Mezo kozeliszennyezodes(Mezo honnan){
 		int x = 0;
 		int y = 0;
-		int[] koordinatak = koordinataKoverter(honnan);
+		int[] koordinatak = koordinataKonverter(honnan);
 		x = koordinatak[0];
 		y = koordinatak[1];
 		int tavolsag = 0;
@@ -59,7 +56,7 @@ public class Navigator {
 	
 	public Mezo legrovidebbut(Mezo honnan, Mezo hova){
 			if(honnan.equals(hova)) return null;
-			int[] koordinatak = koordinataKoverter(honnan);
+			int[] koordinatak = koordinataKonverter(honnan);
 			// ASTAR //
 			boolean kesz = false;
 			
@@ -73,14 +70,16 @@ public class Navigator {
 			
 			vizsgalt.add(honnan);
 			
-			
+			// Megkezdjük az útkeresést
 			while(!kesz && vizsgalt.size() != terkep.length*terkep[0].length){
+				// Ha a vizsgált mezõ a célunk akkor megtaláltuk az utat.
 				if(jelenlegi.equals(hova)){
 					kesz = true;
 				}
-				koordinatak = koordinataKoverter(jelenlegi);
+				koordinatak = koordinataKonverter(jelenlegi);
 				int x = koordinatak[0];
 				int y = koordinatak[1];
+				// Felvesszük az utoljára vizsgált elem szomszédait a határ listába.
 				if(y > terkep[0].length-1 || x > terkep.length-1){
 				}else{
 					if(x < terkep.length-1 && !kulsoMezo(terkep[x+1][y]) && !vizsgalt.contains(terkep[x+1][y]) && !kulsoMezok[x+1][y]){
@@ -96,15 +95,13 @@ public class Navigator {
 						hatar.add(terkep[x][y-1]);
 						elozoHely[x][y-1] = x+";"+y;}
 				}
-				for(int i = 0; i < 4; i++){
-					
-				}
+				// Megkeressük a határ mezõk közül a legkevesebb költségüt
 				int minTavolsag = Integer.MAX_VALUE;
 				for(Mezo kozeli: hatar){
-					koordinatak = koordinataKoverter(hova);
+					koordinatak = koordinataKonverter(hova);
 					int i = koordinatak[0];
 					int j = koordinatak[1];
-					koordinatak = koordinataKoverter(kozeli);
+					koordinatak = koordinataKonverter(kozeli);
 					x = koordinatak[0];
 					y = koordinatak[1];
 					int tavolsag = ((y-j)*(y-j))+((x-i)*(x-i));
@@ -116,16 +113,15 @@ public class Navigator {
 				}
 				hatar.remove(jelenlegi);
 				vizsgalt.add(jelenlegi);
-				
 			}
-			
+			// Ha találtunk egy útvonalat akkor felkell építenünk azt, majd visszatérünk az elsõ elemével.
 			if(kesz){
 				
 				kesz = false;
 				boolean once = false;
 				Mezo utEpito = hova;
 				while(!kesz){
-					koordinatak = koordinataKoverter(utEpito);
+					koordinatak = koordinataKonverter(utEpito);
 					int x = koordinatak[0];
 					int y = koordinatak[1];
 					String[] elozoKoordinata = elozoHely[x][y].split(";");
@@ -143,7 +139,7 @@ public class Navigator {
 			return ut.get(ut.size()-1);
 	}
 	
-	private int[] koordinataKoverter(Mezo honnan){
+	private int[] koordinataKonverter(Mezo honnan){
 		int x = 0;
 		int y = 0;
 		for(int i = 0; i < terkep.length; i++){
@@ -159,7 +155,35 @@ public class Navigator {
 	}
 	
 	boolean kulsoMezo(Mezo mezo){
+		int[] koordinatak = koordinataKonverter(mezo);
+		int x = koordinatak[0];
+		int y = koordinatak[1];
+		return kulsoMezok[x][y];
+	}
+
+	public ArrayList<Mezonallo> getOsszesElem() {
+		ArrayList<Mezonallo> osszesElem = new ArrayList<Mezonallo>();
+		for(int i = 0; i < terkep.length; i++){
+			for(int j = 0; j < terkep[0].length; j++){
+				if(terkep[i][j] != null) {
+					osszesElem.addAll(terkep[i][j].getRajtamAllok());
+				}
+			}
+		}
+		return osszesElem;
+	}
+
+	public void palyaKeszites(Integer n, Integer k) {
+		terkep = new Mezo[n][k];
+		kulsoMezok = new boolean[n][k];
 		
-		return false;
+	}
+
+	public void tick() {
+		
+	}
+
+	public void setKulsoMezo(int x, int y, boolean kulso) {
+		kulsoMezok[x][y] = kulso;
 	}
 }
