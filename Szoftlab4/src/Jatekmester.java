@@ -382,7 +382,7 @@ public class Jatekmester {
 			}
 		}
 		}catch(Exception e){
-
+			e.printStackTrace();
 		}
 	}
 	
