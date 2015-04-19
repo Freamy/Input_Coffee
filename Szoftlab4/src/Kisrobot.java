@@ -6,6 +6,8 @@ public class Kisrobot implements Mezonallo {
 	private Sebesseg sebesseg;
 	private int megsemmisul;		//Mennyi kör után semmisül meg a kisrobot.	
 	
+	private String nev;
+	
 	public Kisrobot(Mezo mezo, Navigator navigator){
 		this.navigator = navigator;
 		pozicio = mezo;
@@ -37,7 +39,7 @@ public class Kisrobot implements Mezonallo {
 	@Override
 	public void ragacsraLeptem(Ragacs kireLeptem) {
 		if(!lekoppant){
-			kireLeptem.getpozicio().leregisztral(kireLeptem);
+			kireLeptem.getPozicio().leregisztral(kireLeptem);
 		}
 		
 	}
@@ -46,7 +48,7 @@ public class Kisrobot implements Mezonallo {
 	@Override
 	public void olajfoltraLeptem(Olajfolt kireLeptem) {
 		if(!lekoppant){
-			kireLeptem.getpozicio().leregisztral(kireLeptem);
+			kireLeptem.getPozicio().leregisztral(kireLeptem);
 		}
 	}
 
@@ -71,15 +73,14 @@ public class Kisrobot implements Mezonallo {
 
 	//Visszatér a kisrobot pozicio attribútrumával.
 	@Override
-	public Mezo getpozicio() {
+	public Mezo getPozicio() {
 		return pozicio;
 	}
 
 	//Beállítja a m-re a pozicio értékét.
 	@Override
-	public void setpozicio(Mezo m) {
-		// TODO Auto-generated method stub
-		
+	public void setPozicio(Mezo m) {
+		pozicio = m;
 	}
 
 	//Beállítja false-ra az lekoppant értékét. Ha a kisrobot ideje lejárt akkor leregisztrálja magát.
@@ -90,6 +91,20 @@ public class Kisrobot implements Mezonallo {
 		if(megsemmisul <= 0){
 			pozicio.leregisztral(this);
 		}
+	}
+
+	public String getNev() {
+		return nev;
+	}
+
+	public void setNev(String nev) {
+		this.nev = nev;
+	}
+
+	@Override
+	public void setkopas(Integer kop) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

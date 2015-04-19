@@ -4,6 +4,8 @@ public class Ragacs implements Mezonallo{
 	private int kopas;			//Megmutatja, hogy még hány robot ugorhat bele 
 								//mielõtt elkopna a ragacs takarítás nélkül.
 	
+	private String nev;
+	
 	public Ragacs(Mezo mezo,int kopas){
 		pozicio = mezo;
 		this.kopas = kopas;
@@ -46,13 +48,13 @@ public class Ragacs implements Mezonallo{
 
 	//Visszaadja a ragacs pozicio attribútumát.
 	@Override
-	public Mezo getpozicio() {
+	public Mezo getPozicio() {
 		return pozicio;
 	}
 
 	//Beállítja a ragacs pozicio attribútumát m értékére.
 	@Override
-	public void setpozicio(Mezo m) {
+	public void setPozicio(Mezo m) {
 		pozicio = m;
 	}
 
@@ -74,5 +76,21 @@ public class Ragacs implements Mezonallo{
 			pozicio.leregisztral(this);
 		}
 	}
+	
+	@Override
+	public String getNev() {
+		return nev;
+	}
+
+	public void setNev(String nev) {
+		this.nev = nev;
+	}
+
+	@Override
+	public void setkopas(Integer kop) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

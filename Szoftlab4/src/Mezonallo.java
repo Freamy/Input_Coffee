@@ -12,10 +12,14 @@ public interface Mezonallo {
 	
 	boolean szennyezodesVagyok();
 	
-	Mezo getpozicio();
+	Mezo getPozicio();
 	
-	void setpozicio(Mezo m);
+	void setPozicio(Mezo m);
+	
+	public String getNev();
 	
 	void tick();
+
+	void setkopas(Integer kop);
 	
 }
