@@ -41,7 +41,7 @@ public class Jatekmester {
 				if(parancs.contains(")")){
 					parancs = bemenet.substring(0, bemenet.indexOf(")"));
 				}
-				String[] darabolo = parancs.split(";");
+				String[] darabolo = parancs.split("\\(");
 				if(darabolo.length > 1){
 					// Vannak paraméterek
 					parancs = darabolo[0];
