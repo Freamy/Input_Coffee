@@ -80,6 +80,15 @@ public class Sebesseg {
 		y *= -1;
 	}
 	
+	public double hossz() {
+		return Math.sqrt(x*x+y*y);
+	}
+	
+	public void atlag(Sebesseg be){
+		x = (x + be.x)/2;
+		y = (y + be.y)/2;
+	}
+	
 	//Új kör kezdésekor végrehajtandó mûveletek ide kerülhetnek.
 	public void tick () {
 		//Jelenleg a sebességgel nem történik semmi új kör kezdésekor.

@@ -1,7 +1,3 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 public class Robot implements Mezonallo{
 	private Mezo pozicio;
 	private Navigator navigator;
@@ -11,6 +7,8 @@ public class Robot implements Mezonallo{
 	private int olajDb;
 	private double megtettUt;
 	private boolean ugrottMar;
+	
+	private String nev;
 	
 	public Robot(Mezo mezo, Navigator navigator){
 		this.pozicio = mezo;
@@ -48,20 +46,14 @@ public class Robot implements Mezonallo{
 	
 	// Letesz egy ragacsot az aktuális helyére.
 	public void ragacsotTesz(){
-		String bemenet = bemenetBekerese();
-		if(bemenet.equals("y")){
-			Ragacs ragacs = new Ragacs(navigator.getMezo(0));
-			pozicio.beregisztral(ragacs);
-		}
+		Ragacs ragacs = new Ragacs(pozicio, 5);
+		pozicio.beregisztral(ragacs);
 	}
 	
 	// Letesz egy olajfoltot az aktuális helyére.
 	public void olajfoltotTesz(){
-		String bemenet = bemenetBekerese();
-		if(bemenet.equals("y")){
-			Olajfolt olajfolt = new Olajfolt(navigator.getMezo(0));
-			pozicio.beregisztral(olajfolt);
-		}
+		Olajfolt olajfolt = new Olajfolt(pozicio, 5);
+		pozicio.beregisztral(olajfolt);
 	}
 	
 	// Meghívja a Navigátor athelyez függvényét, a visszatérési értékként kapott pozíciót beállítja
@@ -122,7 +114,7 @@ public class Robot implements Mezonallo{
 	
 	// A paraméterül kapott kisrobot mezo attribútumának
 	// meghívja a leregisztrál függvényét és a Kisrobot megsemmisül.
-	void kisrobotraLeptem(Kisrobot kireLeptem){
+	public void kisrobotraLeptem(Kisrobot kireLeptem){
 		pozicio.leregisztral(kireLeptem);
 	}
 	
@@ -133,7 +125,7 @@ public class Robot implements Mezonallo{
 	// a mezõrõl és beállítja a saját vesztettem attribútúmának értékét igazra.
 	@Override
 	public void robotraLeptem(Robot kireLeptem){
-		if(hasonlit(kireLeptem.getsebesseg())){
+		if(sebesseg.hasonlit(kireLeptem.getsebesseg())){
 			sebesseg.atlag(kireLeptem.getsebesseg());
 			kireLeptem.vesztettel();
 		}
@@ -149,7 +141,7 @@ public class Robot implements Mezonallo{
 	}
 	
 	// Visszatér hamis értékkel.
-	boolean szennyezodesVagyok(){
+	public boolean szennyezodesVagyok(){
 		return false;
 	}
 	
@@ -159,17 +151,17 @@ public class Robot implements Mezonallo{
 	}
 	
 	// Beállítja a sebesség attribútumot.
-	void setsebesseg(Sebesseg sebesseg){
+	void setSebesseg(Sebesseg sebesseg){
 		this.sebesseg = sebesseg;
 	}
 	
 	// Visszatér a mezo attribútummal.
-	Mezo getpozicio(){
+	public Mezo getPozicio(){
 		return pozicio;
 	}
 	
 	// Beállítja a mezo attribútumot.
-	void setpozicio(Mezo poz){
+	public void setPozicio(Mezo poz){
 		this.pozicio = poz;
 	}
 	
@@ -221,15 +213,19 @@ public class Robot implements Mezonallo{
 	public void tick(){
 		ugrottMar = false;
 	}
-	
-	private String bemenetBekerese(){
-		try {
-			System.out.print("? ");
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			return br.readLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+
+	public String getNev() {
+		return nev;
 	}
+
+	public void setNev(String nev) {
+		this.nev = nev;
+	}
+
+	@Override
+	public void setkopas(Integer kop) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

@@ -4,7 +4,9 @@ public class Olajfolt implements Mezonallo{
 	private int kopas;			//Megmutatja, hogy hány kör múlva szívódik fel az olajfolt
 								//takarítás nélkül.
 	
-	public Olajfolt(Mezo mezo,int kopas){
+	private String nev;
+	
+	public Olajfolt(Mezo mezo, int kopas){
 		this.pozicio = mezo;
 		this.kopas = kopas;
 		pozicio.beregisztral(this);
@@ -56,13 +58,13 @@ public class Olajfolt implements Mezonallo{
 	
 	//Viasszaadja az olajfolt pozicio attribútumát. 
 	@Override
-	public Mezo getpozicio() {
+	public Mezo getPozicio() {
 		return pozicio;
 	}
 
 	//Beaállítja az olajfolt pozicio attribútumát.
 	@Override
-	public void setpozicio(Mezo m) {
+	public void setPozicio(Mezo m) {
 		pozicio = m;
 	}
 	
@@ -71,8 +73,18 @@ public class Olajfolt implements Mezonallo{
 		return kopas;
 	}
 	
+	public String getNev() {
+		return nev;
+	}
+
+	public void setNev(String nev) {
+		this.nev = nev;
+	}
+
 	//Beállítja a kopas attribútum értékét.
-	public void setkopas(int kopas){
-		this.kopas=kopas;
+	@Override
+	public void setkopas(Integer kop) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -1,11 +1,10 @@
-
 public class Kisrobot implements Mezonallo {
 
 	private Mezo pozicio;			//A kisrobot tartózkodási mezõje.
 	private Navigator navigator;	//A kisrobot eltárolja, hogy kiszámoltathassa vele azt, hogy hova ugorjon.
 	private boolean lekoppant;		//Igaz ha robotnak vagy kisrobotnak ütközött.
-	private Sebesseg sebesseg;
-	private int megsemmisul;		//Mennyi kör után semmisül meg a kisrobot.	
+	
+	private String nev;
 	
 	public Kisrobot(Mezo mezo, Navigator navigator){
 		this.navigator = navigator;
@@ -19,12 +18,12 @@ public class Kisrobot implements Mezonallo {
 	//Amenyiben ellökõdik, visszatér eredeti helyére.
 	public void ugrik(){
 		Mezo hova = navigator.kozeliszennyezodes(pozicio);
+		Mezo honnan = pozicio;
 		pozicio.leregisztral(this);
 		hova.beregisztral(this);
 		if(lekoppant){
-			Sebesseg invert = sebesseg.invert();
-			Mezo eredeti = navigator.athelyez(pozicio, invert);
-			eredeti.beregisztral(this);
+			hova.leregisztral(this);
+			honnan.beregisztral(this);
 		}
 	}	
 	
@@ -38,7 +37,7 @@ public class Kisrobot implements Mezonallo {
 	@Override
 	public void ragacsraLeptem(Ragacs kireLeptem) {
 		if(!lekoppant){
-			kireLeptem.getpozicio().leregisztral(kireLeptem);
+			kireLeptem.getPozicio().leregisztral(kireLeptem);
 		}
 		
 	}
@@ -47,7 +46,7 @@ public class Kisrobot implements Mezonallo {
 	@Override
 	public void olajfoltraLeptem(Olajfolt kireLeptem) {
 		if(!lekoppant){
-			kireLeptem.getpozicio().leregisztral(kireLeptem);
+			kireLeptem.getPozicio().leregisztral(kireLeptem);
 		}
 	}
 
@@ -72,25 +71,34 @@ public class Kisrobot implements Mezonallo {
 
 	//Visszatér a kisrobot pozicio attribútrumával.
 	@Override
-	public Mezo getpozicio() {
+	public Mezo getPozicio() {
 		return pozicio;
 	}
 
 	//Beállítja a m-re a pozicio értékét.
 	@Override
-	public void setpozicio(Mezo m) {
-		// TODO Auto-generated method stub
-		
+	public void setPozicio(Mezo m) {
+		pozicio = m;
 	}
 
 	//Beállítja false-ra az lekoppant értékét. Ha a kisrobot ideje lejárt akkor leregisztrálja magát.
 	@Override
 	public void tick() {
 		lekoppant = false;
-		megsemmisul -= 1;
-		if(megsemmisul <= 0){
-			pozicio.leregisztral(this);
-		}
+	}
+
+	public String getNev() {
+		return nev;
+	}
+
+	public void setNev(String nev) {
+		this.nev = nev;
+	}
+
+	@Override
+	public void setkopas(Integer kop) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
