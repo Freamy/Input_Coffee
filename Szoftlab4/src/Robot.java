@@ -133,7 +133,7 @@ public class Robot implements Mezonallo{
 	// a mezõrõl és beállítja a saját vesztettem attribútúmának értékét igazra.
 	@Override
 	public void robotraLeptem(Robot kireLeptem){
-		if(hasonlit(kireLeptem.getsebesseg())){
+		if(sebesseg.hasonlit(kireLeptem.getsebesseg())){
 			sebesseg.atlag(kireLeptem.getsebesseg());
 			kireLeptem.vesztettel();
 		}
