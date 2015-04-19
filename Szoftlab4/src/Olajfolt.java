@@ -5,10 +5,20 @@ public class Olajfolt implements Mezonallo{
 								//takarítás nélkül.
 	
 	private String nev;
+	private static int autoincrement = 0;
 	
-	public Olajfolt(Mezo mezo,int kopas){
+	public Olajfolt(Mezo mezo,int kopas, String kisrobotneve, int kord[]){
 		this.pozicio = mezo;
 		this.kopas = kopas;
+		
+		if(kisrobotneve != "") {
+			nev = kisrobotneve+"olajfoltja";
+		} else {
+		autoincrement++;
+		nev = "olajfolt" + autoincrement;
+		}
+		
+		System.out.println("["+nev+"] létrejött x=("+kord[0]+","+kord[1]+"), "+kopas+" kopás.");
 		pozicio.beregisztral(this);
 	}
 	
@@ -56,6 +66,12 @@ public class Olajfolt implements Mezonallo{
 		return true;
 	}
 	
+	//Megsemmisíti az olajfoltot.
+	public void megsemmisul () {
+		pozicio.leregisztral(this);
+		System.out.println("["+nev+"] megsemmisült.");
+	}
+	
 	//Viasszaadja az olajfolt pozicio attribútumát. 
 	@Override
 	public Mezo getPozicio() {
@@ -86,9 +102,4 @@ public class Olajfolt implements Mezonallo{
 		this.nev = nev;
 	}
 
-	@Override
-	public void setkopas(Integer kop) {
-		// TODO Auto-generated method stub
-		
-	}
 }

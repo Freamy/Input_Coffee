@@ -13,7 +13,6 @@ public class Jatekmester {
 		try{
 		Jatekmester jatekMester = new Jatekmester();
 		boolean running = false; // a játék futását vizsgálja, ha false akkor csak az exit és a start parancsok hívhatók
-		
 		while(jatekMester.korszam< 30){ //egy játék 30 körös (többre/kevesebbre is állíthatjuk ha szeretnétek)
 			
 			BufferedReader be = new BufferedReader(new InputStreamReader(System.in)); 
@@ -59,9 +58,11 @@ public class Jatekmester {
 				
 				if(parancs.equals("Start")){ //Elindítja a játékot
 					running = true;
+					System.out.println("[Jatek] indulás.");
 				}
 				else if(parancs.equals("Stop")){ //Megállítja a játékot, startal újraindítható
 					running = false;
+					System.out.println("[Jatek] megállás.");
 				}
 				else if(parancs.equals("Exit")){ //Leáll a program futása
 					running = false;
@@ -210,18 +211,20 @@ public class Jatekmester {
 					jatekMester.kisrobotok.add(uj);
 				}
 				else if(parancs.equals("UjRagacs") && running){
-					Integer x = Integer.parseInt(parameterek[1]);
-					Integer y = Integer.parseInt(parameterek[2]);
-					Ragacs uj = new Ragacs(jatekMester.navigator.getMezo(x, y), Integer.parseInt(parameterek[3]));
-					uj.setPozicio(jatekMester.navigator.getMezo(x, y));
+
+					int kord[] = {Integer.parseInt(parameterek[1]),Integer.parseInt(parameterek[2])};
+					
+					Ragacs uj = new Ragacs(jatekMester.navigator.getMezo(kord[0], kord[1]), Integer.parseInt(parameterek[3]), kord);
+					uj.setPozicio(jatekMester.navigator.getMezo(kord[0], kord[1]));
 					uj.setNev(parameterek[0]);
 					uj.getPozicio().beregisztral(uj);
 				}
 				else if(parancs.equals("UjOlajfolt") && running){
-					Integer x = Integer.parseInt(parameterek[1]);
-					Integer y = Integer.parseInt(parameterek[2]);
-					Olajfolt uj = new Olajfolt(jatekMester.navigator.getMezo(x, y), Integer.parseInt(parameterek[3]));
-					uj.setPozicio(jatekMester.navigator.getMezo(x, y));
+					
+					int kord[] = {Integer.parseInt(parameterek[1]),Integer.parseInt(parameterek[2])};
+					
+					Olajfolt uj = new Olajfolt(jatekMester.navigator.getMezo(kord[0], kord[1]), Integer.parseInt(parameterek[3]), "", kord);
+					uj.setPozicio(jatekMester.navigator.getMezo(kord[0], kord[1]));
 					uj.setNev(parameterek[0]);
 					uj.getPozicio().beregisztral(uj);
 				}
@@ -360,7 +363,7 @@ public class Jatekmester {
 					for(Robot r : jatekMester.robotok){
 						String vizsgalt = r.getNev();
 						if(vizsgalt.equals(uj)){
-							r.ragacsotTesz();
+							r.olajfoltotTesz();
 						}
 					}
 				}
@@ -379,7 +382,7 @@ public class Jatekmester {
 			}
 		}
 		}catch(Exception e){
-			
+
 		}
 	}
 	
@@ -418,24 +421,24 @@ public class Jatekmester {
 	
 	void tick(){
 		
+		System.out.println("[Jatek] új kör.");
 		korszam++;
 		navigator.tick();
-		
-		for(Robot r : robotok){
-			r.tick();
-		}
-		
-		for(Kisrobot kr : kisrobotok){
-			kr.tick();
-		}
 	}
 	
 	/*boolean running = true;
 	while(running){
+<<<<<<< HEAD
+		main.useCaseTablaKiirasa();
+		bemenet = main.bemenetBekerese();
+		if(bemenet.equals("1")){
+			main.inditUseCase();
+=======
 		jatekMester.useCaseTablaKiirasa();
 		bemenet = jatekMester.bemenetBekerese();
 		if(bemenet.equals("1")){
 			jatekMester.inditUseCase();
+>>>>>>> branch 'master' of https://github.com/Freamy/Input_Coffee.git
 		}else if(bemenet.equals("kilepes")){
 			System.exit(0);
 		}
