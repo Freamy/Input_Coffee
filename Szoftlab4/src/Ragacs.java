@@ -7,13 +7,13 @@ public class Ragacs implements Mezonallo {
 	private String nev;
 	private static int autoincrement = 0;
 	
-	public Ragacs(Mezo mezo,int kopas){
+	public Ragacs(Mezo mezo,int kopas, int kord[]){
 		pozicio = mezo;
 		this.kopas = kopas;
 		
 		autoincrement++;
 		nev = "ragacs" + autoincrement;
-		int[] kord = navigator.koordinataKonverter(mezo);
+		
 		System.out.println("["+nev+"] létrejött x=("+kord[0]+","+kord[1]+"), "+kopas+" kopás.");
 		
 		mezo.beregisztral(this);
@@ -55,7 +55,7 @@ public class Ragacs implements Mezonallo {
 	
 	//Megsemmisíti a ragacsot.
 	public void megsemmisul () {
-		pozicio.leregisztral();
+		pozicio.leregisztral(this);
 		System.out.println("["+nev+"] megsemmisült.");
 	}
 	

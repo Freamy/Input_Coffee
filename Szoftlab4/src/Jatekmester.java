@@ -211,18 +211,20 @@ public class Jatekmester {
 					jatekMester.kisrobotok.add(uj);
 				}
 				else if(parancs.equals("UjRagacs") && running){
-					Integer x = Integer.parseInt(parameterek[1]);
-					Integer y = Integer.parseInt(parameterek[2]);
-					Ragacs uj = new Ragacs(jatekMester.navigator.getMezo(x, y), Integer.parseInt(parameterek[3]));
-					uj.setPozicio(jatekMester.navigator.getMezo(x, y));
+
+					int kord[] = {Integer.parseInt(parameterek[1]),Integer.parseInt(parameterek[2])};
+					
+					Ragacs uj = new Ragacs(jatekMester.navigator.getMezo(kord[0], kord[1]), Integer.parseInt(parameterek[3]), kord);
+					uj.setPozicio(jatekMester.navigator.getMezo(kord[0], kord[1]));
 					uj.setNev(parameterek[0]);
 					uj.getPozicio().beregisztral(uj);
 				}
 				else if(parancs.equals("UjOlajfolt") && running){
-					Integer x = Integer.parseInt(parameterek[1]);
-					Integer y = Integer.parseInt(parameterek[2]);
-					Olajfolt uj = new Olajfolt(jatekMester.navigator.getMezo(x, y), Integer.parseInt(parameterek[3]), "");
-					uj.setPozicio(jatekMester.navigator.getMezo(x, y));
+					
+					int kord[] = {Integer.parseInt(parameterek[1]),Integer.parseInt(parameterek[2])};
+					
+					Olajfolt uj = new Olajfolt(jatekMester.navigator.getMezo(kord[0], kord[1]), Integer.parseInt(parameterek[3]), "", kord);
+					uj.setPozicio(jatekMester.navigator.getMezo(kord[0], kord[1]));
 					uj.setNev(parameterek[0]);
 					uj.getPozicio().beregisztral(uj);
 				}

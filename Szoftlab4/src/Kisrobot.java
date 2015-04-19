@@ -14,7 +14,7 @@ public class Kisrobot implements Mezonallo {
 		lekoppant= false;
 		
 		autoincrement++;
-		nev = "kisrobot" + autroincrement;
+		nev = "kisrobot" + autoincrement;
 		int[] kord = navigator.koordinataKonverter(mezo);
 		System.out.println("["+nev+"] létrejött x=("+kord[0]+","+kord[1]+").");
 		pozicio.beregisztral(this);
@@ -88,12 +88,20 @@ public class Kisrobot implements Mezonallo {
 		return false;
 	}
 	
+	public void megsemmisul() {
+		pozicio.leregisztral(this);
+		
+		System.out.println("["+nev+"] megsemmisült.");
+	}
+	
 	//Megsemmisíti a kisrobotot.
-	public void megsemmisul (boolean robotLepettRa) {
+	public void robotMegsemmisiti () {
 		
-		pozicio.leregisztral();
+		pozicio.leregisztral(this);
 		
-		if(robotLepettRa) Olajfolt maradvany = new Olajfolt (pozicio, 1, nev);
+		int kord[] = navigator.koordinataKonverter(pozicio);
+		
+		new Olajfolt (pozicio, 1, nev, kord);
 		
 		System.out.println("["+nev+"] megsemmisült.");
 	}
@@ -127,11 +135,8 @@ public class Kisrobot implements Mezonallo {
 	public void setNev(String nev) {
 		this.nev = nev;
 	}
-
-	@Override
-	public void setkopas(Integer kop) {
-		// TODO Auto-generated method stub
+	
+	public void setkopas(int kop) {
 		
 	}
-
 }

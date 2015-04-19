@@ -143,7 +143,7 @@ public class Navigator {
 			return ut.get(ut.size()-1);
 	}
 	
-	private int[] koordinataKonverter(Mezo honnan){
+	public int[] koordinataKonverter(Mezo honnan){
 		int x = 0;
 		int y = 0;
 		for(int i = 0; i < terkep.length; i++){
@@ -185,22 +185,22 @@ public class Navigator {
 		//Elnevezzük a mezõket, azért mi csináljuk mert mi tudjuk a kordinátáikat és az része a névnek.
 		for (int i = 0; i<n; i++) {
 			for(int j=0; j<k; j++) {
-				Mezo[i][j].setNev("Mezo("+i+","+j+")");
+				terkep[i][j].setNev("Mezo("+i+","+j+")");
 			}
 		}
 		
 	}
 
 	public void tick() {
-		for (int i = 0; i<n; i++) {
-			for(int j=0; j<k; j++) {
-				Mezo[i][j].tick();
+		for (int i = 0; i<terkep.length; i++) {
+			for(int j=0; j<terkep[0].length; j++) {
+				terkep[i][j].tick();
 			}
 		}
 	}
 
 	public void setKulsoMezo(int x, int y, boolean kulso) {
 		kulsoMezok[x][y] = kulso;
-		System.out.println("["+Mezo[x][y].getNev()+"] külsõ mezõ lett.");
+		System.out.println("["+terkep[x][y].getNev()+"] külsõ mezõ lett.");
 	}
 }

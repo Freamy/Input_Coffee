@@ -20,7 +20,9 @@ public interface Mezonallo {
 	
 	void setNev(String nev);
 	
+	void setkopas(int kop);
+	
 	void tick();
 	
-	void megsemmisult();
+	void megsemmisul();
 }
