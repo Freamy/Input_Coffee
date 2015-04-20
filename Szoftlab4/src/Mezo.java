@@ -15,20 +15,18 @@ public class Mezo {
 		
 		System.out.println("["+nev+"] beregisztrálta: "+joveveny.getNev()+".");
 		
-		rajtamAllok.add(joveveny);
-		for(Mezonallo mezonallo: rajtamAllok){
-			if(!mezonallo.equals(joveveny))
-				mezonallo.jottValaki(joveveny);
+		ArrayList<Mezonallo> rajtamAllokIteralt = new ArrayList<Mezonallo>(rajtamAllok);
+		
+		for(Mezonallo mezonallo : rajtamAllokIteralt){
+			mezonallo.jottValaki(joveveny);
 		}
+		
+		rajtamAllok.add(joveveny);
 	}
 	
 	void leregisztral(Mezonallo joveveny){
-		
 		System.out.println("["+nev+"] leregisztrálta: "+joveveny.getNev()+".");
-		
 		rajtamAllok.remove(joveveny);
-		
-		
 	}
 	
 	boolean szennykeres(){
@@ -46,8 +44,18 @@ public class Mezo {
 	}
 	
 	void tick(){
-		for(Mezonallo mezonallo : rajtamAllok){
+		ArrayList<Mezonallo> rajtamAllokIteralt = new ArrayList<Mezonallo>(rajtamAllok);
+		
+		for(Mezonallo mezonallo : rajtamAllokIteralt){
 			mezonallo.tick();
+		}
+	}
+	
+	void tickend(){
+		ArrayList<Mezonallo> rajtamAllokIteralt = new ArrayList<Mezonallo>(rajtamAllok);
+		
+		for(Mezonallo mezonallo : rajtamAllokIteralt){
+			mezonallo.tickend();
 		}
 	}
 	
@@ -57,5 +65,19 @@ public class Mezo {
 
 	public void setNev(String nev) {
 		this.nev = nev;
+	}
+	
+	public void adatKiirasa(String param) {
+		if(param.equals("") || param.equals(nev)) {
+			System.out.println("["+nev+"]"
+					+"\n");
+		}
+		if(param.equals("")) {
+			Iterator<Mezonallo> it = rajtamAllok.iterator();
+			while(it.hasNext()){
+				Mezonallo iterated = it.next();
+				iterated.adatokKiirasa(param);
+			}
+		}
 	}
 }

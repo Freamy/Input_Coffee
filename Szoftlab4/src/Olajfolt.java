@@ -5,20 +5,13 @@ public class Olajfolt implements Mezonallo{
 								//takarítás nélkül.
 	
 	private String nev;
-	private static int autoincrement = 0;
 	
-	public Olajfolt(Mezo mezo,int kopas, String kisrobotneve, int kord[]){
+	public Olajfolt(String nev, Mezo mezo, int kopas, int kord[]){
+		this.nev = nev;
 		this.pozicio = mezo;
 		this.kopas = kopas;
 		
-		if(kisrobotneve != "") {
-			nev = kisrobotneve+"olajfoltja";
-		} else {
-		autoincrement++;
-		nev = "olajfolt" + autoincrement;
-		}
-		
-		System.out.println("["+nev+"] létrejött x=("+kord[0]+","+kord[1]+"), "+kopas+" kopás.");
+		System.out.println("["+nev+"] létrejött x=("+kord[0]+","+kord[1]+"), kopás = "+kopas+".");
 		pozicio.beregisztral(this);
 	}
 	
@@ -31,23 +24,27 @@ public class Olajfolt implements Mezonallo{
 	//A pozícióra újonnan érkezett olajfolt, leregisztrálja már a mezõn lévõ ragacsot.
 	@Override
 	public void ragacsraLeptem(Ragacs kireLeptem) {
+		System.out.println("["+nev+"] ütközött: "+kireLeptem.getNev()+".");
 		pozicio.leregisztral(kireLeptem);
 	}
 
 	//A mezõre újonnan érkezett olajfolt, leregisztrálja már a mezõn lévõ olajfoltot.
 	@Override
 	public void olajfoltraLeptem(Olajfolt kireLeptem) {
+		System.out.println("["+nev+"] ütközött: "+kireLeptem.getNev()+".");
 		pozicio.leregisztral(kireLeptem);
 	}
 
 	//Nem hajt végre feladatot.
 	@Override
 	public void robotraLeptem(Robot kireLeptem) {	
+		System.out.println("["+nev+"] ütközött: "+kireLeptem.getNev()+".");
 	}
 	
 	//Nem hajt végre feladatot.
 	@Override
 	public void kisrobotraLeptem(Kisrobot kireLeptem){
+		System.out.println("["+nev+"] ütközött: "+kireLeptem.getNev()+".");
 	}
 	
 	//Új kört kezd.Csökkenti a kopás értékét eggyel és ha nulla vagy az allati értéket vett fel
@@ -58,6 +55,10 @@ public class Olajfolt implements Mezonallo{
 		if(kopas <= 0 ){
 			pozicio.leregisztral(this);
 		}
+	}
+	
+	public void tickend() {
+		
 	}
 	
 	//Visszatér igaz értékel, mert az olajfoltot szenyezõdésnek tekintjük.
@@ -100,6 +101,13 @@ public class Olajfolt implements Mezonallo{
 
 	public void setNev(String nev) {
 		this.nev = nev;
+	}
+	
+	public void adatokKiirasa(String param) {
+		if(param.equals("") || param.equals(nev)) {
+			System.out.println("["+nev+"]:\nPozicio: "+pozicio.getNev()+"\nKopas: "+kopas
+					+"\n");
+		}
 	}
 
 }
