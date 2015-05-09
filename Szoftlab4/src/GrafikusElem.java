@@ -7,6 +7,10 @@ public abstract class GrafikusElem {
 	private Image kep;
 	private Kepernyo kepernyo;
 	
+	public GrafikusElem(){
+		
+	}
+	
 	public GrafikusElem(String utvonal, Kepernyo kepernyo){
 		this.kep = kepBetoltese(utvonal);
 		this.kepernyo = kepernyo;

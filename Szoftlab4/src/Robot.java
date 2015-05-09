@@ -11,6 +11,8 @@ public class Robot implements Mezonallo{
 	private String nev;
 	private static int autoincrement=0;
 	
+	private GrafikusRobot grafikusRobot;
+	
 	public Robot(Mezo mezo, Navigator navigator){
 		this.pozicio = mezo;
 		this.navigator = navigator;
