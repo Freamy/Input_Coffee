@@ -290,5 +290,10 @@ public class Robot implements Mezonallo{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	public boolean getAktiv() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 }
