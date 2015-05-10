@@ -1,21 +1,37 @@
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
-
-
 public class GrafikusPalya extends GrafikusElem {
 	
+	int mezomeret;
 	private boolean[][] palya;
 	private Image kulso;
-
-	public GrafikusPalya(String utvonalBelso, String utvonalKulso, Kepernyo kepernyo) {
-	
+	public GrafikusPalya(int x, int y, int mezomeret, String utvonalBelso, String utvonalKulso, Kepernyo kepernyo) {
+		super(x, y, utvonalBelso, kepernyo);
+		kulso = this.kepBetoltese(utvonalKulso);
 	}
 	
-	public void rajzol(){
-		
+	public void rajzol(Graphics g){
+		int szelesseg = palya[0].length;
+		int hosszusag = palya.length;
+		Graphics2D g2 = (Graphics2D) g;
+		for(int i = 0; i < hosszusag; i++){
+			for(int j = 0; j < szelesseg; j++){
+				int xoffset = i*mezomeret;
+				int yoffset = j*mezomeret;
+				if(palya[i][j])
+					g2.drawImage(kep,x+xoffset*20,y+yoffset*20,null);
+				else
+					g2.drawImage(kulso,x+xoffset*20,y+yoffset*20,null);
+			}
+		}
 	}
 	
 	public void frissit(Navigator navigator){
-		
+		for(int i=0; i<palya.length; i++) {
+			for(int j=0; j<palya[0].length; j++) {
+				palya[i][j] = navigator.getKulsoMezo(i, j);
+			}
+		}
 	}
-
 }

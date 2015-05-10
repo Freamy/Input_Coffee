@@ -182,11 +182,9 @@ public class Navigator {
 		kulsoMezok = new boolean[n][k];
 		System.out.println("[Palya] létrejött, "+n+"*"+k+".");
 		
-		//Elnevezzük a mezõket, azért mi csináljuk mert mi tudjuk a kordinátáikat és az része a névnek.
 		for (int i = 0; i<n; i++) {
 			for(int j=0; j<k; j++) {
-				terkep[i][j] = new Mezo();
-				terkep[i][j].setNev("Mezo("+i+","+j+")");
+				terkep[i][j] = new Mezo(i, j);
 			}
 		}
 		
@@ -198,6 +196,10 @@ public class Navigator {
 				terkep[i][j].tick();
 			}
 		}
+	}
+	
+	public boolean getKulsoMezo(int x, int y) {
+		return kulsoMezok[x][y];
 	}
 
 	public void setKulsoMezo(int x, int y, boolean kulso) {

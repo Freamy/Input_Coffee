@@ -5,21 +5,15 @@ import java.awt.Image;
 
 
 public class GrafikusRobot extends GrafikusElem {
-	private int x;
-	private int y;
-	private boolean megsemmisult;
+
 	private boolean aktiv;
 	private Sebesseg sebesseg;
-	private Image kep;
-	private Kepernyo kepernyo;
-
+	
 	public GrafikusRobot(String utvonal, Kepernyo kepernyo, Robot robot) {
-		super(utvonal, kepernyo);
-		this.x = robot.getX();
-		this.y  = robot.getY();
+		super(robot.getPozicio().getX(), robot.getPozicio().getY(), utvonal, kepernyo);
+
 		this.sebesseg = robot.getSebesseg();
 		this.aktiv = false;
-		this.megsemmisult = false;
 	}
 	
 	public void rajzol(Graphics g){

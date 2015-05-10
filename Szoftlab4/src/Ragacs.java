@@ -4,6 +4,7 @@ public class Ragacs implements Mezonallo {
 	private int kopas;			//Megmutatja, hogy még hány robot ugorhat bele 
 								//mielõtt elkopna a ragacs takarítás nélkül.
 	
+	private boolean megsemmisult;
 	private String nev;
 	private static int autoincrement = 0;
 	
@@ -13,6 +14,8 @@ public class Ragacs implements Mezonallo {
 		
 		autoincrement++;
 		nev = "ragacs" + autoincrement;
+		
+		megsemmisult = false;
 		
 		System.out.println("["+nev+"] létrejött x=("+kord[0]+","+kord[1]+"), "+kopas+" kopás.");
 		
@@ -57,6 +60,10 @@ public class Ragacs implements Mezonallo {
 	public void megsemmisul () {
 		pozicio.leregisztral(this);
 		System.out.println("["+nev+"] megsemmisült.");
+	}
+	
+	public boolean getMegsemmisult() {
+		return megsemmisult;
 	}
 	
 	//Visszaadja a ragacs pozicio attribútumát.

@@ -4,6 +4,7 @@ public class Olajfolt implements Mezonallo{
 	private int kopas;			//Megmutatja, hogy hány kör múlva szívódik fel az olajfolt
 								//takarítás nélkül.
 	
+	private boolean megsemmisult;
 	private String nev;
 	private static int autoincrement = 0;
 	
@@ -17,7 +18,7 @@ public class Olajfolt implements Mezonallo{
 		autoincrement++;
 		nev = "olajfolt" + autoincrement;
 		}
-		
+		megsemmisult = false;
 		System.out.println("["+nev+"] létrejött x=("+kord[0]+","+kord[1]+"), "+kopas+" kopás.");
 		pozicio.beregisztral(this);
 	}
@@ -68,8 +69,13 @@ public class Olajfolt implements Mezonallo{
 	
 	//Megsemmisíti az olajfoltot.
 	public void megsemmisul () {
+		megsemmisult = true;
 		pozicio.leregisztral(this);
 		System.out.println("["+nev+"] megsemmisült.");
+	}
+	
+	public boolean getMegsemmisult() {
+		return megsemmisult;
 	}
 	
 	//Viasszaadja az olajfolt pozicio attribútumát. 

@@ -4,11 +4,16 @@ public class Mezo {
 	
 	ArrayList<Mezonallo> rajtamAllok;
 	
+	private int x;
+	private int y;
 	private String nev;
 	
-	public Mezo(){
+	public Mezo(int x, int y){
+		this.x = x;
+		this.y = y;
 		rajtamAllok = new ArrayList<Mezonallo>();
 		//Majd a Navigator nevez el minket, mert a nevünkben a kordinátáink is szerepelnek.
+		 nev = "Mezo("+x+","+y+")";
 	}
 	
 	void beregisztral(Mezonallo joveveny){
@@ -57,5 +62,13 @@ public class Mezo {
 
 	public void setNev(String nev) {
 		this.nev = nev;
+	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
 	}
 }
