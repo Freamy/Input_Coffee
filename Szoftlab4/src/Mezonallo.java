@@ -16,10 +16,13 @@ public interface Mezonallo {
 	
 	void setPozicio(Mezo m);
 	
-	public String getNev();
+	String getNev();
+	
+	void setNev(String nev);
+	
+	void setkopas(int kop);
 	
 	void tick();
-
-	void setkopas(Integer kop);
 	
+	void megsemmisul();
 }

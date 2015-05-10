@@ -13,12 +13,11 @@ public class Jatekmester {
 		try{
 		Jatekmester jatekMester = new Jatekmester();
 		boolean running = false; // a játék futását vizsgálja, ha false akkor csak az exit és a start parancsok hívhatók
-		
 		while(jatekMester.korszam< 30){ //egy játék 30 körös (többre/kevesebbre is állíthatjuk ha szeretnétek)
 			
 			BufferedReader be = new BufferedReader(new InputStreamReader(System.in)); 
 			String bemenet;
-			while((bemenet=be.readLine())!=null && bemenet.length()!=0){ //soronként beolvassuk a bemeneteket, attól függõen, hogy van.
+			while((bemenet=be.readLine())!=null && bemenet.length()!=0){ //soronként beolvassuk a bemeneteket, attól függően, hogy van.
 				String parancs = bemenet;
 				String[] parameterek = new String[10];
 				/*
@@ -41,7 +40,7 @@ public class Jatekmester {
 				if(parancs.contains(")")){
 					parancs = bemenet.substring(0, bemenet.indexOf(")"));
 				}
-				String[] darabolo = parancs.split(";");
+				String[] darabolo = parancs.split("\\(");
 				if(darabolo.length > 1){
 					// Vannak paraméterek
 					parancs = darabolo[0];
@@ -59,9 +58,11 @@ public class Jatekmester {
 				
 				if(parancs.equals("Start")){ //Elindítja a játékot
 					running = true;
+					System.out.println("[Jatek] indulás.");
 				}
 				else if(parancs.equals("Stop")){ //Megállítja a játékot, startal újraindítható
 					running = false;
+					System.out.println("[Jatek] megállás.");
 				}
 				else if(parancs.equals("Exit")){ //Leáll a program futása
 					running = false;
@@ -76,7 +77,7 @@ public class Jatekmester {
 					//navigator.adatKiirasa("");
 					
 					// TODO:
-					// Navigator: adatKiirasa(String) Kiírja a saját adatait (ha a param =  ""), majd ha param= " meghívja minden Mezõre az adatKiirasa(param) függvényt ami benne van.
+					// Navigator: adatKiirasa(String) Kiírja a saját adatait (ha a param =  ""), majd ha param= " meghívja minden Mezőre az adatKiirasa(param) függvényt ami benne van.
 					// Mezo: adatKiirasa(String param) Kiírja a saját adatait (ha a param =  a nevével, vagy "") majd meghívja minden Mezonallora az adatKiirasa(param) függvényt ami benne van.
 					// Mezonallok: adatKiirasa(String param) Kiírja a saját adatait (ha a param = a nevével, vagy "").
 				}
@@ -96,11 +97,11 @@ public class Jatekmester {
 					//navigator.adatKiirasa(x,y);
 					
 					//TODO:
-					//Navigator: adatKiirasa(int x, int y) meghívja az (x,y) kordinátán lévõ mezõre az adatKiirasa("") függvényt.
+					//Navigator: adatKiirasa(int x, int y) meghívja az (x,y) kordinátán lévő mezőre az adatKiirasa("") függvényt.
 					
 					
 				}
-				else if(parancs.equals("Torol") && running){ // Törli a pályán lévõ összes elemet
+				else if(parancs.equals("Torol") && running){ // Törli a pályán lévő összes elemet
 					
 
 					ArrayList<Mezonallo> elemek;
@@ -120,7 +121,7 @@ public class Jatekmester {
 					jatekMester.navigator.palyaKeszites(n,k);
 					
 				}
-				else if(parancs.equals("TorolMezonallo") && running){ //törli a paraméterként kapott mezõnállót
+				else if(parancs.equals("TorolMezonallo") && running){ //törli a paraméterként kapott mezőnállót
 					
 					String uj = parameterek[0];
 					ArrayList<Mezonallo> elemek;
@@ -164,7 +165,7 @@ public class Jatekmester {
 				
 				else if(parancs.equals("UjRobot") && running){ 
 					// Itt nem tudom hogy hogyan kéne a parameter[0]-t a robot nevének adni, ha nincs név paramétere,
-					// változó nevû változót pedig nem tudom hogy kéne létrehozni
+					// változó nevű változót pedig nem tudom hogy kéne létrehozni
 					Integer x = Integer.parseInt(parameterek[1]);
 					Integer y = Integer.parseInt(parameterek[2]);
 					Robot uj = new Robot(jatekMester.navigator.getMezo(x, y), jatekMester.navigator);
@@ -210,18 +211,20 @@ public class Jatekmester {
 					jatekMester.kisrobotok.add(uj);
 				}
 				else if(parancs.equals("UjRagacs") && running){
-					Integer x = Integer.parseInt(parameterek[1]);
-					Integer y = Integer.parseInt(parameterek[2]);
-					Ragacs uj = new Ragacs(jatekMester.navigator.getMezo(x, y), Integer.parseInt(parameterek[3]));
-					uj.setPozicio(jatekMester.navigator.getMezo(x, y));
+
+					int kord[] = {Integer.parseInt(parameterek[1]),Integer.parseInt(parameterek[2])};
+					
+					Ragacs uj = new Ragacs(jatekMester.navigator.getMezo(kord[0], kord[1]), Integer.parseInt(parameterek[3]), kord);
+					uj.setPozicio(jatekMester.navigator.getMezo(kord[0], kord[1]));
 					uj.setNev(parameterek[0]);
 					uj.getPozicio().beregisztral(uj);
 				}
 				else if(parancs.equals("UjOlajfolt") && running){
-					Integer x = Integer.parseInt(parameterek[1]);
-					Integer y = Integer.parseInt(parameterek[2]);
-					Olajfolt uj = new Olajfolt(jatekMester.navigator.getMezo(x, y), Integer.parseInt(parameterek[3]));
-					uj.setPozicio(jatekMester.navigator.getMezo(x, y));
+					
+					int kord[] = {Integer.parseInt(parameterek[1]),Integer.parseInt(parameterek[2])};
+					
+					Olajfolt uj = new Olajfolt(jatekMester.navigator.getMezo(kord[0], kord[1]), Integer.parseInt(parameterek[3]), "", kord);
+					uj.setPozicio(jatekMester.navigator.getMezo(kord[0], kord[1]));
 					uj.setNev(parameterek[0]);
 					uj.getPozicio().beregisztral(uj);
 				}
@@ -360,7 +363,7 @@ public class Jatekmester {
 					for(Robot r : jatekMester.robotok){
 						String vizsgalt = r.getNev();
 						if(vizsgalt.equals(uj)){
-							r.ragacsotTesz();
+							r.olajfoltotTesz();
 						}
 					}
 				}
@@ -379,7 +382,7 @@ public class Jatekmester {
 			}
 		}
 		}catch(Exception e){
-			
+			e.printStackTrace();
 		}
 	}
 	
@@ -418,24 +421,24 @@ public class Jatekmester {
 	
 	void tick(){
 		
+		System.out.println("[Jatek] új kör.");
 		korszam++;
 		navigator.tick();
-		
-		for(Robot r : robotok){
-			r.tick();
-		}
-		
-		for(Kisrobot kr : kisrobotok){
-			kr.tick();
-		}
 	}
 	
 	/*boolean running = true;
 	while(running){
+<<<<<<< HEAD
+		main.useCaseTablaKiirasa();
+		bemenet = main.bemenetBekerese();
+		if(bemenet.equals("1")){
+			main.inditUseCase();
+=======
 		jatekMester.useCaseTablaKiirasa();
 		bemenet = jatekMester.bemenetBekerese();
 		if(bemenet.equals("1")){
 			jatekMester.inditUseCase();
+>>>>>>> branch 'master' of https://github.com/Freamy/Input_Coffee.git
 		}else if(bemenet.equals("kilepes")){
 			System.exit(0);
 		}
