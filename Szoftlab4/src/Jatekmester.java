@@ -9,15 +9,18 @@ import javax.swing.*;
 public class Jatekmester extends JFrame{
 	
 	private static Navigator navigator = new Navigator();;
-	private ArrayList<Kisrobot> kisrobotok;
-	private ArrayList<Robot> robotok;
+	private ArrayList<Kisrobot> kisrobotok = new ArrayList<Kisrobot>();
+	private ArrayList<Robot> robotok = new ArrayList<Robot>();
 	private int korszam;
 	private static Kepernyo kepernyo = new Kepernyo();
 	private  int jatekosszam;
+	
 	public static void main(String[] args){
 		
 		Jatekmester jatekMester = new Jatekmester();
 		Jatekmester.kepernyo.Menu(true);
+		GrafikusPalya ge = new GrafikusPalya("utvonalbelso","utvonalkulso",kepernyo);
+		navigator.setGrafika(ge);
 		jatekMester.menukezeles();
 		//parancsértelmezõs rész kezdete
 		/*try{
@@ -623,7 +626,7 @@ public class Jatekmester extends JFrame{
 	void inicializal(int n, int m){
 		if ( n > m ) n = m;
 		for(int i = 0; i < jatekosszam; i++){
-			int random = (int) (Math.random()*(n+1)); //Itt nincs kezelve, hogy ne rakja külsõ mezõre,
+			int random = (int) (Math.random()*(n)); //Itt nincs kezelve, hogy ne rakja külsõ mezõre,
 			//valamint nem tudom hogy hogy kéne szétdobálni a pályán
 			Mezo mezo = navigator.getMezo(random,random+i);
 			ujRobot(mezo);

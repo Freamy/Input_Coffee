@@ -1,13 +1,16 @@
 import java.util.ArrayList;
 import javax.swing.*;
-
+import java.awt.*;
 public class Kepernyo extends JFrame{
 	private ArrayList<GrafikusElem> grafikak;
 	private boolean kijelez;
-	
+	public Kepernyo(){
+		grafikak = new ArrayList<GrafikusElem>();
+	}
 	public void rajzol(){
 		for(GrafikusElem ge: grafikak){
-			ge.rajzol();
+			Graphics g = this.getGraphics();
+			ge.rajzol(g);
 		}
 	}
 	public void grafikusElemHozzaad(GrafikusElem grafikusElem){

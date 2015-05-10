@@ -5,6 +5,7 @@ public class Navigator {
 	
 	private Mezo[][] terkep;
 	private boolean[][] kulsoMezok;
+	private GrafikusPalya grafikusPalya;
 	
 	public Navigator(){
 		
@@ -203,5 +204,10 @@ public class Navigator {
 	public void setKulsoMezo(int x, int y, boolean kulso) {
 		kulsoMezok[x][y] = kulso;
 		System.out.println("["+terkep[x][y].getNev()+"] külsõ mezõ lett.");
+	}
+
+	public void setGrafika(GrafikusPalya ge) {
+		// TODO Auto-generated method stub
+		this.grafikusPalya = ge;
 	}
 }

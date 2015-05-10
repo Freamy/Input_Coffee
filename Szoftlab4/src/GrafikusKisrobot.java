@@ -1,3 +1,6 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 
 
@@ -22,4 +25,9 @@ public class GrafikusKisrobot extends GrafikusElem {
 		this.megsemmisult = kisrobot.getMegsemmisult();
 		kepernyo.rajzol();
 	}
+	public void rajzol(Graphics g){
+		Graphics2D graphics = (Graphics2D) g;
+		graphics.drawImage(kep,x*20,y*20,null);
+	}
+	
 }
