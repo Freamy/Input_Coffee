@@ -11,7 +11,7 @@ public class Jatekmester extends JFrame{
 	private static Navigator navigator = new Navigator();;
 	private ArrayList<Kisrobot> kisrobotok = new ArrayList<Kisrobot>();
 	private ArrayList<Robot> robotok = new ArrayList<Robot>();
-	private int korszam;
+	private static int korszam = 1;
 	private static Kepernyo kepernyo = new Kepernyo();
 	private  int jatekosszam;
 	
@@ -22,6 +22,10 @@ public class Jatekmester extends JFrame{
 		GrafikusPalya ge = new GrafikusPalya("utvonalbelso","utvonalkulso",kepernyo);
 		navigator.setGrafika(ge);
 		jatekMester.menukezeles();
+		while(korszam < 30){
+			jatekMester.leptet();
+			jatekMester.tick();
+		}
 		//parancsértelmezõs rész kezdete
 		/*try{
 		
@@ -459,8 +463,8 @@ public class Jatekmester extends JFrame{
 					removeAll();
 					//Láthatatlanná tesszük
 					setVisible(false);
-					//inicializáljuk a megadott pályaméret mellett a robotokat, ezt kell kivenni, hogy megnézhetõ legyen
-					inicializal(n,m);
+					//inicializáljuk a megadott pályaméret mellett a robotokat
+					inicializal(navigator.getX(),navigator.getY());
 					//Meghívjuk a jatekosmegadas függvényt, ami felnyit egy új frame-t
 					jatekosmegadas();
 			}
@@ -604,7 +608,7 @@ public class Jatekmester extends JFrame{
 		if(jatekosszam < 3) PalyaY.setEnabled(false);
 		if(jatekosszam < 2) PalyaX.setEnabled(false);
 		
-		//A robotoknak beállítjuk a nev attribútumát, attól függõen, hogy mennyi van. Valamint ezt kell kikommentezni
+		//A robotoknak beállítjuk a nev attribútumát, attól függõen, hogy mennyi van.
 		for(int i=0; i < jatekosszam; i++){
 			if(i==0) robotok.get(i).setNev(jszam.getText());
 			if(i==1) robotok.get(i).setNev(PalyaX.getText());
@@ -626,9 +630,17 @@ public class Jatekmester extends JFrame{
 	void inicializal(int n, int m){
 		if ( n > m ) n = m;
 		for(int i = 0; i < jatekosszam; i++){
-			int random = (int) (Math.random()*(n)); //Itt nincs kezelve, hogy ne rakja külsõ mezõre,
-			//valamint nem tudom hogy hogy kéne szétdobálni a pályán
-			Mezo mezo = navigator.getMezo(random,random+i);
+			int random = (int) (Math.random()*(n)); 
+			int random2 = random + i;
+			if(random2 > n) random2 = random2 - n;
+			Mezo mezo = navigator.getMezo(random,random2);
+			while(navigator.kulsoMezo(mezo)){
+				random++;
+				random2--;
+				if(random > n) random -=n;
+				if(random2 < 0) random2 +=n;
+				mezo = navigator.getMezo(random,random2);
+			}
 			ujRobot(mezo);
 		}
 	}
@@ -640,12 +652,10 @@ public class Jatekmester extends JFrame{
 		for(Robot r : robotok){
 			Sebesseg sebesseg;
 			boolean ragacsle,olajle;
-			//sebesseg =
-			//ragacsle =
-			//olajle =
-			/**Ezt a képernyõnek kéne intéznie valahogyan?**/
-			//Felhasználótól kér egy sebességet, ragacsle és olajle boolean értékeket
-			//r.lep(sebesseg, ragacsle, olajle);
+			sebesseg = kepernyo.sebessegkerdezo();
+			ragacsle = kepernyo.ragacslekerdezo();
+			olajle = kepernyo.olajlekerdezo();
+			r.lep(sebesseg, ragacsle, olajle);
 			r.getGrafika().frissit(r);
 		}
 		for(Kisrobot kr : kisrobotok){
@@ -655,10 +665,20 @@ public class Jatekmester extends JFrame{
 	
 	//Létrehozunk egy kisrobotot, ha a 3-as számot kaptuk a pl: 6-7 koodinátára
 	/**Itt nincs lekezelve hogy mi van akkor ha 6-nál és 7-nél kisebb a pálya**/
-	void ujKisrobot(){
+	void ujKisrobot(int n, int m){
+		if (n > m); n = m;
 		int random  = (int) (Math.random() * 6 + 1);
 		if (random == 3){
-			Mezo kisrobotbelepes = navigator.getMezo(6,7);
+			int random2 = random * random;
+			if(random2 > n) random2-=n;
+			Mezo kisrobotbelepes = navigator.getMezo(random,random2);
+			while(navigator.kulsoMezo(kisrobotbelepes)){
+				random++;
+				random2--;
+				if(random > n) random -=n;
+				if(random2 < 0) random2 +=n;
+				kisrobotbelepes = navigator.getMezo(random,random2);
+			}
 			Kisrobot uj = new Kisrobot(kisrobotbelepes,navigator);
 			kisrobotok.add(uj);
 			GrafikusKisrobot ge = new GrafikusKisrobot("kisrobotképénekhelye",kepernyo,uj);
@@ -698,10 +718,9 @@ public class Jatekmester extends JFrame{
 	//Léptetjük egyel a körszámot és megpróbálunk létrehozni egy ujKisrobotot, valamint minden elemnél léptetünk körszámot
 	//a navigator.tick hívás segítségével, és ezzel a kopás értékek csökkennek.
 	void tick(){
-		
 		System.out.println("[Jatek] új kör.");	
 		korszam++;
-		ujKisrobot();
+		ujKisrobot(navigator.getX(),navigator.getY());
 		navigator.tick();
 	}
 	
