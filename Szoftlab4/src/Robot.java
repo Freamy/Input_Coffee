@@ -10,9 +10,11 @@ public class Robot implements Mezonallo{
 	private boolean megsemmisult;
 	private String nev;
 
-	
 	public Robot(String nev, Mezo mezo, Navigator navigator, Sebesseg sebesseg, int ragacsDb, int olajDb, boolean vesztettem, double megtettUt){
 		this.nev=nev;
+
+    	private GrafikusRobot grafikusRobot;
+
 		this.pozicio = mezo;
 		this.navigator = navigator;
 		this.sebesseg = sebesseg;
@@ -301,6 +303,26 @@ public class Robot implements Mezonallo{
 	
 	public void setkopas(int kop) {
 		
+	}
+
+	public int getX() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getY() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public boolean getMegsemmisult() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean getAktiv() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	public void adatokKiirasa(String param) {
