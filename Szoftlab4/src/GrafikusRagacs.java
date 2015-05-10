@@ -19,8 +19,8 @@ public class GrafikusRagacs extends GrafikusElem{
 	
 	//Frissíti tagváltozóit a ragacs paraméter szerint
 	public void frissit (Ragacs ragacs){
-		this.x = robot.getX();
-		this.y = robot.getY();
+		this.x = ragacs.getX();
+		this.y = ragacs.getY();
 		kepernyo.rajzol();
 	}
 }

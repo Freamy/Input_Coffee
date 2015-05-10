@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -22,8 +21,8 @@ public class GrafikusOlajfolt extends GrafikusElem {
 	
 	//Frissíti tagváltozóit az olajfolt paraméter szerint
 	public void frissit (Olajfolt olajfolt){
-		this.x = robot.getX();
-		this.y = robot.getY();
+		this.x = olajfolt.getX();
+		this.y = olajfolt.getY();
 		kepernyo.rajzol();
 	}
 }
