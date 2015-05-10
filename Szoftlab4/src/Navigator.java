@@ -9,7 +9,6 @@ public class Navigator {
 	private boolean[][] kulsoMezok;
 	
 	public Navigator(){
-		
 	}
 	
 	public Mezo getMezo(int id){
@@ -187,7 +186,7 @@ public class Navigator {
 		//Elnevezzük a mezõket, azért mi csináljuk mert mi tudjuk a kordinátáikat és az része a névnek.
 		for (int i = 0; i<n; i++) {
 			for(int j=0; j<k; j++) {
-				terkep[i][j] = new Mezo();
+				terkep[i][j] = new Mezo(i,j);
 				terkep[i][j].setNev("Mezo("+i+","+j+")");
 			}
 		}
@@ -217,5 +216,15 @@ public class Navigator {
 	
 	public void setGrafikusPalya(GrafikusPalya gp){
 		grafikusPalya=gp;
+	}
+	
+	//Visszatér a pálya szélleségével 
+	public int getX(){
+		return terkep.length;
+	}
+	
+	//visszatér a pálya magasságával
+	public int getY(){
+		return terkep[0].length;
 	}
 }
