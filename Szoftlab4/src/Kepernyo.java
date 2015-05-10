@@ -1,7 +1,9 @@
 import java.util.ArrayList;
+import javax.swing.*;
 
-public class Kepernyo {
+public class Kepernyo extends JFrame{
 	private ArrayList<GrafikusElem> grafikak;
+	private boolean kijelez;
 	
 	public void rajzol(){
 		for(GrafikusElem ge: grafikak){
@@ -13,5 +15,8 @@ public class Kepernyo {
 	}	
 	public void grafikusElemKivesz(GrafikusElem grafikusElem){
 		grafikak.remove(grafikusElem);
+	}
+	public void Menu(boolean aktiv){
+		this.kijelez = !aktiv;
 	}
 }

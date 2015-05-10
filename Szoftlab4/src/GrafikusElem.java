@@ -1,4 +1,9 @@
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public abstract class GrafikusElem {
 	private int x;
@@ -20,6 +25,15 @@ public abstract class GrafikusElem {
 	}
 	public Image kepBetoltese(String utvonal){
 		//placeholder
+		BufferedImage bi = null;
+		try{
+			bi = ImageIO.read(new File(utvonal));
+			kep = bi;
+		}
+		catch(IOException e){
+			System.out.println("Invalid path! in GrafikusElem.kepBetoltese");
+			kep = null;
+		}
 		return kep;
 	}
 	public void rajzol(){}

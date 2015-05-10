@@ -7,6 +7,7 @@ public class Kisrobot implements Mezonallo {
 	
 	private String nev;
 	private static int autoincrement = 0;
+	private GrafikusKisrobot grafikusKisrobot;
 	
 	public Kisrobot(Mezo mezo, Navigator navigator){
 		this.navigator = navigator;
@@ -138,5 +139,29 @@ public class Kisrobot implements Mezonallo {
 	
 	public void setkopas(int kop) {
 		
+	}
+
+	public int getX() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getY() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public boolean getMegsemmisult() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public GrafikusKisrobot getGrafika() {
+		// TODO Auto-generated method stub
+		return grafikusKisrobot;
+	}
+	public void setGrafika(GrafikusKisrobot gk) {
+		// TODO Auto-generated method stub
+		this.grafikusKisrobot = gk;
 	}
 }

@@ -295,5 +295,15 @@ public class Robot implements Mezonallo{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	public GrafikusRobot getGrafika() {
+		// TODO Auto-generated method stub
+		return grafikusRobot;
+	}
+
+	public void setGrafika(GrafikusRobot ge) {
+		// TODO Auto-generated method stub
+		this.grafikusRobot = ge;
+	}
 	
 }
