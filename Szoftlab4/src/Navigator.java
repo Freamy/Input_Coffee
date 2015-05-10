@@ -3,6 +3,8 @@ import java.util.ArrayList;
 
 public class Navigator {
 	
+	
+	private GrafikusPalya grafikusPalya;
 	private Mezo[][] terkep;
 	private boolean[][] kulsoMezok;
 	
@@ -203,5 +205,17 @@ public class Navigator {
 	public void setKulsoMezo(int x, int y, boolean kulso) {
 		kulsoMezok[x][y] = kulso;
 		System.out.println("["+terkep[x][y].getNev()+"] külsõ mezõ lett.");
+	}
+	
+	public boolean[][] getPalya(){
+		return kulsoMezok;
+	}
+	
+	public GrafikusPalya getGrafikusPalya(){
+		return grafikusPalya;
+	}
+	
+	public void setGrafikusPalya(GrafikusPalya gp){
+		grafikusPalya=gp;
 	}
 }

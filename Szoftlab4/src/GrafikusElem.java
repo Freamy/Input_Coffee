@@ -1,11 +1,11 @@
 import java.awt.Image;
 
 public abstract class GrafikusElem {
-	private int x;
-	private int y;
-	private boolean megsemmisult;
-	private Image kep;
-	private Kepernyo kepernyo;
+	protected int x;
+	protected int y;
+	protected boolean megsemmisult;
+	protected Image kep;
+	protected Kepernyo kepernyo;
 	
 	public GrafikusElem(){
 		
