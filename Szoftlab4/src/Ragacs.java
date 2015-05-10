@@ -3,7 +3,8 @@ public class Ragacs implements Mezonallo {
 	private Mezo pozicio;		//A ragacs tartózkodási mezõje.
 	private int kopas;			//Megmutatja, hogy még hány robot ugorhat bele 
 								//mielõtt elkopna a ragacs takarítás nélkül.
-	
+	private int x;
+	private int y;
 	private String nev;
 	private static int autoincrement = 0;
 	
@@ -16,6 +17,8 @@ public class Ragacs implements Mezonallo {
 		
 		System.out.println("["+nev+"] létrejött x=("+kord[0]+","+kord[1]+"), "+kopas+" kopás.");
 		
+		this.x = mezo.getX();
+		this.y = mezo.getY();
 		mezo.beregisztral(this);
 	}
 	
@@ -99,7 +102,13 @@ public class Ragacs implements Mezonallo {
 		this.nev = nev;
 	}
 
-
+	public int getX(){
+		return x;
+	}
+	
+	public int getY(){
+		return y;
+	}
 
 	
 }

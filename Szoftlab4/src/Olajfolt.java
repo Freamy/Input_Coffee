@@ -3,14 +3,16 @@ public class Olajfolt implements Mezonallo{
 	private Mezo pozicio;		//Az olajfolt tartózkodási mezõje.
 	private int kopas;			//Megmutatja, hogy hány kör múlva szívódik fel az olajfolt
 								//takarítás nélkül.
-	
+	private int x;
+	private int y;
 	private String nev;
 	private static int autoincrement = 0;
 	
 	public Olajfolt(Mezo mezo,int kopas, String kisrobotneve, int kord[]){
 		this.pozicio = mezo;
 		this.kopas = kopas;
-		
+		this.x = mezo.getX();
+		this.y = mezo.getY();
 		if(kisrobotneve != "") {
 			nev = kisrobotneve+"olajfoltja";
 		} else {
@@ -100,6 +102,14 @@ public class Olajfolt implements Mezonallo{
 
 	public void setNev(String nev) {
 		this.nev = nev;
+	}
+	
+	public int getX(){
+		return x;
+	}
+	
+	public int getY(){
+		return y;
 	}
 
 }
