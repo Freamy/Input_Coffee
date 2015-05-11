@@ -16,7 +16,7 @@ public class Kisrobot implements Mezonallo {
 
 	public Kisrobot(Mezo mezo, Navigator navigator, Gyar gyar){
 		grafikusGyar = gyar;
-		grafikusKisrobot = (GrafikusKisrobot) grafikusGyar.grafikaKeszitese(Jatekmester.getKepernyo(),this);
+		grafikusKisrobot = (GrafikusKisrobot) gyar.grafikaKeszitese(Jatekmester.getKepernyo(),this);
 	
 		this.nev = nev;
 		this.navigator = navigator;

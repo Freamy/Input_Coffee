@@ -9,11 +9,9 @@ public class Kepernyo extends JPanel{
 	private ArrayList<GrafikusElem> grafikak;
 	private boolean kijelez;
 	private JFrame frame;
-	private Navigator navigator;
 	
 	public Kepernyo(Navigator navigator){
 		grafikak = new ArrayList<GrafikusElem>();
-		this.navigator = navigator;
 	}
 	
 	public void initFrame(){
@@ -25,10 +23,15 @@ public class Kepernyo extends JPanel{
 	
 	public void rajzol(JFrame j){
 		j.invalidate();
-		for(GrafikusElem ge: grafikak){
-			Graphics g = j.getGraphics();
+		Graphics g = j.getGraphics();
+		for(int i = grafikak.size() - 1; i>=0; i--){
+			grafikak.get(i).rajzol(g);
+		}
+		/*for(GrafikusElem ge: grafikak){
+			//Graphics g = j.getGraphics();
 			ge.rajzol(g, navigator);
 		}
+		*/
 	}
 	public void grafikusElemHozzaad(GrafikusElem grafikusElem){
 		grafikak.add(grafikusElem);

@@ -39,5 +39,5 @@ public abstract class GrafikusElem {
 		}
 		return kep;
 	}
-	public void rajzol(Graphics g, Navigator navigator){}
+	public void rajzol(Graphics g){}
 }

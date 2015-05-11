@@ -20,7 +20,7 @@ public class GrafikusPalya extends GrafikusElem {
 		palya = n.getPalya();
 	}
 	
-	public void rajzol(Graphics g, Navigator navigator){
+	public void rajzol(Graphics g){
 		int szelesseg = palya[0].length;
 		int hosszusag = palya.length;
 		Graphics2D g2 = (Graphics2D) g;
@@ -29,12 +29,7 @@ public class GrafikusPalya extends GrafikusElem {
 				int xoffset = i*mezomeret;
 				int yoffset = j*mezomeret;
 				if(!palya[i][j]){
-					if(navigator.getMezo(i,j).rajtamAllok.size() == 0){
-						g2.drawImage(belso,x+xoffset,y+yoffset,null);
-					}
-					else{
-						
-					}
+					g2.drawImage(belso,x+xoffset,y+yoffset,null);
 				}
 				else{
 					g2.drawImage(kulso,x+xoffset,y+yoffset,null);

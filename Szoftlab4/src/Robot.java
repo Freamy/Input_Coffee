@@ -21,7 +21,7 @@ public class Robot implements Mezonallo{
 		grafikaGyar = 
 
 	}*/
-	public Robot(String nev, Mezo mezo, Navigator navigator, Sebesseg sebesseg, int ragacsDb, int olajDb, boolean vesztettem, double megtettUt){
+	public Robot(String nev, Mezo mezo, Navigator navigator, Sebesseg sebesseg, int ragacsDb, int olajDb, boolean vesztettem, double megtettUt, Gyar gyar){
 		
 		this.nev = nev;
 		this.navigator = navigator;
@@ -47,7 +47,7 @@ public class Robot implements Mezonallo{
 		
 		mezo.beregisztral(this);
 		this.pozicio = mezo;
-		grafikusRobot = (GrafikusRobot) grafikaGyar.grafikaKeszitese(Jatekmester.getKepernyo(), this);
+		grafikusRobot = (GrafikusRobot) gyar.grafikaKeszitese(Jatekmester.getKepernyo(), this);
 	}
 	
 	// Ha az olajfoltotTesz igaz, akkor meghívja az olajfoltotTesz függvényét,
@@ -308,7 +308,7 @@ public class Robot implements Mezonallo{
 	
 	// Új kört kezd.
 	public void tick(){
-		ugrottMar = false;
+
 	}
 	
 	public void tickend() {

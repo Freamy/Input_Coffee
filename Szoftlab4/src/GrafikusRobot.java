@@ -17,7 +17,7 @@ public class GrafikusRobot extends GrafikusElem {
 		this.aktiv = false;
 	}
 	
-	public void rajzol(Graphics g, Navigator navigator){
+	public void rajzol(Graphics g){
 		Graphics2D g2 = (Graphics2D) g;
 		int meret = 64;
 		if(!megsemmisult){

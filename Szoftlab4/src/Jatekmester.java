@@ -16,6 +16,8 @@ public class Jatekmester extends JFrame{
 	private int korszam = 1;
 	private static Kepernyo kepernyo = new Kepernyo(navigator); 
 	private  int jatekosszam;
+	private KisRobotGyar kisgyar = new KisRobotGyar(kepernyo);
+	private RobotGyar nagygyar = new RobotGyar(kepernyo);
 	
 	public static void setKepernyo(Kepernyo kepernyo) {
 		Jatekmester.kepernyo = kepernyo;
@@ -193,7 +195,7 @@ public class Jatekmester extends JFrame{
 							// változó nevû változót pedig nem tudom hogy kéne létrehozni
 							Integer x = Integer.parseInt(parameterek[1]);
 							Integer y = Integer.parseInt(parameterek[2]);
-							Robot uj = new Robot("UJRobot"+x+y,navigator.getMezo(x, y), navigator,new Sebesseg(1,1),0,0,false,0);
+							Robot uj = new Robot("UJRobot"+x+y,navigator.getMezo(x, y), navigator,new Sebesseg(1,1),0,0,false,0,jatekMester.nagygyar);
 
 							uj.getPozicio().beregisztral(uj);
 							
@@ -768,7 +770,8 @@ public class Jatekmester extends JFrame{
 	private boolean ujragacs = false, ujolaj =false;
 	//Létrehozunk egy kisrobotot,  ha a 3-as számot kaptuk a pl: 6-7 koodinátára
 	/**Itt nincs lekezelve hogy mi van akkor ha 6-nál és 7-nél kisebb a pálya**/
-	private KisRobotGyar kisgyar = new KisRobotGyar(kepernyo);
+	
+	
 	void ujKisrobot(int n, int m){
 		if (n > m); n = m;
 		int random  = (int) (Math.random() * 6 + 1);
@@ -785,8 +788,7 @@ public class Jatekmester extends JFrame{
 			}
 			Kisrobot uj = new Kisrobot(kisrobotbelepes,navigator,kisgyar);
 			kisrobotok.add(uj);
-			GrafikusKisrobot ge = new GrafikusKisrobot("gfx/kisrobot.png",getKepernyo(),uj);
-			getKepernyo().grafikusElemHozzaad(ge);
+			getKepernyo().grafikusElemHozzaad(uj.getGrafika());
 		}
 	}
 	
@@ -798,11 +800,9 @@ public class Jatekmester extends JFrame{
 	
 	//Létrehozunk egy Robotot a megadott mezõre
 	void ujRobot(Mezo hova, int i){
-		Sebesseg sebesseg = new Sebesseg(1,1);
-		Robot uj = new Robot("Robot"+i,hova,navigator,sebesseg,5,5,false,0);
-		GrafikusRobot ge = new GrafikusRobot("gfx/robot.png",getKepernyo(),uj);
-		uj.setGrafika(ge);
-		getKepernyo().grafikusElemHozzaad(ge);
+		Sebesseg sebesseg = new Sebesseg(0,0);
+		Robot uj = new Robot("Robot"+i,hova,navigator,sebesseg,5,5,false,0,nagygyar);
+		getKepernyo().grafikusElemHozzaad(uj.getGrafika());
 		robotok.add(uj);
 	}
 	
@@ -843,7 +843,7 @@ public class Jatekmester extends JFrame{
 		this.setLocationRelativeTo(null);
 		navigator.getGrafikusPalya().grafikusPalyaFelvevese(navigator);
 		kepernyo.initFrame();
-		navigator.getGrafikusPalya().rajzol(this.getGraphics(),navigator);
+		navigator.getGrafikusPalya().rajzol(this.getGraphics());
 		Ugrasevent e = new Ugrasevent(this);
 		this.addKeyListener(e);
 		this.robot = robotok.get(i);
