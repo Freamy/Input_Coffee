@@ -11,9 +11,15 @@ public class Robot implements Mezonallo{
 	private String nev;
 	private static int autoincrement=0;
 	
+	private Gyar grafikaGyar;
 	private GrafikusRobot grafikusRobot;
 	
+	private boolean aktiv;
+	
 	public Robot(Mezo mezo, Navigator navigator){
+		grafikaGyar = new RobotGyar();
+		
+		
 		this.pozicio = mezo;
 		this.navigator = navigator;
 		this.vesztettem = false;
@@ -22,6 +28,8 @@ public class Robot implements Mezonallo{
 		this.megtettUt = 0;
 		this.ugrottMar = false;
 		sebesseg = new Sebesseg(0,0);
+		
+		grafikusRobot = (GrafikusRobot) grafikaGyar.grafikaKeszitese(Jatekmester.kepernyo, this);
 		
 		autoincrement++;
 		nev = "robot" + autoincrement;
@@ -35,24 +43,25 @@ public class Robot implements Mezonallo{
 						+megtettUt+" út.");
 		
 		mezo.beregisztral(this);
+		
 	}
 	
 	// Ha az olajfoltotTesz igaz, akkor meghívja az olajfoltotTesz függvényét,
 	// ha pedig a ragacsotTesz igaz, akkor meghívja a ragacsotTesz függvényét.
 	// Ezután meghívja a sebessegvaltoztatas függvénye, aminek
 	// átadja a paraméterül kaporr valtozas -t. Ha ez is kész akkor meghívódik az ugrik függvény.
-	public void lep(Sebesseg valtozas, boolean olajfoltotTesz, boolean ragacsotTesz){
+	public void lep(Sebesseg valtozas, boolean olajfoltotTesz, boolean ragacsotTesz, Kepernyo k){
 		if (vesztettem) {
 			System.out.println("Hiba: ["+nev+"] nem tud ugrani, mert vesztett.");
 		} else if(ugrottMar) {
 			System.out.println("Hiba: ["+nev+"] ebben a körben már ugrott.");
 		} else {
 			if(olajfoltotTesz){
-				olajfoltotTesz();
+				olajfoltotTesz(k);
 				//Nem itt vonunk ki az olajDb-bõl hanem a letevõ függvényen belül!
 			}
 			else if(ragacsotTesz){
-				ragacsotTesz();
+				ragacsotTesz(k);
 				//Nem itt vonunk ki a ragacsDb-bõl hanem a letevõ függvényen belül!
 			}
 			pozicio.leregisztral(this);
@@ -66,26 +75,26 @@ public class Robot implements Mezonallo{
 	public void sebessegvaltozas(Sebesseg valtozas){}
 	
 	// Letesz egy ragacsot az aktuális helyére.
-	public void ragacsotTesz(){
+	public void ragacsotTesz(Kepernyo k){
 		if(ragacsDb==0) {
 			System.out.println("Hiba: ["+nev+"] elfogyott a ragacskészlet.");
 		} else {
 		System.out.println("["+nev+"] ragacsot tesz le.");
 		int kord[] = navigator.koordinataKonverter(pozicio);
-		Ragacs ragacs = new Ragacs(pozicio, 5, kord);
+		Ragacs ragacs = new Ragacs(pozicio, 5, kord, k);
 		pozicio.beregisztral(ragacs);
 		ragacsDb--;
 		}
 	}
 	
 	// Letesz egy olajfoltot az aktuális helyére.
-	public void olajfoltotTesz(){
+	public void olajfoltotTesz(Kepernyo k){
 		if(olajDb==0) {
 			System.out.println("Hiba: ["+nev+"] elfogyott az olajfoltkészlet.");
 		} else {
 		System.out.println("["+nev+"] olajfoltot tesz le.");
 		int kord[] = navigator.koordinataKonverter(pozicio);
-		Olajfolt olajfolt = new Olajfolt(pozicio, 5, "", kord);
+		Olajfolt olajfolt = new Olajfolt(pozicio, 5, "", kord, k);
 		pozicio.beregisztral(olajfolt);
 		olajDb--;
 		}
@@ -156,7 +165,7 @@ public class Robot implements Mezonallo{
 	// meghívja a leregisztrál függvényét és a Kisrobot megsemmisül.
 	public void kisrobotraLeptem(Kisrobot kireLeptem){
 		System.out.println("["+nev+"] ütközött: "+kireLeptem.getNev()+".");
-		kireLeptem.robotMegsemmisiti();
+		kireLeptem.robotMegsemmisiti(Jatekmester.kepernyo);
 	}
 	
 	// Ilyenkor a robot a kireLeptem robottal ütközött.
@@ -278,12 +287,12 @@ public class Robot implements Mezonallo{
 
 	public int getX() {
 		// TODO Auto-generated method stub
-		return 0;
+		return pozicio.getX();
 	}
 
 	public int getY() {
 		// TODO Auto-generated method stub
-		return 0;
+		return pozicio.getY();
 	}
 
 	public boolean getMegsemmisult() {
@@ -292,8 +301,19 @@ public class Robot implements Mezonallo{
 	}
 
 	public boolean getAktiv() {
-		// TODO Auto-generated method stub
-		return false;
+		return aktiv;
+	}
+	
+	public void setAktiv(boolean a){
+		aktiv = a;
+	}
+
+	public GrafikusRobot getGrafika() {
+		return grafikusRobot;
+	}
+
+	public void setGrafika(GrafikusRobot ge) {
+		grafikusRobot = ge;
 	}
 	
 }

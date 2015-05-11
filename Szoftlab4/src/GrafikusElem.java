@@ -1,3 +1,4 @@
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -37,5 +38,5 @@ public abstract class GrafikusElem {
 		}
 		return kep;
 	}
-	public void rajzol(){}
+	public void rajzol(Graphics g){}
 }

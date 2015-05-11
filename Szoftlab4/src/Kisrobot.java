@@ -1,14 +1,22 @@
+
 public class Kisrobot implements Mezonallo {
 
+	private Gyar grafikusGyar;
+	
 	private Mezo pozicio;			//A kisrobot tartózkodási mezõje.
 	private Navigator navigator;	//A kisrobot eltárolja, hogy kiszámoltathassa vele azt, hogy hova ugorjon.
 	private boolean lekoppant;		//Igaz ha robotnak vagy kisrobotnak ütközött.
 	private int megsemmisul;		//Mennyi kör után semmisül meg a kisrobot.	
 	
+	
 	private String nev;
 	private static int autoincrement = 0;
+	private GrafikusKisrobot grafikusKisrobot;
 	
-	public Kisrobot(Mezo mezo, Navigator navigator){
+	public Kisrobot(Mezo mezo, Navigator navigator, Kepernyo kepernyo){
+		grafikusGyar = new KisRobotGyar();
+		grafikusKisrobot = (GrafikusKisrobot) grafikusGyar.grafikaKeszitese(kepernyo, this);
+		
 		this.navigator = navigator;
 		pozicio = mezo;
 		lekoppant= false;
@@ -95,13 +103,13 @@ public class Kisrobot implements Mezonallo {
 	}
 	
 	//Megsemmisíti a kisrobotot.
-	public void robotMegsemmisiti () {
+	public void robotMegsemmisiti (Kepernyo k) {
 		
 		pozicio.leregisztral(this);
 		
 		int kord[] = navigator.koordinataKonverter(pozicio);
 		
-		new Olajfolt (pozicio, 1, nev, kord);
+		new Olajfolt (pozicio, 1, nev, kord, k);
 		
 		System.out.println("["+nev+"] megsemmisült.");
 	}
@@ -138,5 +146,29 @@ public class Kisrobot implements Mezonallo {
 	
 	public void setkopas(int kop) {
 		
+	}
+
+	public int getX() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getY() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public boolean getMegsemmisult() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public GrafikusKisrobot getGrafika() {
+		// TODO Auto-generated method stub
+		return grafikusKisrobot;
+	}
+	public void setGrafika(GrafikusKisrobot gk) {
+		// TODO Auto-generated method stub
+		this.grafikusKisrobot = gk;
 	}
 }

@@ -1,13 +1,20 @@
 import java.util.ArrayList;
 
 
+import java.util.ArrayList;
+
+
 public class Navigator {
 	
+	private Gyar grafikaGyar;
+	
+	private GrafikusPalya grafikusPalya;
 	private Mezo[][] terkep;
 	private boolean[][] kulsoMezok;
 	
 	public Navigator(){
-		
+		grafikaGyar = new PalyaGyar();
+		grafikusPalya = (GrafikusPalya) grafikaGyar.grafikaKeszitese(Jatekmester.kepernyo, null);
 	}
 	
 	public Mezo getMezo(int id){
@@ -182,9 +189,11 @@ public class Navigator {
 		kulsoMezok = new boolean[n][k];
 		System.out.println("[Palya] létrejött, "+n+"*"+k+".");
 		
+		//Elnevezzük a mezõket, azért mi csináljuk mert mi tudjuk a kordinátáikat és az része a névnek.
 		for (int i = 0; i<n; i++) {
 			for(int j=0; j<k; j++) {
-				terkep[i][j] = new Mezo(i, j);
+				terkep[i][j] = new Mezo(i,j);
+				terkep[i][j].setNev("Mezo("+i+","+j+")");
 			}
 		}
 		
@@ -197,13 +206,39 @@ public class Navigator {
 			}
 		}
 	}
-	
-	public boolean getKulsoMezo(int x, int y) {
-		return kulsoMezok[x][y];
-	}
 
 	public void setKulsoMezo(int x, int y, boolean kulso) {
 		kulsoMezok[x][y] = kulso;
 		System.out.println("["+terkep[x][y].getNev()+"] külsõ mezõ lett.");
+	}
+	
+	public boolean[][] getPalya(){
+		return kulsoMezok;
+	}
+	
+	public GrafikusPalya getGrafikusPalya(){
+		return grafikusPalya;
+	}
+	
+	public void setGrafikusPalya(GrafikusPalya gp){
+		grafikusPalya=gp;
+	}
+	
+	//Visszatér a pálya szélleségével 
+	public int getX(){
+		return terkep.length;
+	}
+	
+	//visszatér a pálya magasságával
+	public int getY(){
+		return terkep[0].length;
+	}
+
+	public boolean getKulsoMezo(int i, int j) {
+		return kulsoMezok[i][j];
+	}
+	
+	public void setGrafika(GrafikusPalya ge){
+		this.grafikusPalya = ge;
 	}
 }

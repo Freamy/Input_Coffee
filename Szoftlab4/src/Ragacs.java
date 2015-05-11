@@ -1,16 +1,26 @@
 public class Ragacs implements Mezonallo {
+	
+	private Gyar grafikusGyar;
 
 	private Mezo pozicio;		//A ragacs tartózkodási mezõje.
 	private int kopas;			//Megmutatja, hogy még hány robot ugorhat bele 
 								//mielõtt elkopna a ragacs takarítás nélkül.
-	
-	private boolean megsemmisult;
+	private int x;
+	private int y;
 	private String nev;
 	private static int autoincrement = 0;
 	
-	public Ragacs(Mezo mezo,int kopas, int kord[]){
+	private GrafikusRagacs grafika;
+	
+	private boolean megsemmisult;
+	
+	public Ragacs(Mezo mezo,int kopas, int kord[], Kepernyo k){
 		pozicio = mezo;
 		this.kopas = kopas;
+		
+		grafikusGyar = new RagacsGyar();
+		
+		grafika = (GrafikusRagacs) grafikusGyar.grafikaKeszitese(k, this);
 		
 		autoincrement++;
 		nev = "ragacs" + autoincrement;
@@ -19,6 +29,8 @@ public class Ragacs implements Mezonallo {
 		
 		System.out.println("["+nev+"] létrejött x=("+kord[0]+","+kord[1]+"), "+kopas+" kopás.");
 		
+		this.x = mezo.getX();
+		this.y = mezo.getY();
 		mezo.beregisztral(this);
 	}
 	
@@ -62,10 +74,6 @@ public class Ragacs implements Mezonallo {
 		System.out.println("["+nev+"] megsemmisült.");
 	}
 	
-	public boolean getMegsemmisult() {
-		return megsemmisult;
-	}
-	
 	//Visszaadja a ragacs pozicio attribútumát.
 	@Override
 	public Mezo getPozicio() {
@@ -106,7 +114,17 @@ public class Ragacs implements Mezonallo {
 		this.nev = nev;
 	}
 
+	public int getX(){
+		return x;
+	}
+	
+	public int getY(){
+		return y;
+	}
 
+	public boolean getMegsemmisult() {
+		return megsemmisult;
+	}
 
 	
 }

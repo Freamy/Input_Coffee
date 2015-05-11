@@ -1,5 +1,7 @@
 public class Olajfolt implements Mezonallo{
 	
+	private Gyar grafikusGyar;
+	
 	private Mezo pozicio;		//Az olajfolt tartózkodási mezõje.
 	private int kopas;			//Megmutatja, hogy hány kör múlva szívódik fel az olajfolt
 								//takarítás nélkül.
@@ -8,9 +10,20 @@ public class Olajfolt implements Mezonallo{
 	private String nev;
 	private static int autoincrement = 0;
 	
-	public Olajfolt(Mezo mezo,int kopas, String kisrobotneve, int kord[]){
+	private GrafikusOlajfolt go = null;
+	
+	private GrafikusOlajfolt grafika;
+
+	
+	
+	public Olajfolt(Mezo mezo,int kopas, String kisrobotneve, int kord[], Kepernyo k){
 		this.pozicio = mezo;
 		this.kopas = kopas;
+		
+		grafikusGyar = new OlajGyar();
+		
+		grafika = (GrafikusOlajfolt) grafikusGyar.grafikaKeszitese(k, this);
+		
 		
 		if(kisrobotneve != "") {
 			nev = kisrobotneve+"olajfoltja";
@@ -58,6 +71,8 @@ public class Olajfolt implements Mezonallo{
 		kopas -= 1;
 		if(kopas <= 0 ){
 			pozicio.leregisztral(this);
+			megsemmisult = true;
+			if(go!=null) go.frissit(this);
 		}
 	}
 	
@@ -72,6 +87,7 @@ public class Olajfolt implements Mezonallo{
 		megsemmisult = true;
 		pozicio.leregisztral(this);
 		System.out.println("["+nev+"] megsemmisült.");
+		if(go!=null) go.frissit(this);
 	}
 	
 	public boolean getMegsemmisult() {
@@ -88,6 +104,7 @@ public class Olajfolt implements Mezonallo{
 	@Override
 	public void setPozicio(Mezo m) {
 		pozicio = m;
+		if(go!=null) go.frissit(this);
 	}
 	
 	//Visszatér a kopas attribútum értékével.
@@ -98,14 +115,26 @@ public class Olajfolt implements Mezonallo{
 	//Beállítja a kopas attribútum értékét.
 	public void setkopas(int kopas){
 		this.kopas=kopas;
+		if(kopas <= 0)  {
+			megsemmisult = true;
+			if(go!=null) go.frissit(this);
+		}
 	}
 	
 	public String getNev() {
 		return nev;
 	}
-
+	
 	public void setNev(String nev) {
 		this.nev = nev;
+	}
+	
+	public void setGrafikusOlajfolt (GrafikusOlajfolt go) {
+		this.go = go;
+	}
+	
+	public GrafikusOlajfolt getGrafikusOlajfolt (){
+		return go;
 	}
 
 }
