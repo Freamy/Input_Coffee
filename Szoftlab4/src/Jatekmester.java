@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.math.*;
 import javax.swing.*;
 
-public class Jatekmester extends JFrame{
+public class Jatekmester extends JFrame implements KeyListener{
 	
 	private static Navigator navigator = new Navigator();;
 	private ArrayList<Kisrobot> kisrobotok = new ArrayList<Kisrobot>();
@@ -415,6 +415,7 @@ public class Jatekmester extends JFrame{
 				jatekMester.menukezeles();
 				while(korszam < 30){
 					jatekMester.leptet();
+					getKepernyo().rajzol(jatekMester.getFrame());
 					jatekMester.tick();
 				}
 			}
@@ -614,6 +615,7 @@ public class Jatekmester extends JFrame{
 				frame.setVisible(false);
 				getKepernyo().Menu(false);
 				getKepernyo().rajzol(getFrame());
+				mainloop();
 			}
 			
 		});
@@ -669,7 +671,7 @@ public class Jatekmester extends JFrame{
 	//A léptet függvény minden körben meghívódik és az összes robotot léptetjük, ehhez a felhasználó
 	//által megadott értékekre is szükség van(sebességváltoztatás,ragacsot v olajat le akar tenni).
 	//Ezenfelül a kisrobotokat is lépteti.
-	public class Ugrasevent implements KeyListener{
+	/*public class Ugrasevent implements KeyListener{
 		Robot r;
 		boolean ragacsle = false;
 		boolean olajle = false;
@@ -723,21 +725,23 @@ public class Jatekmester extends JFrame{
 			
 		}
 		
-	}
+	}*/
 	
 	void leptet(){
-		for(Robot r : robotok){
-			r.setAktiv(true);
+		/*for(Robot r : robotok){
+			/*r.setAktiv(true);
 			Ugrasevent e = new Ugrasevent(r);
 			r.lep(e.r.getSebesseg(), e.ragacsle, e.olajle,kepernyo);
 			r.getGrafika().frissit(r);
 			r.setAktiv(false);
-		}
+		}*/
 		for(Kisrobot kr : kisrobotok){
 			kr.ugrik();
 		}
 	}
-	
+	private Robot robot;
+	private Sebesseg ujsebesseg;
+	private boolean ujragacs,ujolaj;
 	//Létrehozunk egy kisrobotot, ha a 3-as számot kaptuk a pl: 6-7 koodinátára
 	/**Itt nincs lekezelve hogy mi van akkor ha 6-nál és 7-nél kisebb a pálya**/
 	void ujKisrobot(int n, int m){
@@ -800,7 +804,81 @@ public class Jatekmester extends JFrame{
 		ujKisrobot(navigator.getX(),navigator.getY());
 		navigator.tick();
 	}
-	
+	private void mainloop(){
+		this.removeAll();
+		this.add(kepernyo);
+		this.addKeyListener(this);
+		this.setFocusable(true);
+		this.setResizable(true);
+		this.setSize(12*64,12*64);
+		this.setResizable(false);
+		this.setVisible(true);
+		navigator.getGrafikusPalya().grafikusPalyaFelvevese(navigator);
+		kepernyo.initFrame();
+		navigator.getGrafikusPalya();
+		int i = 0;
+		while(i < jatekosszam){
+			this.robot = robotok.get(i);
+			this.ujsebesseg = this.robot.getSebesseg();
+			this.ujolaj = false;
+			this.ujragacs = false;
+			robotok.get(i).setAktiv(true);
+			robotok.get(i).getGrafika().frissit(robotok.get(i));
+			kepernyo.rajzol(this);
+			robotok.get(i).setAktiv(false);
+			i++;
+		}
+	}
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		if(arg0.getKeyChar()=='1'){
+			this.ujolaj = true;
+			System.out.println("1 pressed");
+		}
+		else if(arg0.getKeyChar()=='2'){
+			this.ujragacs = true;
+			System.out.println("2 pressed");
+		}
+		if(arg0.getKeyChar()=='w'){
+			Sebesseg sebesseg = robot.getSebesseg();
+			sebesseg.setx(sebesseg.getx());
+			sebesseg.sety(sebesseg.gety()+1);
+			this.robot.setSebesseg(sebesseg);
+			System.out.println("w pressed");
+		}
+		else if(arg0.getKeyChar()=='a'){
+			Sebesseg sebesseg = robot.getSebesseg();
+			sebesseg.setx(sebesseg.getx()-1);
+			sebesseg.sety(sebesseg.gety());
+			this.robot.setSebesseg(sebesseg);
+			System.out.println("a pressed");
+		}
+		else if(arg0.getKeyChar()=='s'){
+			Sebesseg sebesseg = robot.getSebesseg();
+			sebesseg.setx(sebesseg.getx());
+			sebesseg.sety(sebesseg.gety());
+			this.robot.setSebesseg(sebesseg);
+			System.out.println("s pressed");
+		}
+		else if(arg0.getKeyChar()=='d'){
+			Sebesseg sebesseg = robot.getSebesseg();
+			sebesseg.setx(sebesseg.getx()+1);
+			sebesseg.sety(sebesseg.gety());
+			this.robot.setSebesseg(sebesseg);
+			System.out.println("d pressed");
+		}
+	}
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 	/*boolean running = true;
 	while(running){
 <<<<<<< HEAD
@@ -909,5 +987,6 @@ public class Jatekmester extends JFrame{
 			return null;
 		}
 	}*/
+	
 	
 }
