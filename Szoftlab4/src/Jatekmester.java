@@ -683,7 +683,7 @@ public class Jatekmester extends JFrame{
 			else if(arg0.getKeyChar()=='2'){
 				this.ragacsle = true;
 			}
-			else if(arg0.getKeyChar()=='w'){
+			if(arg0.getKeyChar()=='w'){
 				Sebesseg sebesseg = r.getSebesseg();
 				sebesseg.setx(sebesseg.getx());
 				sebesseg.sety(sebesseg.gety()+1);
@@ -729,6 +729,7 @@ public class Jatekmester extends JFrame{
 			Ugrasevent e = new Ugrasevent(r);
 			r.lep(e.r.getSebesseg(), e.ragacsle, e.olajle,kepernyo);
 			r.getGrafika().frissit(r);
+			r.setAktiv(false);
 		}
 		for(Kisrobot kr : kisrobotok){
 			kr.ugrik();
