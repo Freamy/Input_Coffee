@@ -19,9 +19,9 @@ public class Olajfolt implements Mezonallo{
 		this.pozicio = mezo;
 		this.kopas = kopas;
 		
-		grafikusGyar = new OlajGyar();
+		grafikusGyar = new OlajGyar(Jatekmester.kepernyo);
 		
-		grafika = (GrafikusOlajfolt) grafikusGyar.grafikaKeszitese(this);
+		grafika = (GrafikusOlajfolt) grafikusGyar.grafikaKeszitese(Jatekmester.kepernyo,this);
 		
 		if(kisrobotneve != "") {
 			nev = kisrobotneve+"olajfoltja";

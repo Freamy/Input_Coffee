@@ -15,10 +15,10 @@ public class Kepernyo extends JPanel{
 	}
 	
 	public void initFrame(){
-		//frame = new JFrame();
-		//frame.add(this);
-		//frame.setSize(1024, 960);
-		//frame.setVisible(true);
+		frame = new JFrame();
+		frame.add(this);
+		frame.setSize(1024, 960);
+		frame.setVisible(true);
 	}
 	
 	public void rajzol(JFrame j){
@@ -41,11 +41,9 @@ public class Kepernyo extends JPanel{
 		return sebesseg;
 	}
 	public boolean ragacslekerdezo() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	public boolean olajlekerdezo() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

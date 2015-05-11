@@ -9,8 +9,8 @@ public class Navigator {
 	private boolean[][] kulsoMezok;
 	
 	public Navigator(){
-		grafikaGyar = new PalyaGyar();
-		grafikusPalya = (GrafikusPalya) grafikaGyar.grafikaKeszitese(Jatekmester.kepernyo, null);
+		grafikaGyar = new PalyaGyar(Jatekmester.kepernyo);
+		grafikusPalya = (GrafikusPalya) grafikaGyar.grafikaKeszitese(Jatekmester.kepernyo);
 	}
 	
 	public Mezo getMezo(int id){

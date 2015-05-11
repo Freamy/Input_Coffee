@@ -12,13 +12,14 @@ public class Ragacs implements Mezonallo {
 	private GrafikusRagacs grafika;
 	
 	private boolean megsemmisult;
+	private static int autoincrement = 0;
 	
 	public Ragacs(Mezo mezo,int kopas, int kord[], Kepernyo k){
 		pozicio = mezo;
 
 		this.kopas = kopas;
 		
-		grafikusGyar = new RagacsGyar();
+		grafikusGyar = new RagacsGyar(k);
 		
 		grafika = (GrafikusRagacs) grafikusGyar.grafikaKeszitese(k, this);
 		
