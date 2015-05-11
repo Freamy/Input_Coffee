@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 
 public abstract class GrafikusElem {
 	protected int x;
@@ -12,7 +13,7 @@ public abstract class GrafikusElem {
 	protected boolean megsemmisult;
 	protected Image kep;
 	protected Kepernyo kepernyo;
-	
+
 	public GrafikusElem(){
 		
 	}

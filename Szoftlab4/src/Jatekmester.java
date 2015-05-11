@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.math.*;
 import javax.swing.*;
 
-public class Jatekmester extends JFrame implements KeyListener{
+public class Jatekmester extends JFrame{
 	
 	private static Navigator navigator = new Navigator();;
 	private ArrayList<Kisrobot> kisrobotok = new ArrayList<Kisrobot>();
 	private ArrayList<Robot> robotok = new ArrayList<Robot>();
-	private static int korszam = 1;
+	private int korszam = 1;
 	private static Kepernyo kepernyo = new Kepernyo(); 
 	private  int jatekosszam;
 	
@@ -24,7 +24,7 @@ public class Jatekmester extends JFrame implements KeyListener{
 		return kepernyo;
 	}
 	public static void main(String[] args){
-		
+		//Parancsértelmezõs rész
 		try{
 			Jatekmester jatekMester = new Jatekmester();
 			System.out.println("MarsOne : Konzolosan vagy grafikusan szeretne játszani?");
@@ -39,7 +39,7 @@ public class Jatekmester extends JFrame implements KeyListener{
 			}*/
 			if(szam == 0){
 				boolean running = false; // a játék futását vizsgálja, ha false akkor csak az exit és a start parancsok hívhatók
-				while(korszam< 30){ //egy játék 30 körös (többre/kevesebbre is állíthatjuk ha szeretnétek)
+				while(jatekMester.korszam< 30){ //egy játék 30 körös (többre/kevesebbre is állíthatjuk ha szeretnétek)
 					
 					BufferedReader be = new BufferedReader(new InputStreamReader(System.in)); 
 					String bemenet;
@@ -115,11 +115,11 @@ public class Jatekmester extends JFrame implements KeyListener{
 						}
 						else if(parancs.equals("AdatokMezo") && running){
 							
-							int x = Integer.parseInt(parameterek[0]);
-							int y = Integer.parseInt(parameterek[1]);
+							//int x = Integer.parseInt(parameterek[0]);
+							//int y = Integer.parseInt(parameterek[1]);
 							
 							//Ha a lenti TODO-k kész vannak az alábbi sor kommentezése feloldható:
-							//1navigator.adatKiirasa(x,y);
+							navigator.adatokKiirasa(parameterek[0]);
 							
 							//TODO:
 							//Navigator: adatKiirasa(int x, int y) meghívja az (x,y) kordinátán lévõ mezõre az adatKiirasa("") függvényt.
@@ -413,13 +413,9 @@ public class Jatekmester extends JFrame implements KeyListener{
 				GrafikusPalya ge = new GrafikusPalya(0,0,20,"gfx/rajz2.png","gfx/rajz3.png",getKepernyo());
 				navigator.setGrafika(ge);
 				jatekMester.menukezeles();
-				while(korszam < 30){
-					jatekMester.leptet();
-					getKepernyo().rajzol(jatekMester.getFrame());
-					jatekMester.tick();
-				}
 			}
 		}catch(Exception ex){
+			System.out.println("Exception.");
 		}
 		
 	}
@@ -671,46 +667,59 @@ public class Jatekmester extends JFrame implements KeyListener{
 	//A léptet függvény minden körben meghívódik és az összes robotot léptetjük, ehhez a felhasználó
 	//által megadott értékekre is szükség van(sebességváltoztatás,ragacsot v olajat le akar tenni).
 	//Ezenfelül a kisrobotokat is lépteti.
-	/*public class Ugrasevent implements KeyListener{
-		Robot r;
-		boolean ragacsle = false;
-		boolean olajle = false;
-		public Ugrasevent(Robot r){
-			this.r = r;
+	public class Ugrasevent implements KeyListener{
+		Jatekmester jatekmester;
+		public Ugrasevent(Jatekmester jm){
+			this.jatekmester = jm;
 		}
 		@Override
 		public void keyPressed(KeyEvent arg0) {
 			// TODO Auto-generated method stub
-			if(arg0.getKeyChar()=='1'){
-				this.olajle = true;
+			char c = arg0.getKeyChar();
+			
+			if( c =='1'){
+				jatekmester.ujolaj = true;
 			}
-			else if(arg0.getKeyChar()=='2'){
-				this.ragacsle = true;
+			else if( c =='2'){
+				jatekmester.ujragacs = true;
 			}
-			if(arg0.getKeyChar()=='w'){
-				Sebesseg sebesseg = r.getSebesseg();
-				sebesseg.setx(sebesseg.getx());
-				sebesseg.sety(sebesseg.gety()+1);
-				this.r.setSebesseg(sebesseg);
+			if( c=='w' || c=='a' || c=='s' || c=='d'){
+				if( c =='w'){
+					Sebesseg sebesseg = jatekmester.robot.getSebesseg();
+					sebesseg.setx(sebesseg.getx());
+					sebesseg.sety(sebesseg.gety()+1);
+					jatekmester.ujsebesseg = sebesseg;
+					jatekmester.robot.setSebesseg(sebesseg);
+				}
+				else if( c =='a'){
+					Sebesseg sebesseg = jatekmester.robot.getSebesseg();
+					sebesseg.setx(sebesseg.getx()-1);
+					sebesseg.sety(sebesseg.gety());
+					jatekmester.ujsebesseg = sebesseg;
+					jatekmester.robot.setSebesseg(sebesseg);
+				}
+				else if( c =='s'){
+					Sebesseg sebesseg = jatekmester.robot.getSebesseg();
+					sebesseg.setx(sebesseg.getx());
+					sebesseg.sety(sebesseg.gety()-1);
+					jatekmester.ujsebesseg = sebesseg;
+					jatekmester.robot.setSebesseg(sebesseg);
+				}
+				else if( c =='d'){
+					Sebesseg sebesseg = jatekmester.robot.getSebesseg();
+					sebesseg.setx(sebesseg.getx()+1);
+					sebesseg.sety(sebesseg.gety());
+					jatekmester.ujsebesseg = sebesseg;
+					jatekmester.robot.setSebesseg(sebesseg);
+				}
+				if(korszam < 30){
+					leptet();
+				}
+				else{
+					System.out.println("A játék véget ért");
+				}
 			}
-			else if(arg0.getKeyChar()=='a'){
-				Sebesseg sebesseg = r.getSebesseg();
-				sebesseg.setx(sebesseg.getx()-1);
-				sebesseg.sety(sebesseg.gety());
-				this.r.setSebesseg(sebesseg);
-			}
-			else if(arg0.getKeyChar()=='s'){
-				Sebesseg sebesseg = r.getSebesseg();
-				sebesseg.setx(sebesseg.getx());
-				sebesseg.sety(sebesseg.gety());
-				this.r.setSebesseg(sebesseg);
-			}
-			else if(arg0.getKeyChar()=='d'){
-				Sebesseg sebesseg = r.getSebesseg();
-				sebesseg.setx(sebesseg.getx()+1);
-				sebesseg.sety(sebesseg.gety());
-				this.r.setSebesseg(sebesseg);
-			}
+			
 		}
 
 		@Override
@@ -725,30 +734,49 @@ public class Jatekmester extends JFrame implements KeyListener{
 			
 		}
 		
-	}*/
+	}
 	
 	void leptet(){
-		/*for(Robot r : robotok){
-			/*r.setAktiv(true);
-			Ugrasevent e = new Ugrasevent(r);
-			r.lep(e.r.getSebesseg(), e.ragacsle, e.olajle,kepernyo);
-			r.getGrafika().frissit(r);
-			r.setAktiv(false);
-		}*/
+		getKepernyo().rajzol(getFrame());
+		robotok.get(i).getGrafika().frissit(robotok.get(i));
+		robotok.get(i).lep(ujsebesseg,ujolaj,ujragacs,kepernyo);
+		robotok.get(i).setAktiv(false);
+		i++;
+		if(i == jatekosszam){
+			i = 0;
+			tick();
+		}
+		
+		//robotok.get(i).lep(sebesseg, e.ragacsle, e.olajle,kepernyo);
+		//robotok.get(i).getGrafika().frissit(robotok.get(i));
+		//robotok.get(i).setAktiv(false);
+		this.robot = robotok.get(i);
+		this.ujsebesseg = this.robot.getSebesseg();
+		this.ujolaj = false;
+		this.ujragacs = false;
+		robotok.get(i).setAktiv(true);
+		robotok.get(i).getGrafika().frissit(robotok.get(i));
+		getKepernyo().rajzol(getFrame());
+	}
+	
+	void kisrobotlepteto(){
 		for(Kisrobot kr : kisrobotok){
 			kr.ugrik();
 		}
 	}
+	
+	private int i = 0;
 	private Robot robot;
 	private Sebesseg ujsebesseg;
-	private boolean ujragacs,ujolaj;
-	//Létrehozunk egy kisrobotot, ha a 3-as számot kaptuk a pl: 6-7 koodinátára
+	private boolean ujragacs = false, ujolaj =false;
+	//Létrehozunk egy kisrobotot,  ha a 3-as számot kaptuk a pl: 6-7 koodinátára
 	/**Itt nincs lekezelve hogy mi van akkor ha 6-nál és 7-nél kisebb a pálya**/
+	private KisRobotGyar kisgyar = new KisRobotGyar(kepernyo);
 	void ujKisrobot(int n, int m){
 		if (n > m); n = m;
 		int random  = (int) (Math.random() * 6 + 1);
 		if (random == 3){
-			int random2 = random * random;
+			int random2 = random/2;
 			if(random2 > n) random2-=n;
 			Mezo kisrobotbelepes = navigator.getMezo(random,random2);
 			while(navigator.kulsoMezo(kisrobotbelepes)){
@@ -758,8 +786,7 @@ public class Jatekmester extends JFrame implements KeyListener{
 				if(random2 < 0) random2 +=n;
 				kisrobotbelepes = navigator.getMezo(random,random2);
 			}
-			KisRobotGyar gyar = new KisRobotGyar(kepernyo);
-			Kisrobot uj = new Kisrobot(kisrobotbelepes,navigator,gyar);
+			Kisrobot uj = new Kisrobot(kisrobotbelepes,navigator,kisgyar);
 			kisrobotok.add(uj);
 			GrafikusKisrobot ge = new GrafikusKisrobot("gfx/kisrobot.png",getKepernyo(),uj);
 			getKepernyo().grafikusElemHozzaad(ge);
@@ -801,84 +828,37 @@ public class Jatekmester extends JFrame implements KeyListener{
 	void tick(){
 		System.out.println("[Jatek] új kör.");	
 		korszam++;
+		for(Robot r : robotok){
+			r.tick();
+		}
 		ujKisrobot(navigator.getX(),navigator.getY());
+		kisrobotlepteto();
 		navigator.tick();
 	}
 	private void mainloop(){
 		this.removeAll();
 		this.add(kepernyo);
-		this.addKeyListener(this);
+		
 		this.setFocusable(true);
 		this.setResizable(true);
 		this.setSize(12*64,12*64);
 		this.setResizable(false);
 		this.setVisible(true);
+		this.setLocationRelativeTo(null);
 		navigator.getGrafikusPalya().grafikusPalyaFelvevese(navigator);
 		kepernyo.initFrame();
-		navigator.getGrafikusPalya();
-		int i = 0;
-		while(i < jatekosszam){
-			this.robot = robotok.get(i);
-			this.ujsebesseg = this.robot.getSebesseg();
-			this.ujolaj = false;
-			this.ujragacs = false;
-			robotok.get(i).setAktiv(true);
-			robotok.get(i).getGrafika().frissit(robotok.get(i));
-			kepernyo.rajzol(this);
-			robotok.get(i).setAktiv(false);
-			i++;
-		}
-	}
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		if(arg0.getKeyChar()=='1'){
-			this.ujolaj = true;
-			System.out.println("1 pressed");
-		}
-		else if(arg0.getKeyChar()=='2'){
-			this.ujragacs = true;
-			System.out.println("2 pressed");
-		}
-		if(arg0.getKeyChar()=='w'){
-			Sebesseg sebesseg = robot.getSebesseg();
-			sebesseg.setx(sebesseg.getx());
-			sebesseg.sety(sebesseg.gety()+1);
-			this.robot.setSebesseg(sebesseg);
-			System.out.println("w pressed");
-		}
-		else if(arg0.getKeyChar()=='a'){
-			Sebesseg sebesseg = robot.getSebesseg();
-			sebesseg.setx(sebesseg.getx()-1);
-			sebesseg.sety(sebesseg.gety());
-			this.robot.setSebesseg(sebesseg);
-			System.out.println("a pressed");
-		}
-		else if(arg0.getKeyChar()=='s'){
-			Sebesseg sebesseg = robot.getSebesseg();
-			sebesseg.setx(sebesseg.getx());
-			sebesseg.sety(sebesseg.gety());
-			this.robot.setSebesseg(sebesseg);
-			System.out.println("s pressed");
-		}
-		else if(arg0.getKeyChar()=='d'){
-			Sebesseg sebesseg = robot.getSebesseg();
-			sebesseg.setx(sebesseg.getx()+1);
-			sebesseg.sety(sebesseg.gety());
-			this.robot.setSebesseg(sebesseg);
-			System.out.println("d pressed");
-		}
-	}
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		navigator.getGrafikusPalya().rajzol(this.getGraphics());
+		Ugrasevent e = new Ugrasevent(this);
+		this.addKeyListener(e);
+		this.robot = robotok.get(i);
+		this.ujsebesseg = robot.getSebesseg();
+		robotok.get(i).setAktiv(true);
+		robotok.get(i).getGrafika().frissit(robotok.get(i));
+		//kepernyo.rajzol(this);
 		
 	}
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+
+	
 	/*boolean running = true;
 	while(running){
 <<<<<<< HEAD

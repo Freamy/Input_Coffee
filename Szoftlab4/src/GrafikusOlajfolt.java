@@ -20,6 +20,5 @@ public class GrafikusOlajfolt extends GrafikusElem {
 		x = olajfolt.getPozicio().getX();
 		y = olajfolt.getPozicio().getY();
 		megsemmisult = olajfolt.getMegsemmisult();
-		
 	}
 }

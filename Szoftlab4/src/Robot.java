@@ -308,7 +308,7 @@ public class Robot implements Mezonallo{
 	
 	// Új kört kezd.
 	public void tick(){
-		
+		ugrottMar = false;
 	}
 	
 	public void tickend() {

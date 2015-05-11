@@ -20,6 +20,5 @@ public class GrafikusRagacs extends GrafikusElem {
 		x = ragacs.getPozicio().getX();
 		y = ragacs.getPozicio().getY();
 		megsemmisult = ragacs.getMegsemmisult();
-		
 	}
 }

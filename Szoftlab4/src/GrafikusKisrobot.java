@@ -19,6 +19,5 @@ public class GrafikusKisrobot extends GrafikusElem {
 		x = kisrobot.getPozicio().getX();
 		y = kisrobot.getPozicio().getY();
 		megsemmisult = kisrobot.getMegsemmisult();
-		
 	}
 }

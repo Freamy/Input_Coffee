@@ -36,16 +36,6 @@ public class Kepernyo extends JPanel{
 	public void Menu(boolean aktiv){
 		this.kijelez = !aktiv;
 	}
-	public Sebesseg sebessegkerdezo() {
-		Sebesseg sebesseg = null;
-		return sebesseg;
-	}
-	public boolean ragacslekerdezo() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	public boolean olajlekerdezo() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+
+	
 }

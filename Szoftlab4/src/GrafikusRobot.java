@@ -44,6 +44,5 @@ public class GrafikusRobot extends GrafikusElem {
 		this.megsemmisult = robot.getMegsemmisult();
 		this.sebesseg = robot.getSebesseg();
 		this.aktiv = robot.getAktiv();
-		//kepernyo.rajzol();
 	}
 }
