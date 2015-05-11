@@ -687,7 +687,8 @@ public class Jatekmester extends JFrame implements KeyListener{
 				if(random2 < 0) random2 +=n;
 				kisrobotbelepes = navigator.getMezo(random,random2);
 			}
-			Kisrobot uj = new Kisrobot(kisrobotbelepes,navigator, kepernyo);
+			KisRobotGyar krgy= new KisRobotGyar(kepernyo);
+			Kisrobot uj = new Kisrobot(kisrobotbelepes,navigator, krgy);
 			kisrobotok.add(uj);
 		}
 	}
@@ -753,17 +754,10 @@ public class Jatekmester extends JFrame implements KeyListener{
 	}
 	/*boolean running = true;
 	while(running){
-<<<<<<< HEAD
-		main.useCaseTablaKiirasa();
-		bemenet = main.bemenetBekerese();
-		if(bemenet.equals("1")){
-			main.inditUseCase();
-=======
 		jatekMester.useCaseTablaKiirasa();
 		bemenet = jatekMester.bemenetBekerese();
 		if(bemenet.equals("1")){
 			jatekMester.inditUseCase();
->>>>>>> branch 'master' of https://github.com/Freamy/Input_Coffee.git
 		}else if(bemenet.equals("kilepes")){
 			System.exit(0);
 		}

@@ -7,8 +7,9 @@ public class Robot implements Mezonallo{
 	private int olajDb;
 	private double megtettUt;
 	private boolean ugrottMar;
-	
+	private boolean megsemmisult;
 	private String nev;
+
 	private static int autoincrement=0;
 	
 	private Gyar grafikaGyar;
@@ -18,21 +19,28 @@ public class Robot implements Mezonallo{
 	
 	public Robot(Mezo mezo, Navigator navigator){
 		grafikaGyar = new RobotGyar();
-		
-		
+
+
+	public Robot(String nev, Mezo mezo, Navigator navigator, Sebesseg sebesseg, int ragacsDb, int olajDb, boolean vesztettem, double megtettUt){
+		this.nev=nev;
+
+    	private GrafikusRobot grafikusRobot;
+    	
 		this.pozicio = mezo;
 		this.navigator = navigator;
-		this.vesztettem = false;
-		this.ragacsDb = 5;
-		this.olajDb = 5;
-		this.megtettUt = 0;
+		this.sebesseg = sebesseg;
+		this.vesztettem = vesztettem;
+		this.ragacsDb = ragacsDb;
+		this.olajDb = olajDb;
+		this.megtettUt = megtettUt;
 		this.ugrottMar = false;
+
 		sebesseg = new Sebesseg(0,0);
 		
 		grafikusRobot = (GrafikusRobot) grafikaGyar.grafikaKeszitese(Jatekmester.kepernyo, this);
+
+		megsemmisult = false;
 		
-		autoincrement++;
-		nev = "robot" + autoincrement;
 		int[] kord = navigator.koordinataKonverter(mezo);
 		System.out.println("["+nev+"] létrejött, x=("+kord[0]+","+kord[1]+"), v=("
 						+sebesseg.getx()+","+sebesseg.gety()+"), "
@@ -50,18 +58,27 @@ public class Robot implements Mezonallo{
 	// ha pedig a ragacsotTesz igaz, akkor meghívja a ragacsotTesz függvényét.
 	// Ezután meghívja a sebessegvaltoztatas függvénye, aminek
 	// átadja a paraméterül kaporr valtozas -t. Ha ez is kész akkor meghívódik az ugrik függvény.
+
 	public void lep(Sebesseg valtozas, boolean olajfoltotTesz, boolean ragacsotTesz, Kepernyo k){
+
+		if(!megsemmisult) {
 		if (vesztettem) {
 			System.out.println("Hiba: ["+nev+"] nem tud ugrani, mert vesztett.");
 		} else if(ugrottMar) {
 			System.out.println("Hiba: ["+nev+"] ebben a körben már ugrott.");
 		} else {
-			if(olajfoltotTesz){
-				olajfoltotTesz(k);
+
+
+			if(!olajfoltNeve.equals("")){
+				olajfoltotTesz(olajfoltNeve);
+
 				//Nem itt vonunk ki az olajDb-bõl hanem a letevõ függvényen belül!
 			}
-			else if(ragacsotTesz){
-				ragacsotTesz(k);
+
+
+			else if(!ragacsNeve.equals("")){
+				ragacsotTesz(ragacsNeve);
+
 				//Nem itt vonunk ki a ragacsDb-bõl hanem a letevõ függvényen belül!
 			}
 			pozicio.leregisztral(this);
@@ -69,34 +86,45 @@ public class Robot implements Mezonallo{
 			ugrik();
 			ugrottMar = true;
 		}
+		}
 	}
 
 	//Szerintem ez a függvény még mindig nem szükséges.
 	public void sebessegvaltozas(Sebesseg valtozas){}
 	
 	// Letesz egy ragacsot az aktuális helyére.
-	public void ragacsotTesz(Kepernyo k){
+
+	public void ragacsotTesz(String ragacsneve){
+		if(!megsemmisult) {
+		System.out.println("["+nev+"] ragacsot tesz le.");
+
 		if(ragacsDb==0) {
 			System.out.println("Hiba: ["+nev+"] elfogyott a ragacskészlet.");
 		} else {
-		System.out.println("["+nev+"] ragacsot tesz le.");
 		int kord[] = navigator.koordinataKonverter(pozicio);
-		Ragacs ragacs = new Ragacs(pozicio, 5, kord, k);
+		Ragacs ragacs = new Ragacs(pozicio, 5, kord);
 		pozicio.beregisztral(ragacs);
 		ragacsDb--;
+		}
 		}
 	}
 	
 	// Letesz egy olajfoltot az aktuális helyére.
-	public void olajfoltotTesz(Kepernyo k){
+
+	public void olajfoltotTesz(String olajfoltneve){
+		if(!megsemmisult) {
+		System.out.println("["+nev+"] olajfoltot tesz le.");
+
 		if(olajDb==0) {
 			System.out.println("Hiba: ["+nev+"] elfogyott az olajfoltkészlet.");
 		} else {
-		System.out.println("["+nev+"] olajfoltot tesz le.");
 		int kord[] = navigator.koordinataKonverter(pozicio);
-		Olajfolt olajfolt = new Olajfolt(pozicio, 5, "", kord, k);
+
+		Olajfolt olajfolt = new Olajfolt(pozicio, 5, "", kord);
 		pozicio.beregisztral(olajfolt);
+
 		olajDb--;
+		}
 		}
 	}
 	
@@ -105,14 +133,27 @@ public class Robot implements Mezonallo{
 	// leelenõrzi hogy kûlsõ mezõre lépett-e: 
 	//    ha igen akkor beállítja a vesztettem attríbútumát igazra.
 	//    ha nem akkor beregisztrál arra a mezõre ahová került.
-	public void ugrik(){	
-		pozicio = navigator.athelyez(pozicio,sebesseg);
-		int[] kord = navigator.koordinataKonverter(pozicio);
+	public void ugrik(){
+		if(!megsemmisult) {
+		if (vesztettem) {
+			System.out.println("Hiba: ["+nev+"] nem tud ugrani, mert vesztett.");
+		} else if(ugrottMar) {
+			System.out.println("Hiba: ["+nev+"] ebben a körben már ugrott.");
+		} else {
+		Mezo hova = navigator.athelyez(pozicio,sebesseg);
+		if(hova!=null) {
+		int[] kord = navigator.koordinataKonverter(hova);
+		pozicio = hova;
 		System.out.println("["+nev+"] elugrott a(z) ("+kord[0]+","+kord[1]+") kordinátára.");
 		sebesseg.modosithato();
 		pozicio.beregisztral(this); //A robot nem regisztrál le a mezõrõl ha vesztett.
 		if(navigator.kulsoMezo(pozicio)){
 			vesztettel(); //Azért hogy kiírja a szöveget a vesztett függvény és ha módosítani akarjuk ne 2 helyen kelljen.
+		}
+		} else {
+			System.out.println("["+nev+"] nem tud ugrani, mert a pálya szélén van.");
+		}
+		}
 		}
 	}
 	
@@ -130,16 +171,20 @@ public class Robot implements Mezonallo{
 	// A sebességek összehasonlításában vesztes robotra hívják meg ezt a függvényt.
 	// A robot akire meghívják leregisztrál a mezõrõl.
 	public void vesztettel(){
+		if(!megsemmisult) {
 		System.out.println("["+nev+"] vesztett.");
 		vesztettem = true;
+		}
 	}
 	
 	// A sebességek összehasonlításában az a robot nyert, akire ráugrottak,
 	// a sebessége a két robot sebességének vektorátalaga lesz.
 	// Az ugró robotra meghívódik a vesztettél attribútum.
 	public void nyertel(Robot robot){
+		if(!megsemmisult) {
 		sebesseg.atlag(robot.getSebesseg());
 		robot.vesztettel();
+		}
 	}
 	
 	// A robot ragacsra lépett, a sebessége lefelezõdik.
@@ -177,12 +222,14 @@ public class Robot implements Mezonallo{
 	public void robotraLeptem(Robot kireLeptem){
 		System.out.println("["+nev+"] ütközött: "+kireLeptem.getNev()+".");
 		if(sebesseg.hasonlit(kireLeptem.getSebesseg())){
-			kireLeptem.megsemmisul();
-			sebesseg.atlag(kireLeptem.sebesseg);
-		}
-		else {
 			megsemmisul();
 			kireLeptem.sebesseg.atlag(sebesseg);
+			System.out.println("["+kireLeptem.getNev()+"] v=("+kireLeptem.sebesseg.getx()+","+kireLeptem.sebesseg.gety()+").");
+		}
+		else {
+			kireLeptem.megsemmisul();
+			sebesseg.atlag(kireLeptem.sebesseg);
+			System.out.println("["+nev+"] v=("+sebesseg.getx()+","+sebesseg.gety()+").");
 		}	
 	}
 	
@@ -200,6 +247,7 @@ public class Robot implements Mezonallo{
 	//Megsemmisíti a robotot.
 	public void megsemmisul () {
 		pozicio.leregisztral(this);
+		megsemmisult = true;
 		System.out.println("["+nev+"] megsemmisült.");
 	}
 	
@@ -270,6 +318,10 @@ public class Robot implements Mezonallo{
 	
 	// Új kört kezd.
 	public void tick(){
+		
+	}
+	
+	public void tickend() {
 		ugrottMar = false;
 	}
 
@@ -316,4 +368,17 @@ public class Robot implements Mezonallo{
 		grafikusRobot = ge;
 	}
 	
+	public void adatokKiirasa(String param) {
+		if(param.equals("") || param.equals(nev)) {
+			System.out.println("["+nev+"]:\nPozicio: "+pozicio.getNev()
+					+"\nSebesseg: ("+sebesseg.getx()+","+sebesseg.gety()+")"
+					+"\nVesztettem: "+vesztettem
+					+"\nRagacsDb: "+ragacsDb
+					+"\nOlajDb: "+olajDb
+					+"\nMegtettUt: "+megtettUt
+					+"\nUgrottMar: "+ugrottMar
+					+"\n");
+		}
+	}
+
 }

@@ -8,22 +8,20 @@ public class Olajfolt implements Mezonallo{
 	
 	private boolean megsemmisult;
 	private String nev;
-	private static int autoincrement = 0;
-	
-	private GrafikusOlajfolt go = null;
+
 	
 	private GrafikusOlajfolt grafika;
 
+	private static int autoincrement = 0;
 	
-	
-	public Olajfolt(Mezo mezo,int kopas, String kisrobotneve, int kord[], Kepernyo k){
+	public Olajfolt(Mezo mezo,int kopas, String kisrobotneve, int kord[]){
+
 		this.pozicio = mezo;
 		this.kopas = kopas;
 		
 		grafikusGyar = new OlajGyar();
 		
-		grafika = (GrafikusOlajfolt) grafikusGyar.grafikaKeszitese(k, this);
-		
+		grafika = (GrafikusOlajfolt) grafikusGyar.grafikaKeszitese(this);
 		
 		if(kisrobotneve != "") {
 			nev = kisrobotneve+"olajfoltja";
@@ -33,6 +31,7 @@ public class Olajfolt implements Mezonallo{
 		}
 		megsemmisult = false;
 		System.out.println("["+nev+"] létrejött x=("+kord[0]+","+kord[1]+"), "+kopas+" kopás.");
+
 		pozicio.beregisztral(this);
 	}
 	
@@ -45,23 +44,27 @@ public class Olajfolt implements Mezonallo{
 	//A pozícióra újonnan érkezett olajfolt, leregisztrálja már a mezõn lévõ ragacsot.
 	@Override
 	public void ragacsraLeptem(Ragacs kireLeptem) {
+		System.out.println("["+nev+"] ütközött: "+kireLeptem.getNev()+".");
 		pozicio.leregisztral(kireLeptem);
 	}
 
 	//A mezõre újonnan érkezett olajfolt, leregisztrálja már a mezõn lévõ olajfoltot.
 	@Override
 	public void olajfoltraLeptem(Olajfolt kireLeptem) {
+		System.out.println("["+nev+"] ütközött: "+kireLeptem.getNev()+".");
 		pozicio.leregisztral(kireLeptem);
 	}
 
 	//Nem hajt végre feladatot.
 	@Override
 	public void robotraLeptem(Robot kireLeptem) {	
+		System.out.println("["+nev+"] ütközött: "+kireLeptem.getNev()+".");
 	}
 	
 	//Nem hajt végre feladatot.
 	@Override
 	public void kisrobotraLeptem(Kisrobot kireLeptem){
+		System.out.println("["+nev+"] ütközött: "+kireLeptem.getNev()+".");
 	}
 	
 	//Új kört kezd.Csökkenti a kopás értékét eggyel és ha nulla vagy az allati értéket vett fel
@@ -72,8 +75,12 @@ public class Olajfolt implements Mezonallo{
 		if(kopas <= 0 ){
 			pozicio.leregisztral(this);
 			megsemmisult = true;
-			if(go!=null) go.frissit(this);
+			if(grafika!=null) grafika.frissit(this);
 		}
+	}
+	
+	public void tickend() {
+		
 	}
 	
 	//Visszatér igaz értékel, mert az olajfoltot szenyezõdésnek tekintjük.
@@ -87,7 +94,7 @@ public class Olajfolt implements Mezonallo{
 		megsemmisult = true;
 		pozicio.leregisztral(this);
 		System.out.println("["+nev+"] megsemmisült.");
-		if(go!=null) go.frissit(this);
+		if(grafika!=null) grafika.frissit(this);
 	}
 	
 	public boolean getMegsemmisult() {
@@ -104,7 +111,7 @@ public class Olajfolt implements Mezonallo{
 	@Override
 	public void setPozicio(Mezo m) {
 		pozicio = m;
-		if(go!=null) go.frissit(this);
+		if(grafika!=null) grafika.frissit(this);
 	}
 	
 	//Visszatér a kopas attribútum értékével.
@@ -117,7 +124,7 @@ public class Olajfolt implements Mezonallo{
 		this.kopas=kopas;
 		if(kopas <= 0)  {
 			megsemmisult = true;
-			if(go!=null) go.frissit(this);
+			if(grafika!=null) grafika.frissit(this);
 		}
 	}
 	
@@ -130,11 +137,17 @@ public class Olajfolt implements Mezonallo{
 	}
 	
 	public void setGrafikusOlajfolt (GrafikusOlajfolt go) {
-		this.go = go;
+		this.grafika = go;
 	}
 	
 	public GrafikusOlajfolt getGrafikusOlajfolt (){
-		return go;
+		return grafika;
+	}
+	public void adatokKiirasa(String param) {
+		if(param.equals("") || param.equals(nev)) {
+			System.out.println("["+nev+"]:\nPozicio: "+pozicio.getNev()+"\nKopas: "+kopas
+					+"\n");
+		}
 	}
 
 }

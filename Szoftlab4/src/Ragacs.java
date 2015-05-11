@@ -8,7 +8,6 @@ public class Ragacs implements Mezonallo {
 	private int x;
 	private int y;
 	private String nev;
-	private static int autoincrement = 0;
 	
 	private GrafikusRagacs grafika;
 	
@@ -16,6 +15,7 @@ public class Ragacs implements Mezonallo {
 	
 	public Ragacs(Mezo mezo,int kopas, int kord[], Kepernyo k){
 		pozicio = mezo;
+
 		this.kopas = kopas;
 		
 		grafikusGyar = new RagacsGyar();
@@ -32,6 +32,7 @@ public class Ragacs implements Mezonallo {
 		this.x = mezo.getX();
 		this.y = mezo.getY();
 		mezo.beregisztral(this);
+
 	}
 	
 	//Az ragacs poziciójára érkezõ elemnek szól, hogy ragacsra lépett.
@@ -43,23 +44,27 @@ public class Ragacs implements Mezonallo {
 	//A mezõre újonnan érkezõ ragacsfolt leregrisztrálja már ott lévõ ragacsot.
 	@Override
 	public void ragacsraLeptem(Ragacs kireLeptem) {
+		System.out.println("["+nev+"] ütközött: "+kireLeptem.getNev()+".");
 		pozicio.leregisztral(kireLeptem);
 	}
 
 	//A mezõre újonnan érkezõ ragacsfolt leregisztrálja a már ott lévõ olajfoltot.
 	@Override
 	public void olajfoltraLeptem(Olajfolt kireLeptem) {
+		System.out.println("["+nev+"] ütközött: "+kireLeptem.getNev()+".");
 		pozicio.leregisztral(kireLeptem);
 	}
 
 	//Nem hajt végre feladatot.
 	@Override
 	public void robotraLeptem(Robot kireLeptem) {
+		System.out.println("["+nev+"] ütközött: "+kireLeptem.getNev()+".");
 	}
 	
 	//Nem hajt végre feladatot.
 	@Override
 	public void kisrobotraLeptem(Kisrobot kireLeptem) {
+		System.out.println("["+nev+"] ütközött: "+kireLeptem.getNev()+".");
 	}
 
 	//Igaz értékkel tér vissza, mert a ragacsot szennyezõdésnek tekintjül.
@@ -92,6 +97,10 @@ public class Ragacs implements Mezonallo {
 		// TODO Auto-generated method stub		
 	}
 	
+	public void tickend() {
+		
+	}
+	
 	//Visszatér a kopas attribútum értékével.
 	public int getkopas(){
 		return kopas;
@@ -120,6 +129,13 @@ public class Ragacs implements Mezonallo {
 	
 	public int getY(){
 		return y;
+	}
+	
+	public void adatokKiirasa(String param) {
+		if(param.equals("") || param.equals(nev)) {
+			System.out.println("["+nev+"]:\nPozicio: "+pozicio.getNev()+"\nKopas: "+kopas
+					+"\n");
+		}
 	}
 
 	public boolean getMegsemmisult() {
