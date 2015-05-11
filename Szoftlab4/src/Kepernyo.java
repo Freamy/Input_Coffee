@@ -1,15 +1,29 @@
 import java.util.ArrayList;
+
 import javax.swing.*;
+
 import java.awt.*;
-public class Kepernyo extends JFrame{
+
+
+public class Kepernyo extends JPanel{
 	private ArrayList<GrafikusElem> grafikak;
 	private boolean kijelez;
+	private JFrame frame;
+	
 	public Kepernyo(){
 		grafikak = new ArrayList<GrafikusElem>();
 	}
-	public void rajzol(){
+	
+	public void initFrame(){
+		//frame = new JFrame();
+		//frame.add(this);
+		//frame.setSize(1024, 960);
+		//frame.setVisible(true);
+	}
+	
+	public void rajzol(JFrame j){
 		for(GrafikusElem ge: grafikak){
-			Graphics g = this.getGraphics();
+			Graphics g = j.getGraphics();
 			ge.rajzol(g);
 		}
 	}

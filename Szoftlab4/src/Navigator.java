@@ -1,14 +1,16 @@
 import java.util.ArrayList;
 
-
 public class Navigator {
 	
+	private Gyar grafikaGyar;
+	
+	private GrafikusPalya grafikusPalya;
 	private Mezo[][] terkep;
 	private boolean[][] kulsoMezok;
-	private GrafikusPalya grafikusPalya;
 	
 	public Navigator(){
-		
+		grafikaGyar = new PalyaGyar();
+		grafikusPalya = (GrafikusPalya) grafikaGyar.grafikaKeszitese(Jatekmester.kepernyo, null);
 	}
 	
 	public Mezo getMezo(int id){
@@ -22,6 +24,10 @@ public class Navigator {
 	}
 	
 	public Mezo getMezo(int x, int y){
+		if(x < 0 || y < 0 || x >= terkep.length || y >= terkep[0].length){
+			System.out.println("Hiba: [Palya] nem létezõ mezõ.");
+			return null;
+		}
 		return terkep[x][y];
 	}
 	
@@ -31,9 +37,15 @@ public class Navigator {
 		int y = koordinatak[1];
 		x += sebesseg.getx();
 		y += sebesseg.gety();
-		return terkep[x][y];
+		if(x < 0 || y < 0 || x >= terkep.length || y >= terkep[0].length) 
+		{
+			return null;
+		} else {
+			return terkep[x][y];
+		}
 	}
 	
+	//Meg keressük egy adott pozíciótol legközelebbi szennyezõdést tartalmazó mezõt, és ezt	visszaadjuk.
 	public Mezo kozeliszennyezodes(Mezo honnan){
 		int x = 0;
 		int y = 0;
@@ -46,117 +58,138 @@ public class Navigator {
 		int kozeliY = 0;
 		for(int i = 0; i < terkep.length; i++){
 			for(int j = 0; j < terkep[0].length; j++){
-				if(j != x && i != y && honnan.szennykeres()){
-					tavolsag = ((y-i)*(y-i))+((x-j)*(x-j));
+				if(!(j == x && i == y) && terkep[i][j].szennykeres()){
+					tavolsag = ((x-j)*(x-j))+((y-i)*(y-i));
 					if(tavolsag < legkozelebbi){
 						legkozelebbi = tavolsag;
-						kozeliX = j;
-						kozeliY = i;
+						kozeliX = i;
+						kozeliY = j;
 					}
 				}
 			}
 		}
-		return terkep[kozeliX][kozeliY];
+		if(legkozelebbi != Integer.MAX_VALUE) {
+			return terkep[kozeliX][kozeliY];
+		} else {
+			return null;
+		}
 	}
 	
+	
+	//Dijkstra algortimus használatával a függvény megkeresi a legrövidebb utat a jelenglei és a cél kordináta között. 
+	//Majd ennek az útnak az elsõ lépését vissza adja.
 	public Mezo legrovidebbut(Mezo honnan, Mezo hova){
-			if(honnan.equals(hova)) return null;
-			int[] koordinatak = koordinataKonverter(honnan);
-			// ASTAR //
-			boolean kesz = false;
-			
-			ArrayList<Mezo> ut = new ArrayList<Mezo>();
-			
-			ArrayList<Mezo> hatar = new ArrayList<Mezo>();
+
+			ArrayList<Mezo> lezart = new ArrayList<Mezo>();
 			ArrayList<Mezo> vizsgalt = new ArrayList<Mezo>();
-			Mezo jelenlegi = honnan;
 			
-			String[][] elozoHely = new String[terkep.length][terkep[0].length];
+			int uthosszak[][] = new int[terkep.length][terkep[0].length];
+			Mezo keresztul[][] = new Mezo[terkep.length][terkep[0].length];
 			
+			for(int i = 0; i<terkep.length; i++) {
+				for(int j = 0; j<terkep[0].length; j++) {
+					uthosszak[i][j] = Integer.MAX_VALUE;
+				}
+			}
 			vizsgalt.add(honnan);
+			int kord[] = koordinataKonverter(honnan);
+			uthosszak[kord[0]][kord[1]] = 0;
 			
-			// Megkezdjük az útkeresést
-			while(!kesz && vizsgalt.size() != terkep.length*terkep[0].length){
-				// Ha a vizsgált mezõ a célunk akkor megtaláltuk az utat.
-				if(jelenlegi.equals(hova)){
-					kesz = true;
+			while(!vizsgalt.isEmpty() && !lezart.contains(hova)) {
+				Mezo aktualis = null;
+				int min = Integer.MAX_VALUE;
+				for(Mezo m : vizsgalt) {
+					kord = koordinataKonverter(m);
+					if(uthosszak[kord[0]][kord[1]] < min){
+						min = uthosszak[kord[0]][kord[1]];
+						aktualis = m;
+					}
 				}
-				koordinatak = koordinataKonverter(jelenlegi);
-				int x = koordinatak[0];
-				int y = koordinatak[1];
-				// Felvesszük az utoljára vizsgált elem szomszédait a határ listába.
-				if(y > terkep[0].length-1 || x > terkep.length-1){
-				}else{
-					if(x < terkep.length-1 && !kulsoMezo(terkep[x+1][y]) && !vizsgalt.contains(terkep[x+1][y]) && !kulsoMezok[x+1][y]){
-						hatar.add(terkep[x+1][y]);
-						elozoHely[x+1][y] = x+";"+y;}
-					if(x > 0 && !kulsoMezo(terkep[x-1][y]) && !vizsgalt.contains(terkep[x-1][y]) && !kulsoMezok[x-1][y]){
-						hatar.add(terkep[x-1][y]);
-						elozoHely[x-1][y] = x+";"+y;}
-					if(y < terkep[0].length-1 && !kulsoMezo(terkep[x][y+1]) && !vizsgalt.contains(terkep[x][y+1]) && !kulsoMezok[x][y+1]){
-						hatar.add(terkep[x][y+1]);
-						elozoHely[x][y+1] = x+";"+y;}
-					if(y > 0 && !kulsoMezo(terkep[x][y-1]) && !vizsgalt.contains(terkep[x][y-1]) && !kulsoMezok[x][y-1]){
-						hatar.add(terkep[x][y-1]);
-						elozoHely[x][y-1] = x+";"+y;}
-				}
-				// Megkeressük a határ mezõk közül a legkevesebb költségüt
-				int minTavolsag = Integer.MAX_VALUE;
-				for(Mezo kozeli: hatar){
-					koordinatak = koordinataKonverter(hova);
-					int i = koordinatak[0];
-					int j = koordinatak[1];
-					koordinatak = koordinataKonverter(kozeli);
-					x = koordinatak[0];
-					y = koordinatak[1];
-					int tavolsag = ((y-j)*(y-j))+((x-i)*(x-i));
-					if(tavolsag < minTavolsag){
-						minTavolsag = tavolsag;
-						jelenlegi = kozeli;
+				
+				if(aktualis!=null) {
+					vizsgalt.remove(aktualis);
+					lezart.add(aktualis);
+					
+					
+					kord = koordinataKonverter(aktualis);
+					
+					// Fent
+					if (0<=kord[0] && kord[0]<terkep.length && 0<=(kord[1]-1) && (kord[1]-1)<terkep[0].length) {
+						if(!kulsoMezok[kord[0]][kord[1]-1]) {
+							if (uthosszak[kord[0]][kord[1]] + 1 < uthosszak[kord[0]][kord[1]-1]) {
+								uthosszak[kord[0]][kord[1]-1] = uthosszak[kord[0]][kord[1]] + 1;
+								keresztul[kord[0]][kord[1]-1] = terkep[kord[0]][kord[1]];
+								vizsgalt.add(terkep[kord[0]][kord[1]-1]);
+							}
+						}
 					}
 					
-				}
-				hatar.remove(jelenlegi);
-				vizsgalt.add(jelenlegi);
-			}
-			// Ha találtunk egy útvonalat akkor felkell építenünk azt, majd visszatérünk az elsõ elemével.
-			if(kesz){
-				
-				kesz = false;
-				boolean once = false;
-				Mezo utEpito = hova;
-				while(!kesz){
-					koordinatak = koordinataKonverter(utEpito);
-					int x = koordinatak[0];
-					int y = koordinatak[1];
-					String[] elozoKoordinata = elozoHely[x][y].split(";");
-					if(!once){
-						once = true;
+					// Lent
+					if (0<=kord[0] && kord[0]<terkep.length && 0<=(kord[1]+1) && (kord[1]+1)<terkep[0].length) {
+						if(!kulsoMezok[kord[0]][kord[1]+1]) {
+							if (uthosszak[kord[0]][kord[1]] + 1 < uthosszak[kord[0]][kord[1]+1]) {
+								uthosszak[kord[0]][kord[1]+1] = uthosszak[kord[0]][kord[1]] + 1;
+								keresztul[kord[0]][kord[1]+1] = terkep[kord[0]][kord[1]];
+								vizsgalt.add(terkep[kord[0]][kord[1]+1]);
+							}
+						}
 					}
-					ut.add(terkep[Integer.parseInt(elozoKoordinata[0])][Integer.parseInt(elozoKoordinata[1])]);
-				System.out.println(ut.size()+" "+x+" "+y);
-					utEpito = ut.get(ut.size()-1);
-					if(utEpito.equals(honnan)) kesz = true;
+					// Jobbra
+					if (0<=(kord[0]+1) && (kord[0]+1)<terkep.length && 0<=kord[1] && kord[1]<terkep[0].length) {
+						if(!kulsoMezok[kord[0]+1][kord[1]]) {
+							if (uthosszak[kord[0]][kord[1]] + 1 < uthosszak[kord[0]+1][kord[1]]) {
+								uthosszak[kord[0]+1][kord[1]] = uthosszak[kord[0]][kord[1]] + 1;
+								keresztul[kord[0]+1][kord[1]] = terkep[kord[0]][kord[1]];
+								vizsgalt.add(terkep[kord[0]+1][kord[1]]);
+							}
+						}
+					}
+					//Balra
+					if (0<=(kord[0]-1) && (kord[0]-1)<terkep.length && 0<=kord[1] && kord[1]<terkep[0].length) {
+						if(!kulsoMezok[kord[0]-1][kord[1]]) {
+							if (uthosszak[kord[0]][kord[1]] + 1 < uthosszak[kord[0]-1][kord[1]]) {
+								uthosszak[kord[0]-1][kord[1]] = uthosszak[kord[0]][kord[1]] + 1;
+								keresztul[kord[0]-1][kord[1]] = terkep[kord[0]][kord[1]];
+								vizsgalt.add(terkep[kord[0]-1][kord[1]]);
+							}
+						}
+					}
 				}
-			}else
-				return null;
-			if(ut.size() > 1) return ut.get(ut.size()-2);
-			return ut.get(ut.size()-1);
+			}
+			
+			
+			if (lezart.contains(hova)) {
+				kord = koordinataKonverter(hova);
+				while(keresztul[kord[0]][kord[1]] != honnan) {
+					kord = koordinataKonverter(keresztul[kord[0]][kord[1]]);
+				}
+				
+				return terkep[kord[0]][kord[1]];
+			}
+			
+			
+			return null;
 	}
 	
 	public int[] koordinataKonverter(Mezo honnan){
-		int x = 0;
-		int y = 0;
-		for(int i = 0; i < terkep.length; i++){
-			for(int j = 0; j < terkep[i].length; j++){
-				if(honnan.equals(terkep[i][j])) {
-					x = j;
-					y = i;
+			if(honnan!=null) {
+			int x = 0;
+			int y = 0;
+			for(int i = 0; i < terkep.length; i++){
+				for(int j = 0; j < terkep[i].length; j++){
+					if(honnan.equals(terkep[i][j])) {
+						x = i;
+						y = j;
+					}
 				}
 			}
-		}
-		int t[] = {x,y};
-		return t;
+			int t[] = {x,y};
+			return t;
+			}
+			else {
+				System.out.println("Hiba: [Palya] olyan mezõt adtál ami nem létezik.");
+				return null;
+			}
 	}
 	
 	boolean kulsoMezo(Mezo mezo){
@@ -186,7 +219,7 @@ public class Navigator {
 		//Elnevezzük a mezõket, azért mi csináljuk mert mi tudjuk a kordinátáikat és az része a névnek.
 		for (int i = 0; i<n; i++) {
 			for(int j=0; j<k; j++) {
-				terkep[i][j] = new Mezo();
+				terkep[i][j] = new Mezo(i,j);
 				terkep[i][j].setNev("Mezo("+i+","+j+")");
 			}
 		}
@@ -199,15 +232,66 @@ public class Navigator {
 				terkep[i][j].tick();
 			}
 		}
+		
+		for (int i = 0; i<terkep.length; i++) {
+			for(int j=0; j<terkep[0].length; j++) {
+				terkep[i][j].tickend();
+			}
+		}
 	}
 
 	public void setKulsoMezo(int x, int y, boolean kulso) {
 		kulsoMezok[x][y] = kulso;
 		System.out.println("["+terkep[x][y].getNev()+"] külsõ mezõ lett.");
 	}
+	
+	public boolean[][] getPalya(){
+		return kulsoMezok;
+	}
+	
+	public GrafikusPalya getGrafikusPalya(){
+		return grafikusPalya;
+	}
+	
+	public void setGrafikusPalya(GrafikusPalya gp){
+		grafikusPalya=gp;
+	}
+	
+	//Visszatér a pálya szélleségével 
+	public int getX(){
+		return terkep.length;
+	}
+	
+	//visszatér a pálya magasságával
+	public int getY(){
+		return terkep[0].length;
+	}
 
-	public void setGrafika(GrafikusPalya ge) {
-		// TODO Auto-generated method stub
+	public boolean getKulsoMezo(int i, int j) {
+		return kulsoMezok[i][j];
+	}
+	
+	public void setGrafika(GrafikusPalya ge){
 		this.grafikusPalya = ge;
+	}
+
+	public void adatokKiirasa (String param) {
+		if (param.contains(" ")) {
+			String[] darabolo = param.split(" ");
+			int x = Integer.parseInt(darabolo[0]);
+			int y = Integer.parseInt(darabolo[1]);
+			
+			if(x > 0 && y > 0 && x < terkep.length && y < terkep[0].length) {
+				if(terkep[x][y]!=null) terkep[x][y].adatKiirasa("");
+			}
+		} else {
+			if(param.equals("")) System.out.println("[Palya]\nx: "+terkep.length+"\ny: "+terkep[0].length
+					+"\n");
+			for(int i = 0; i < terkep.length; i++){
+				for(int j = 0; j < terkep[i].length; j++){
+					if(terkep[i][j]!=null) terkep[i][j].adatKiirasa(param);
+				}
+			}
+		}
 	}
 }
