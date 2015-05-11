@@ -10,7 +10,7 @@ public class Sebesseg {
 		this.modosithato = true;
 	}
 	
-	//Hozzzáadja a bemeneten kapott sebességet ehhez a sebességhez, ha ez módosítható.
+	//HozzzÃ¡adja a bemeneten kapott sebessÃ©get ehhez a sebessÃ©ghez, ha ez mÃ³dosÃ­thatÃ³.
 	public void hozzaad(Sebesseg sebesseg){
 		if(modosithato) {
 		x += sebesseg.x;
@@ -19,7 +19,7 @@ public class Sebesseg {
 			//TODO
 		}
 	}
-	//Felezi a sebességet ha módosítható.
+	//Felezi a sebessÃ©get ha mÃ³dosÃ­thatÃ³.
 	public void felez(){
 		if (modosithato) {
 		x /= 2;
@@ -28,53 +28,53 @@ public class Sebesseg {
 			//TODO
 		}
 	}
-	//Igaz értékkel tér vissza, ha a bemeneten kapott sebesség nagyobb mint ez.
+	//Igaz Ã©rtÃ©kkel tÃ©r vissza, ha a bemeneten kapott sebessÃ©g nagyobb mint ez.
 	public boolean hasonlit(Sebesseg sebesseg) {
 		if ((x*x+y*y) < (sebesseg.x*sebesseg.x + sebesseg.y*sebesseg.y)) return true;
 		else return false;
 	}
 	
-	//Beállítja a modosithatatlan paramétert hamisra.
+	//BeÃ¡llÃ­tja a modosithatatlan paramÃ©tert hamisra.
 	public void modosithatatlan(){
 		modosithato = false;
 	}
 	
-	//Beállítja a modosithatatlan paramétert igazra.
+	//BeÃ¡llÃ­tja a modosithatatlan paramÃ©tert igazra.
 	public void modosithato(){
 		modosithato = true;
 	}
 	
-	//Lekérdezi az x értékét.
+	//LekÃ©rdezi az x Ã©rtÃ©kÃ©t.
 	public int getx() {
 		return x;
 	}
 	
-	//Beállítja az x értékét.
+	//BeÃ¡llÃ­tja az x Ã©rtÃ©kÃ©t.
 	public void setx(int x) {
 		this.x=x;
 	}
 	
-	//Lekérdezi az y értékét.
+	//LekÃ©rdezi az y Ã©rtÃ©kÃ©t.
 	public int gety() {
 		return y;
 	}
 	
-	//Beállítja az y értékét.
+	//BeÃ¡llÃ­tja az y Ã©rtÃ©kÃ©t.
 	public void sety(int y) {
 		this.y=y;
 	}
 	
-	//Lekérdezi a modosithato értékét.
+	//LekÃ©rdezi a modosithato Ã©rtÃ©kÃ©t.
 	public boolean getmodosithato() {
 		return modosithato;
 	}
 	
-	//Beállítja a modosithato értékét.
+	//BeÃ¡llÃ­tja a modosithato Ã©rtÃ©kÃ©t.
 	public void setmodosithato(boolean modosithato) {
 		this.modosithato=modosithato;
 	}
 	
-	//Ellentétes irányba állítja a sebességet. (180 fokos forgatás.)
+	//EllentÃ©tes irÃ¡nyba Ã¡llÃ­tja a sebessÃ©get. (180 fokos forgatÃ¡s.)
 	public void inverz() {
 		x *= -1;
 		y *= -1;
@@ -90,9 +90,9 @@ public class Sebesseg {
 		y = (y + be.y)/2;
 	}
 
-	//Új kör kezdésekor végrehajtandó mûveletek ide kerülhetnek.
+	//Ãšj kÃ¶r kezdÃ©sekor vÃ©grehajtandÃ³ mÃ»veletek ide kerÃ¼lhetnek.
 	public void tick () {
-		//Jelenleg a sebességgel nem történik semmi új kör kezdésekor.
-		//Például ha lenne súrlódás, ami adott idõközönként csökkenti a sebességet az ide kerülhetne.
+		//Jelenleg a sebessÃ©ggel nem tÃ¶rtÃ©nik semmi Ãºj kÃ¶r kezdÃ©sekor.
+		//PÃ©ldÃ¡ul ha lenne sÃºrlÃ³dÃ¡s, ami adott idÃµkÃ¶zÃ¶nkÃ©nt csÃ¶kkenti a sebessÃ©get az ide kerÃ¼lhetne.
 	}
 }

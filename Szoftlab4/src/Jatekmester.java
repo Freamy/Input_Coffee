@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.*;
 import java.util.ArrayList;
 import java.math.*;
@@ -12,9 +14,15 @@ public class Jatekmester extends JFrame{
 	private ArrayList<Kisrobot> kisrobotok = new ArrayList<Kisrobot>();
 	private ArrayList<Robot> robotok = new ArrayList<Robot>();
 	private static int korszam = 1;
-	private static Kepernyo kepernyo = new Kepernyo();
+	private static Kepernyo kepernyo = new Kepernyo(); 
 	private  int jatekosszam;
 	
+	public static void setKepernyo(Kepernyo kepernyo) {
+		Jatekmester.kepernyo = kepernyo;
+	}
+	public static Kepernyo getKepernyo() {
+		return kepernyo;
+	}
 	public static void main(String[] args){
 		
 		try{
@@ -221,7 +229,8 @@ public class Jatekmester extends JFrame{
 						else if(parancs.equals("UjKisrobot") && running){
 							Integer x = Integer.parseInt(parameterek[1]);
 							Integer y = Integer.parseInt(parameterek[2]);
-							Kisrobot uj = new Kisrobot(navigator.getMezo(x, y), navigator);
+							KisRobotGyar gyar = new KisRobotGyar(kepernyo);
+							Kisrobot uj = new Kisrobot(navigator.getMezo(x, y), navigator,gyar);
 							uj.setPozicio(navigator.getMezo(x, y));
 							uj.getPozicio().beregisztral(uj);
 							uj.setNev(parameterek[0]);
@@ -231,7 +240,7 @@ public class Jatekmester extends JFrame{
 
 							int kord[] = {Integer.parseInt(parameterek[1]),Integer.parseInt(parameterek[2])};
 							
-							Ragacs uj = new Ragacs(navigator.getMezo(kord[0], kord[1]), Integer.parseInt(parameterek[3]), kord);
+							Ragacs uj = new Ragacs(navigator.getMezo(kord[0], kord[1]), Integer.parseInt(parameterek[3]), kord,kepernyo);
 							uj.setPozicio(navigator.getMezo(kord[0], kord[1]));
 							uj.setNev(parameterek[0]);
 							uj.getPozicio().beregisztral(uj);
@@ -240,7 +249,7 @@ public class Jatekmester extends JFrame{
 							
 							int kord[] = {Integer.parseInt(parameterek[1]),Integer.parseInt(parameterek[2])};
 							
-							Olajfolt uj = new Olajfolt(navigator.getMezo(kord[0], kord[1]), Integer.parseInt(parameterek[3]), "", kord);
+							Olajfolt uj = new Olajfolt(navigator.getMezo(kord[0], kord[1]), Integer.parseInt(parameterek[3]), "", kord,kepernyo);
 							uj.setPozicio(navigator.getMezo(kord[0], kord[1]));
 							uj.setNev(parameterek[0]);
 							uj.getPozicio().beregisztral(uj);
@@ -368,7 +377,7 @@ public class Jatekmester extends JFrame{
 							for(Robot r : jatekMester.robotok){
 								String vizsgalt = r.getNev();
 								if(vizsgalt.equals(uj)){
-									r.ragacsotTesz();
+									r.ragacsotTesz(r.getNev()+"ragacsa");
 								}
 							}
 						}
@@ -380,7 +389,7 @@ public class Jatekmester extends JFrame{
 							for(Robot r : jatekMester.robotok){
 								String vizsgalt = r.getNev();
 								if(vizsgalt.equals(uj)){
-									r.olajfoltotTesz();
+									r.olajfoltotTesz(r.getNev()+"ragacsa");
 								}
 							}
 						}
@@ -400,8 +409,8 @@ public class Jatekmester extends JFrame{
 				}
 			}
 			else if(szam == 1){
-				Jatekmester.kepernyo.Menu(true);
-				GrafikusPalya ge = new GrafikusPalya("utvonalbelso","utvonalkulso",kepernyo);
+				Jatekmester.getKepernyo().Menu(true);
+				GrafikusPalya ge = new GrafikusPalya(0,0,20,"rajz2.png","rajz3.png",getKepernyo());
 				navigator.setGrafika(ge);
 				jatekMester.menukezeles();
 				while(korszam < 30){
@@ -603,8 +612,8 @@ public class Jatekmester extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				frame.setVisible(false);
-				kepernyo.Menu(false);
-				kepernyo.rajzol();
+				getKepernyo().Menu(false);
+				getKepernyo().rajzol(new JFrame());
 			}
 			
 		});
@@ -640,10 +649,11 @@ public class Jatekmester extends JFrame{
 		if ( n > m ) n = m;
 		for(int i = 0; i < jatekosszam; i++){
 			int random = (int) (Math.random()*(n)); 
-			int random2 = random + i;
+			int random2 = random/2;
 			if(random2 > n) random2 = random2 - n;
+			if(random > n) random = random - n;
 			Mezo mezo = navigator.getMezo(random,random2);
-			while(navigator.kulsoMezo(mezo)){
+			while(navigator.getKulsoMezo(random,random2)){
 				random++;
 				random2--;
 				if(random > n) random -=n;
@@ -657,17 +667,66 @@ public class Jatekmester extends JFrame{
 	//A léptet függvény minden körben meghívódik és az összes robotot léptetjük, ehhez a felhasználó
 	//által megadott értékekre is szükség van(sebességváltoztatás,ragacsot v olajat le akar tenni).
 	//Ezenfelül a kisrobotokat is lépteti.
+	public class Ugrasevent implements KeyListener{
+		Robot r;
+		boolean ragacsle = false;
+		boolean olajle = false;
+		public Ugrasevent(Robot r){
+			this.r = r;
+		}
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			if(arg0.getKeyChar()=='1'){
+				this.olajle = true;
+			}
+			else if(arg0.getKeyChar()=='2'){
+				this.ragacsle = true;
+			}
+			else if(arg0.getKeyChar()=='w'){
+				Sebesseg sebesseg = r.getSebesseg();
+				sebesseg.setx(sebesseg.getx());
+				sebesseg.sety(sebesseg.gety()+1);
+				this.r.setSebesseg(sebesseg);
+			}
+			else if(arg0.getKeyChar()=='a'){
+				Sebesseg sebesseg = r.getSebesseg();
+				sebesseg.setx(sebesseg.getx()-1);
+				sebesseg.sety(sebesseg.gety());
+				this.r.setSebesseg(sebesseg);
+			}
+			else if(arg0.getKeyChar()=='s'){
+				Sebesseg sebesseg = r.getSebesseg();
+				sebesseg.setx(sebesseg.getx());
+				sebesseg.sety(sebesseg.gety());
+				this.r.setSebesseg(sebesseg);
+			}
+			else if(arg0.getKeyChar()=='d'){
+				Sebesseg sebesseg = r.getSebesseg();
+				sebesseg.setx(sebesseg.getx()+1);
+				sebesseg.sety(sebesseg.gety());
+				this.r.setSebesseg(sebesseg);
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
 	void leptet(){
 		for(Robot r : robotok){
-			Sebesseg sebesseg;
-			boolean ragacsle,olajle;
-			sebesseg = kepernyo.sebessegkerdezo();
-			ragacsle = kepernyo.ragacslekerdezo();
-			olajle = kepernyo.olajlekerdezo();
-			r.lep(sebesseg, ragacsle, olajle);
-			if(ragacsle){
-				Ragacs ragacs = new Ragacs(r.getPozicio(),5,navigator.getKoord(r.getPozicio()));
-			}
+			Ugrasevent e = new Ugrasevent(r);
+			r.lep(e.r.getSebesseg(), e.ragacsle, e.olajle,kepernyo);
 			r.getGrafika().frissit(r);
 		}
 		for(Kisrobot kr : kisrobotok){
@@ -691,31 +750,32 @@ public class Jatekmester extends JFrame{
 				if(random2 < 0) random2 +=n;
 				kisrobotbelepes = navigator.getMezo(random,random2);
 			}
-			Kisrobot uj = new Kisrobot(kisrobotbelepes,navigator);
+			KisRobotGyar gyar = new KisRobotGyar(kepernyo);
+			Kisrobot uj = new Kisrobot(kisrobotbelepes,navigator,gyar);
 			kisrobotok.add(uj);
-			GrafikusKisrobot ge = new GrafikusKisrobot("kisrobot.png",kepernyo,uj);
-			kepernyo.grafikusElemHozzaad(ge);
+			GrafikusKisrobot ge = new GrafikusKisrobot("kisrobot.png",getKepernyo(),uj);
+			getKepernyo().grafikusElemHozzaad(ge);
 		}
 	}
 	
 	//Törlünk egy megadott kisrobotot
 	void torolKisrobot(Kisrobot torolt){
-		kepernyo.grafikusElemKivesz(torolt.getGrafika());
+		getKepernyo().grafikusElemKivesz(torolt.getGrafika());
 		kisrobotok.remove(torolt);
 	}
 	
 	//Létrehozunk egy Robotot a megadott mezõre
 	void ujRobot(Mezo hova){
 		Robot uj = new Robot(hova,navigator);
-		GrafikusRobot ge = new GrafikusRobot("robot.png",kepernyo,uj);
+		GrafikusRobot ge = new GrafikusRobot("robot.png",getKepernyo(),uj);
 		uj.setGrafika(ge);
-		kepernyo.grafikusElemHozzaad(ge);
+		getKepernyo().grafikusElemHozzaad(ge);
 		robotok.add(uj);
 	}
 	
 	//Törlünk egy megadott robotot
 	void torolRobot(Robot torolt){
-		kepernyo.grafikusElemKivesz(torolt.getGrafika());
+		getKepernyo().grafikusElemKivesz(torolt.getGrafika());
 		robotok.remove(torolt);
 	}
 	
