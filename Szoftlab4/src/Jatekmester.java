@@ -725,6 +725,7 @@ public class Jatekmester extends JFrame{
 	
 	void leptet(){
 		for(Robot r : robotok){
+			r.setAktiv(true);
 			Ugrasevent e = new Ugrasevent(r);
 			r.lep(e.r.getSebesseg(), e.ragacsle, e.olajle,kepernyo);
 			r.getGrafika().frissit(r);
