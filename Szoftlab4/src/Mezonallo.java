@@ -24,5 +24,9 @@ public interface Mezonallo {
 	
 	void tick();
 	
+	void tickend();
+	
 	void megsemmisul();
+	
+	void adatokKiirasa(String param);
 }

@@ -1,20 +1,30 @@
 public class Kisrobot implements Mezonallo {
 
+	private Gyar grafikusGyar;
+	
 	private Mezo pozicio;			//A kisrobot tartózkodási mezõje.
 	private Navigator navigator;	//A kisrobot eltárolja, hogy kiszámoltathassa vele azt, hogy hova ugorjon.
 	private boolean lekoppant;		//Igaz ha robotnak vagy kisrobotnak ütközött.
-	private int megsemmisul;		//Mennyi kör után semmisül meg a kisrobot.	
+	private boolean ugrottMar;
+	private boolean megsemmisult;
+	
 	
 	private String nev;
+
 	private static int autoincrement = 0;
+	private GrafikusKisrobot grafikusKisrobot;
+
+	public Kisrobot(Mezo mezo, Navigator navigator, Gyar gyar){
+		grafikusGyar = gyar;
+		grafikusKisrobot = (GrafikusKisrobot) grafikusGyar.grafikaKeszitese(this);
 	
-	public Kisrobot(Mezo mezo, Navigator navigator){
+		this.nev = nev;
 		this.navigator = navigator;
-		pozicio = mezo;
-		lekoppant= false;
+		this.pozicio = mezo;
+		this.lekoppant= false;
+		this.ugrottMar = false;
+		megsemmisult = false;
 		
-		autoincrement++;
-		nev = "kisrobot" + autoincrement;
 		int[] kord = navigator.koordinataKonverter(mezo);
 		System.out.println("["+nev+"] létrejött x=("+kord[0]+","+kord[1]+").");
 		pozicio.beregisztral(this);
@@ -24,23 +34,34 @@ public class Kisrobot implements Mezonallo {
 	//Leregrisztrál aktuális poziciójáról és beregrisztrál a kapott helyre.
 	//Amenyiben ellökõdik, visszatér eredeti helyére.
 	public void ugrik(){
+		if(!megsemmisult) {
+		if(!ugrottMar) {
 		Mezo hova = navigator.kozeliszennyezodes(pozicio);
+		if(hova!=null) {
+		Mezo keresztul = navigator.legrovidebbut(pozicio, hova);
+		if(keresztul!=null) {
+		
 		pozicio.leregisztral(this);
 		
-		int[] kord = navigator.koordinataKonverter(hova);
+		int[] kord = navigator.koordinataKonverter(keresztul);
 		System.out.println("["+nev+"] elugrott a(z) ("+kord[0]+","+kord[1]+") kordinátára.");
 		
-		hova.beregisztral(this);
+		keresztul.beregisztral(this);
 		if(lekoppant){
-			hova.leregisztral(this);
+			keresztul.leregisztral(this);
 			int[] kord2 = navigator.koordinataKonverter(pozicio);
 			System.out.println("["+nev+"] visszalép ("+kord2[0]+","+kord2[1]+").");
 			pozicio.beregisztral(this);
 
 		} else {
-			pozicio = hova;
+			pozicio = keresztul;
 		}
 		lekoppant = false;
+		}
+		}
+		ugrottMar = true;
+		}
+		}
 	}	
 	
 	//A kisrobot poziciojára érkezõ elemnek szól, hogy kisrobotra lépet.
@@ -90,18 +111,20 @@ public class Kisrobot implements Mezonallo {
 	
 	public void megsemmisul() {
 		pozicio.leregisztral(this);
-		
+		megsemmisult = true;
 		System.out.println("["+nev+"] megsemmisült.");
 	}
 	
 	//Megsemmisíti a kisrobotot.
-	public void robotMegsemmisiti () {
+	public void robotMegsemmisiti (Kepernyo k) {
 		
 		pozicio.leregisztral(this);
+		megsemmisult = true;
 		
 		int kord[] = navigator.koordinataKonverter(pozicio);
 		
 		new Olajfolt (pozicio, 1, nev, kord);
+
 		
 		System.out.println("["+nev+"] megsemmisült.");
 	}
@@ -121,13 +144,13 @@ public class Kisrobot implements Mezonallo {
 	//Beállítja false-ra az lekoppant értékét. Ha a kisrobot ideje lejárt akkor leregisztrálja magát.
 	@Override
 	public void tick() {
-		lekoppant = false;
-		megsemmisul -= 1;
-		if(megsemmisul <= 0){
-			pozicio.leregisztral(this);
-		}
+		if(!megsemmisult) ugrik();
 	}
-
+	
+	public void tickend() {
+		if (!megsemmisult) ugrottMar = false;
+	}
+	
 	public String getNev() {
 		return nev;
 	}
@@ -139,4 +162,38 @@ public class Kisrobot implements Mezonallo {
 	public void setkopas(int kop) {
 		
 	}
+
+
+	public int getX() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getY() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public boolean getMegsemmisult() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public GrafikusKisrobot getGrafika() {
+		// TODO Auto-generated method stub
+		return grafikusKisrobot;
+	}
+	public void setGrafika(GrafikusKisrobot gk) {
+		// TODO Auto-generated method stub
+		this.grafikusKisrobot = gk;
+	}
+
+	
+	public void adatokKiirasa(String param) {
+		if(param.equals("") || param.equals(nev)) {
+			System.out.println("["+nev+"]:\nPozicio: "+pozicio.getNev()+"\nLekoppant: "+lekoppant
+					+"\n");
+		}
+	}
+
 }
