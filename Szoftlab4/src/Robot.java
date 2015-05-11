@@ -12,15 +12,15 @@ public class Robot implements Mezonallo{
 
 	private static int autoincrement=0;
 	
-	private Gyar grafikaGyar;
+	private Gyar grafikaGyar = new RobotGyar(Jatekmester.getKepernyo());
 	private GrafikusRobot grafikusRobot;
 	
 	private boolean aktiv;
 	
-	public Robot(Mezo mezo, Navigator navigator){
-		grafikaGyar = new RobotGyar(Jatekmester.getKepernyo());
+	/*public Robot(Mezo mezo, Navigator navigator){
+		grafikaGyar = 
 
-	}
+	}*/
 	public Robot(String nev, Mezo mezo, Navigator navigator, Sebesseg sebesseg, int ragacsDb, int olajDb, boolean vesztettem, double megtettUt){
 		
 		this.nev = nev;
@@ -34,8 +34,6 @@ public class Robot implements Mezonallo{
 		this.ugrottMar = false;
 
 		sebesseg = new Sebesseg(0,0);
-		
-		grafikusRobot = (GrafikusRobot) grafikaGyar.grafikaKeszitese(Jatekmester.getKepernyo(), this);
 
 		megsemmisult = false;
 		
@@ -49,7 +47,7 @@ public class Robot implements Mezonallo{
 						+megtettUt+" út.");
 		
 		mezo.beregisztral(this);
-		
+		grafikusRobot = (GrafikusRobot) grafikaGyar.grafikaKeszitese(Jatekmester.getKepernyo(), this);
 	}
 	
 	// Ha az olajfoltotTesz igaz, akkor meghívja az olajfoltotTesz függvényét,

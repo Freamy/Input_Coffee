@@ -119,7 +119,7 @@ public class Jatekmester extends JFrame{
 							int y = Integer.parseInt(parameterek[1]);
 							
 							//Ha a lenti TODO-k kész vannak az alábbi sor kommentezése feloldható:
-							//navigator.adatKiirasa(x,y);
+							//1navigator.adatKiirasa(x,y);
 							
 							//TODO:
 							//Navigator: adatKiirasa(int x, int y) meghívja az (x,y) kordinátán lévõ mezõre az adatKiirasa("") függvényt.
@@ -193,7 +193,7 @@ public class Jatekmester extends JFrame{
 							// változó nevû változót pedig nem tudom hogy kéne létrehozni
 							Integer x = Integer.parseInt(parameterek[1]);
 							Integer y = Integer.parseInt(parameterek[2]);
-							Robot uj = new Robot(navigator.getMezo(x, y), navigator);
+							Robot uj = new Robot("UJRobot"+x+y,navigator.getMezo(x, y), navigator,new Sebesseg(1,1),0,0,false,0);
 
 							uj.getPozicio().beregisztral(uj);
 							
@@ -410,7 +410,7 @@ public class Jatekmester extends JFrame{
 			}
 			else if(szam == 1){
 				Jatekmester.getKepernyo().Menu(true);
-				GrafikusPalya ge = new GrafikusPalya(0,0,20,"rajz2.png","rajz3.png",getKepernyo());
+				GrafikusPalya ge = new GrafikusPalya(0,0,20,"gfx/rajz2.png","gfx/rajz3.png",getKepernyo());
 				navigator.setGrafika(ge);
 				jatekMester.menukezeles();
 				while(korszam < 30){
@@ -613,7 +613,7 @@ public class Jatekmester extends JFrame{
 				// TODO Auto-generated method stub
 				frame.setVisible(false);
 				getKepernyo().Menu(false);
-				getKepernyo().rajzol(new JFrame());
+				getKepernyo().rajzol(getFrame());
 			}
 			
 		});
@@ -642,7 +642,9 @@ public class Jatekmester extends JFrame{
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
-	
+	public JFrame getFrame(){
+		return this;
+	}
 	//Ezt a függvényt akkor hívjuk meg, ha a felhasználó megadta, hogy hány játékost szeretne egy n*m-es pályán
 	//És létrehozunk annyi robotot ahány játékos van, valamint elhelyezzük õket egy adott mezõre a pályán
 	void inicializal(int n, int m){
@@ -660,7 +662,7 @@ public class Jatekmester extends JFrame{
 				if(random2 < 0) random2 +=n;
 				mezo = navigator.getMezo(random,random2);
 			}
-			ujRobot(mezo);
+			ujRobot(mezo,i);
 		}
 	}
 	
@@ -755,7 +757,7 @@ public class Jatekmester extends JFrame{
 			KisRobotGyar gyar = new KisRobotGyar(kepernyo);
 			Kisrobot uj = new Kisrobot(kisrobotbelepes,navigator,gyar);
 			kisrobotok.add(uj);
-			GrafikusKisrobot ge = new GrafikusKisrobot("kisrobot.png",getKepernyo(),uj);
+			GrafikusKisrobot ge = new GrafikusKisrobot("gfx/kisrobot.png",getKepernyo(),uj);
 			getKepernyo().grafikusElemHozzaad(ge);
 		}
 	}
@@ -767,9 +769,10 @@ public class Jatekmester extends JFrame{
 	}
 	
 	//Létrehozunk egy Robotot a megadott mezõre
-	void ujRobot(Mezo hova){
-		Robot uj = new Robot(hova,navigator);
-		GrafikusRobot ge = new GrafikusRobot("robot.png",getKepernyo(),uj);
+	void ujRobot(Mezo hova, int i){
+		Sebesseg sebesseg = new Sebesseg(1,1);
+		Robot uj = new Robot("Robot"+i,hova,navigator,sebesseg,5,5,false,0);
+		GrafikusRobot ge = new GrafikusRobot("gfx/robot.png",getKepernyo(),uj);
 		uj.setGrafika(ge);
 		getKepernyo().grafikusElemHozzaad(ge);
 		robotok.add(uj);
