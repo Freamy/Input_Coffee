@@ -24,7 +24,6 @@ public class Robot implements Mezonallo{
 	public Robot(String nev, Mezo mezo, Navigator navigator, Sebesseg sebesseg, int ragacsDb, int olajDb, boolean vesztettem, double megtettUt){
 		
 		this.nev = nev;
-		this.pozicio = mezo;
 		this.navigator = navigator;
 		this.sebesseg = sebesseg;
 		this.vesztettem = vesztettem;
@@ -47,6 +46,7 @@ public class Robot implements Mezonallo{
 						+megtettUt+" út.");
 		
 		mezo.beregisztral(this);
+		this.pozicio = mezo;
 		grafikusRobot = (GrafikusRobot) grafikaGyar.grafikaKeszitese(Jatekmester.getKepernyo(), this);
 	}
 	

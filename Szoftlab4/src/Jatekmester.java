@@ -14,7 +14,7 @@ public class Jatekmester extends JFrame{
 	private ArrayList<Kisrobot> kisrobotok = new ArrayList<Kisrobot>();
 	private ArrayList<Robot> robotok = new ArrayList<Robot>();
 	private int korszam = 1;
-	private static Kepernyo kepernyo = new Kepernyo(); 
+	private static Kepernyo kepernyo = new Kepernyo(navigator); 
 	private  int jatekosszam;
 	
 	public static void setKepernyo(Kepernyo kepernyo) {
@@ -453,7 +453,7 @@ public class Jatekmester extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				
 					//n a PalyaX, m a PalyaY Textfield-bõl kerül beolvasásra.
 					int n = Integer.parseInt(PalyaX.getText());
 					int m = Integer.parseInt(PalyaY.getText());
@@ -477,6 +477,7 @@ public class Jatekmester extends JFrame{
 					removeAll();
 					//Láthatatlanná tesszük
 					setVisible(false);
+					navigator.setKulsoMezo(1,1,true);
 					//inicializáljuk a megadott pályaméret mellett a robotokat
 					inicializal(navigator.getX(),navigator.getY());
 					//Meghívjuk a jatekosmegadas függvényt, ami felnyit egy új frame-t
@@ -607,7 +608,6 @@ public class Jatekmester extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				frame.setVisible(false);
 				getKepernyo().Menu(false);
 				getKepernyo().rajzol(getFrame());
@@ -674,16 +674,15 @@ public class Jatekmester extends JFrame{
 		}
 		@Override
 		public void keyPressed(KeyEvent arg0) {
-			// TODO Auto-generated method stub
 			char c = arg0.getKeyChar();
 			
-			if( c =='1'){
+			if( c =='1' && !ujragacs){
 				jatekmester.ujolaj = true;
 			}
-			else if( c =='2'){
+			else if( c =='2' && !ujolaj){
 				jatekmester.ujragacs = true;
 			}
-			if( c=='w' || c=='a' || c=='s' || c=='d'){
+		    if( c=='w' || c=='a' || c=='s' || c=='d'){
 				if( c =='w'){
 					Sebesseg sebesseg = jatekmester.robot.getSebesseg();
 					sebesseg.setx(sebesseg.getx());
@@ -724,13 +723,11 @@ public class Jatekmester extends JFrame{
 
 		@Override
 		public void keyReleased(KeyEvent arg0) {
-			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
 		public void keyTyped(KeyEvent arg0) {
-			// TODO Auto-generated method stub
 			
 		}
 		
@@ -838,7 +835,6 @@ public class Jatekmester extends JFrame{
 	private void mainloop(){
 		this.removeAll();
 		this.add(kepernyo);
-		
 		this.setFocusable(true);
 		this.setResizable(true);
 		this.setSize(12*64,12*64);
@@ -847,15 +843,14 @@ public class Jatekmester extends JFrame{
 		this.setLocationRelativeTo(null);
 		navigator.getGrafikusPalya().grafikusPalyaFelvevese(navigator);
 		kepernyo.initFrame();
-		navigator.getGrafikusPalya().rajzol(this.getGraphics());
+		navigator.getGrafikusPalya().rajzol(this.getGraphics(),navigator);
 		Ugrasevent e = new Ugrasevent(this);
 		this.addKeyListener(e);
 		this.robot = robotok.get(i);
 		this.ujsebesseg = robot.getSebesseg();
 		robotok.get(i).setAktiv(true);
 		robotok.get(i).getGrafika().frissit(robotok.get(i));
-		//kepernyo.rajzol(this);
-		
+		kepernyo.rajzol(this);
 	}
 
 	

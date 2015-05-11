@@ -7,12 +7,14 @@ public class GrafikusRagacs extends GrafikusElem {
 	public GrafikusRagacs(String utvonal, Kepernyo kepernyo, Ragacs ragacs) {
 		super(ragacs.getPozicio().getX(), ragacs.getPozicio().getY(), utvonal, kepernyo);
 		kepernyo.grafikusElemHozzaad(this);
+		
 	}
 	
-	public void rajzol(Graphics g){
+	public void rajzol(Graphics g, Navigator navigator){
 		if(!megsemmisult) {
 			Graphics2D g2 = (Graphics2D) g;
-			g2.drawImage(kep,x,y,null);
+			g2.drawImage(kep,x*64,y*64,null);
+			
 		}
 	}
 	

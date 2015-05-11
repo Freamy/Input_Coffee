@@ -6,8 +6,10 @@ public class GrafikusPalya extends GrafikusElem {
 	int mezomeret;
 	private boolean[][] palya;
 	private Image kulso;
+	private Image belso;
 	public GrafikusPalya(int x, int y, int mezomeret, String utvonalBelso, String utvonalKulso, Kepernyo kepernyo) {
 		super(x, y, utvonalBelso, kepernyo);
+		belso = this.kepBetoltese(utvonalBelso);
 		kulso = this.kepBetoltese(utvonalKulso);
 		this.mezomeret = 64;
 	}
@@ -18,7 +20,7 @@ public class GrafikusPalya extends GrafikusElem {
 		palya = n.getPalya();
 	}
 	
-	public void rajzol(Graphics g){
+	public void rajzol(Graphics g, Navigator navigator){
 		int szelesseg = palya[0].length;
 		int hosszusag = palya.length;
 		Graphics2D g2 = (Graphics2D) g;
@@ -27,7 +29,12 @@ public class GrafikusPalya extends GrafikusElem {
 				int xoffset = i*mezomeret;
 				int yoffset = j*mezomeret;
 				if(!palya[i][j]){
-					g2.drawImage(kep,x+xoffset,y+yoffset,null);
+					if(navigator.getMezo(i,j).rajtamAllok.size() == 0){
+						g2.drawImage(belso,x+xoffset,y+yoffset,null);
+					}
+					else{
+						
+					}
 				}
 				else{
 					g2.drawImage(kulso,x+xoffset,y+yoffset,null);
