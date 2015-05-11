@@ -687,29 +687,29 @@ public class Jatekmester extends JFrame{
 		    if( c=='w' || c=='a' || c=='s' || c=='d'){
 				if( c =='w'){
 					Sebesseg sebesseg = jatekmester.robot.getSebesseg();
-					sebesseg.setx(sebesseg.getx());
-					sebesseg.sety(sebesseg.gety()+1);
+					sebesseg.setx(0);
+					sebesseg.sety(+1);
 					jatekmester.ujsebesseg = sebesseg;
 					jatekmester.robot.setSebesseg(sebesseg);
 				}
 				else if( c =='a'){
 					Sebesseg sebesseg = jatekmester.robot.getSebesseg();
-					sebesseg.setx(sebesseg.getx()-1);
-					sebesseg.sety(sebesseg.gety());
+					sebesseg.setx(-1);
+					sebesseg.sety(0);
 					jatekmester.ujsebesseg = sebesseg;
 					jatekmester.robot.setSebesseg(sebesseg);
 				}
 				else if( c =='s'){
 					Sebesseg sebesseg = jatekmester.robot.getSebesseg();
-					sebesseg.setx(sebesseg.getx());
-					sebesseg.sety(sebesseg.gety()-1);
+					sebesseg.setx(0);
+					sebesseg.sety(-1);
 					jatekmester.ujsebesseg = sebesseg;
 					jatekmester.robot.setSebesseg(sebesseg);
 				}
 				else if( c =='d'){
 					Sebesseg sebesseg = jatekmester.robot.getSebesseg();
-					sebesseg.setx(sebesseg.getx()+1);
-					sebesseg.sety(sebesseg.gety());
+					sebesseg.setx(1);
+					sebesseg.sety(0);
 					jatekmester.ujsebesseg = sebesseg;
 					jatekmester.robot.setSebesseg(sebesseg);
 				}
@@ -739,6 +739,7 @@ public class Jatekmester extends JFrame{
 		getKepernyo().rajzol(getFrame());
 		robotok.get(i).getGrafika().frissit(robotok.get(i));
 		robotok.get(i).lep(ujsebesseg,ujolaj,ujragacs,kepernyo);
+		this.ujsebesseg = this.robot.getSebesseg();
 		robotok.get(i).setAktiv(false);
 		i++;
 		if(i == jatekosszam){
