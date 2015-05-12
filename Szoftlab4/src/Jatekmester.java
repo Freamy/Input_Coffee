@@ -426,6 +426,9 @@ public class Jatekmester extends JFrame{
 	private JTextField jszam = new JTextField(5);
 	private JTextField PalyaX = new JTextField(5);
 	private JTextField PalyaY = new JTextField(5);
+	private JTextField jatekos4 = new JTextField(5);
+	private JTextField jatekos5 = new JTextField(5);
+	private JTextField jatekos6 = new JTextField(5);
 	private JLabel x = new JLabel("X");
 	private JLabel szoveg1 = new JLabel("Palya merete:");
 	private JLabel szoveg2 = new JLabel("Jatekosok szama:");
@@ -522,9 +525,9 @@ public class Jatekmester extends JFrame{
 		JLabel szoveg6 = new JLabel("6");
 		
 		// Létrehozunk új TextFieldeket
-		JTextField jatekos4 = new JTextField(5);
-		JTextField jatekos5 = new JTextField(5);
-		JTextField jatekos6 = new JTextField(5);
+		//JTextField jatekos4 = new JTextField(5);
+		//JTextField jatekos5 = new JTextField(5);
+		//JTextField jatekos6 = new JTextField(5);
 		
 		//Létrehozunk 9 új panelt
 		JPanel panel = new JPanel();
@@ -610,6 +613,15 @@ public class Jatekmester extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				//A robotoknak beállítjuk a nev attribútumát, attól függően, hogy mennyi van.
+				for(int i=0; i < jatekosszam; i++){
+					if(i==0) robotok.get(i).setNev(jszam.getText());
+					if(i==1) robotok.get(i).setNev(PalyaX.getText());
+					if(i==2) robotok.get(i).setNev(PalyaY.getText());
+					if(i==3) robotok.get(i).setNev(jatekos4.getText());
+					if(i==4) robotok.get(i).setNev(jatekos5.getText());
+					if(i==5) robotok.get(i).setNev(jatekos6.getText());
+				}
 				frame.setVisible(false);
 				getKepernyo().Menu(false);
 				getKepernyo().rajzol(getFrame());
@@ -626,7 +638,6 @@ public class Jatekmester extends JFrame{
 		if(jatekosszam < 3) PalyaY.setEnabled(false);
 		if(jatekosszam < 2) PalyaX.setEnabled(false);
 		
-		//A robotoknak beállítjuk a nev attribútumát, attól függően, hogy mennyi van.
 		for(int i=0; i < jatekosszam; i++){
 			if(i==0) robotok.get(i).setNev(jszam.getText());
 			if(i==1) robotok.get(i).setNev(PalyaX.getText());
@@ -635,6 +646,7 @@ public class Jatekmester extends JFrame{
 			if(i==4) robotok.get(i).setNev(jatekos5.getText());
 			if(i==5) robotok.get(i).setNev(jatekos6.getText());
 		}
+		
 		//Frame-nek beállítjuk a tulajdonságait.
 		frame.pack();
 		frame.setVisible(true);
@@ -710,11 +722,24 @@ public class Jatekmester extends JFrame{
 					sebesseg.sety(0);
 					jatekmester.ujsebesseg = sebesseg;
 				}
-				if(korszam < 30){
+				int kiesettdb = 0;
+				for(int j=0; j<jatekosszam; j++){
+					if(robotok.get(j).getMegsemmisult() || robotok.get(j).getVesztett())
+						kiesettdb++;
+				}
+				if(korszam < 30 && kiesettdb<jatekosszam-1){
 					leptet();
 				}
 				else{
 					System.out.println("A játék véget ért");
+					String message = new String();
+					for(int j=0; j<jatekosszam; j++){
+						message+=robotok.get(j).getNev();
+						message+=":";
+						message+=robotok.get(j).getmegtettUt();
+						message+=", ";
+					}
+					JOptionPane.showMessageDialog(getFrame(), message);
 				}
 			}
 		}
@@ -733,7 +758,6 @@ public class Jatekmester extends JFrame{
 		robotok.get(i).getGrafika().frissit(robotok.get(i));
 		getKepernyo().rajzol(this);
 		i++;
-			
 		if(i == jatekosszam){
 			i = 0;
 			tick();
