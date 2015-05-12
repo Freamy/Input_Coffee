@@ -524,11 +524,6 @@ public class Jatekmester extends JFrame{
 		JLabel szoveg5 = new JLabel("5");
 		JLabel szoveg6 = new JLabel("6");
 		
-		// Létrehozunk új TextFieldeket
-		//JTextField jatekos4 = new JTextField(5);
-		//JTextField jatekos5 = new JTextField(5);
-		//JTextField jatekos6 = new JTextField(5);
-		
 		//Létrehozunk 9 új panelt
 		JPanel panel = new JPanel();
 		JPanel panel1 = new JPanel();
@@ -774,6 +769,8 @@ public class Jatekmester extends JFrame{
 	void kisrobotlepteto(){
 		for(Kisrobot kr : kisrobotok){
 			kr.ugrik();
+			kr.getGrafika().frissit(kr);
+			getKepernyo().rajzol(this);
 		}
 	}
 	
