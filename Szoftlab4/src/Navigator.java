@@ -1,5 +1,9 @@
 import java.util.ArrayList;
 
+
+import java.util.ArrayList;
+
+
 public class Navigator {
 	
 	private Gyar grafikaGyar;
@@ -9,8 +13,8 @@ public class Navigator {
 	private boolean[][] kulsoMezok;
 	
 	public Navigator(){
-		grafikaGyar = new PalyaGyar(Jatekmester.kepernyo);
-		grafikusPalya = (GrafikusPalya) grafikaGyar.grafikaKeszitese(Jatekmester.kepernyo);
+		grafikaGyar = new PalyaGyar(Jatekmester.getKepernyo());
+		grafikusPalya = (GrafikusPalya) grafikaGyar.grafikaKeszitese(Jatekmester.getKepernyo(), null);
 	}
 	
 	public Mezo getMezo(int id){
@@ -274,8 +278,7 @@ public class Navigator {
 	public void setGrafika(GrafikusPalya ge){
 		this.grafikusPalya = ge;
 	}
-
-	public void adatokKiirasa (String param) {
+public void adatokKiirasa (String param) {
 		if (param.contains(" ")) {
 			String[] darabolo = param.split(" ");
 			int x = Integer.parseInt(darabolo[0]);

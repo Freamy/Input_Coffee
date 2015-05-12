@@ -3,413 +3,422 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.peer.KeyboardFocusManagerPeer;
 import java.io.*;
 import java.util.ArrayList;
 import java.math.*;
-
 import javax.swing.*;
 
-public class Jatekmester extends JFrame implements KeyListener{
+public class Jatekmester extends JFrame{
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private static Navigator navigator = new Navigator();
+	private static Navigator navigator = new Navigator();;
 	private ArrayList<Kisrobot> kisrobotok = new ArrayList<Kisrobot>();
 	private ArrayList<Robot> robotok = new ArrayList<Robot>();
-	private static int korszam = 1;
-	public static Kepernyo kepernyo = new Kepernyo();
+	private int korszam = 1;
+	private static Kepernyo kepernyo = new Kepernyo(navigator); 
 	private  int jatekosszam;
+	private KisRobotGyar kisgyar = new KisRobotGyar(kepernyo);
+	private RobotGyar nagygyar = new RobotGyar(kepernyo);
 	
+	public static void setKepernyo(Kepernyo kepernyo) {
+		Jatekmester.kepernyo = kepernyo;
+	}
+	public static Kepernyo getKepernyo() {
+		return kepernyo;
+	}
 	public static void main(String[] args){
-		
-		Jatekmester jatekMester = new Jatekmester();
-		Jatekmester.kepernyo.Menu(true);
-
-		jatekMester.menukezeles();
-		/*
-		while(korszam < 30){
-			jatekMester.leptet();
-			jatekMester.tick();
-		}
-		//parancsértelmezõs rész kezdete
+		//Parancsértelmezős rész
 		try{
-		
-		boolean running = false; // a játék futását vizsgálja, ha false akkor csak az exit és a start parancsok hívhatók
-		while(jatekMester.korszam< 30){ //egy játék 30 körös (többre/kevesebbre is állíthatjuk ha szeretnétek)
-			
-			BufferedReader be = new BufferedReader(new InputStreamReader(System.in)); 
-			String bemenet;
-			while((bemenet=be.readLine())!=null && bemenet.length()!=0){ //soronként beolvassuk a bemeneteket, attól függõen, hogy van.
-				String parancs = bemenet;
-				String[] parameterek = new String[10];
-				/*
-				for(index=0; index<bemenet.length(); index++){
-					char c = bemenet.charAt(index);
-					if(c=='('){ //Ha zárójelet is beolvastunk, akkor paraméter is van két részre bontjuk
-						parancs = bemenet.substring(0, index); //Parancs részre, ami alapján értelnezzük a bemenetet.
-						kezdo = index + 1;
-					}
+			Jatekmester jatekMester = new Jatekmester();
+			System.out.println("MarsOne : Konzolosan vagy grafikusan szeretne játszani?");
+			System.out.println("0: konzolosan, 1: grafikusan");
+			BufferedReader be1 = new BufferedReader(new InputStreamReader(System.in)); 
+			String szam0 = be1.readLine();
+			Integer szam = Integer.parseInt(szam0);
+			/*while((szam != 0) || (szam != 1)){
+				System.out.println("Rossz értéket írt be, próbálja újból!");
+				szam0 = be1.readLine();
+				szam = Integer.parseInt(szam0);
+			}*/
+			if(szam == 0){
+				boolean running = false; // a játék futását vizsgálja, ha false akkor csak az exit és a start parancsok hívhatók
+				while(jatekMester.korszam< 30){ //egy játék 30 körös (többre/kevesebbre is állíthatjuk ha szeretnétek)
 					
-					else if(c==',' || c==')'){ //illetve paraméter részre, amiket tömben tárolunk, mert lehet több is (max 10)
-						parameterek[tobbparameter] = bemenet.substring(kezdo, index); 
-						tobbparameter++;
-						kezdo = index + 1;
-						if(c==')') break;
-					}
-				}*/
-				/*
-				// This is kinda not perfect yet
-				if(parancs.contains(")")){
-					parancs = bemenet.substring(0, bemenet.indexOf(")"));
-				}
-				String[] darabolo = parancs.split("\\(");
-				if(darabolo.length > 1){
-					// Vannak paraméterek
-					parancs = darabolo[0];
-					darabolo = darabolo[1].split(",");
-					int i = 0;
-					for(String darab: darabolo){
-						parameterek[i] = darab;
-						i++;
-					}
-				}else{
-					// Nincsnenek paraméterek
-					parancs = darabolo[0];
-				}
-				// Until like this part
-				
-				if(parancs.equals("Start")){ //Elindítja a játékot
-					running = true;
-					System.out.println("[Jatek] indulás.");
-				}
-				else if(parancs.equals("Stop")){ //Megállítja a játékot, startal újraindítható
-					running = false;
-					System.out.println("[Jatek] megállás.");
-				}
-				else if(parancs.equals("Exit")){ //Leáll a program futása
-					running = false;
-					System.exit(0);
-				}
-				else if(parancs.equals("Tick") && running){ //Meghívja a játékmester tick függvényét
-					jatekMester.tick();
-				}
-				else if(parancs.equals("AdatokMindenki") && running){
-					
-					//Ha a lenti TODO-k kész vannak az alábbi sor kommentezése feloldható:
-					//navigator.adatKiirasa("");
-					
-					// TODO:
-					// Navigator: adatKiirasa(String) Kiírja a saját adatait (ha a param =  ""), majd ha param= " meghívja minden Mezõre az adatKiirasa(param) függvényt ami benne van.
-					// Mezo: adatKiirasa(String param) Kiírja a saját adatait (ha a param =  a nevével, vagy "") majd meghívja minden Mezonallora az adatKiirasa(param) függvényt ami benne van.
-					// Mezonallok: adatKiirasa(String param) Kiírja a saját adatait (ha a param = a nevével, vagy "").
-				}
-				else if(parancs.equals("AdatokNev") && running){
-					
-					
-					//Ha a függvény implementálva van az alábbi sor kommentezése feloldható:
-					//navigator.adatKiirasa(parameterek[0]);
-					
-				}
-				else if(parancs.equals("AdatokMezo") && running){
-					
-					int x = Integer.parseInt(parameterek[0]);
-					int y = Integer.parseInt(parameterek[1]);
-					
-					//Ha a lenti TODO-k kész vannak az alábbi sor kommentezése feloldható:
-					//navigator.adatKiirasa(x,y);
-					
-					//TODO:
-					//Navigator: adatKiirasa(int x, int y) meghívja az (x,y) kordinátán lévõ mezõre az adatKiirasa("") függvényt.
-					
-					
-				}
-				else if(parancs.equals("Torol") && running){ // Törli a pályán lévõ összes elemet
-					
-					ArrayList<Mezonallo> elemek;
-					elemek = jatekMester.navigator.getOsszesElem(); //Visszaadja az összes elemet, ami a pályán van és egy listába menti.
-					
-					for(Mezonallo m : elemek){
-						m.getPozicio().leregisztral(m);
-						if(jatekMester.robotok.contains(m)) jatekMester.robotok.remove(m);
-						else if(jatekMester.kisrobotok.contains(m)) jatekMester.kisrobotok.remove(m);
-					}
-				}
-				else if(parancs.equals("Palya") && running){ //
-					
-					Integer n = Integer.parseInt(parameterek[0]);
-					Integer k = Integer.parseInt(parameterek[1]);
-					jatekMester.navigator = new Navigator();
-					jatekMester.navigator.palyaKeszites(n,k);
-					
-				}
-				else if(parancs.equals("TorolMezonallo") && running){ //törli a paraméterként kapott mezõnállót
-					
-					String uj = parameterek[0];
-					ArrayList<Mezonallo> elemek;
-					elemek = jatekMester.navigator.getOsszesElem(); //Visszaadja az összes elemet, ami a pályán van és egy listába menti.
-					
-					for(Mezonallo m : elemek){
-						String vizsgalt = m.getNev();
-						if(vizsgalt.equals(uj)){
-							m.getPozicio().leregisztral(m);
-							if(jatekMester.robotok.contains(m)) jatekMester.robotok.remove(m);
-							else if(jatekMester.kisrobotok.contains(m)) jatekMester.kisrobotok.remove(m);
-						}
-					}
-				}
-				else if(parancs.equals("TorolMezo") && running){
-					
-					int x = Integer.parseInt(parameterek[0]);
-					int y = Integer.parseInt(parameterek[1]);
-					ArrayList<Mezonallo> elemek;
-					Mezo torlendo = jatekMester.navigator.getMezo(x, y);
-					elemek = torlendo.getRajtamAllok();
-					for(Mezonallo m : elemek){
-							m.getPozicio().leregisztral(m);
-							if(jatekMester.robotok.contains(m)) jatekMester.robotok.remove(m);
-							else if(jatekMester.kisrobotok.contains(m)) jatekMester.kisrobotok.remove(m);
-					}
-					
-				}
-				
-				else if((parancs.equals("Kulso") || parancs.equals("Belso")) && running){
-					
-					int x = Integer.parseInt(parameterek[0]);
-					int y = Integer.parseInt(parameterek[1]);
-						if(parancs.equals("Kulso")){
-							jatekMester.navigator.setKulsoMezo(x,y,true);
-						}
-						else{
-							jatekMester.navigator.setKulsoMezo(x,y,false);
-						}
-				}
-				
-				else if(parancs.equals("UjRobot") && running){ 
-					// Itt nem tudom hogy hogyan kéne a parameter[0]-t a robot nevének adni, ha nincs név paramétere,
-					// változó nevû változót pedig nem tudom hogy kéne létrehozni
-					Integer x = Integer.parseInt(parameterek[1]);
-					Integer y = Integer.parseInt(parameterek[2]);
-					Robot uj = new Robot(jatekMester.navigator.getMezo(x, y), jatekMester.navigator);
-					uj.getPozicio().beregisztral(uj);
-					
-					Integer vx = Integer.parseInt(parameterek[3]);
-					Integer vy = Integer.parseInt(parameterek[4]);
-					Sebesseg s = new Sebesseg(vx,vy);
-					if(parameterek[5].equals("true")){
-						s.modosithato();
-					}
-					else if(parameterek[5].equals("false")){
-						s.modosithatatlan();
-					}
-					uj.sebessegvaltozas(s);
-					
-					Integer ragacsDB = Integer.parseInt(parameterek[6]);
-					Integer olajDB = Integer.parseInt(parameterek[7]);
-					uj.setRagacsDb(ragacsDB);
-					uj.setOlajDb(olajDB);
-					
-					if(parameterek[8].equals("true")){
-						uj.setVesztett(true);
-					}
-					else if (parameterek[8].equals("false")){
-						uj.setVesztett(false);
-					}
-					
-					Integer ut = Integer.parseInt(parameterek[9]);
-					uj.setmegtettUt(ut);
-					uj.setNev(parameterek[0]);
-					jatekMester.robotok.add(uj);
-				}
-				
-				else if(parancs.equals("UjKisrobot") && running){
-					Integer x = Integer.parseInt(parameterek[1]);
-					Integer y = Integer.parseInt(parameterek[2]);
-					Kisrobot uj = new Kisrobot(jatekMester.navigator.getMezo(x, y), jatekMester.navigator);
-					uj.setPozicio(jatekMester.navigator.getMezo(x, y));
-					uj.getPozicio().beregisztral(uj);
-					uj.setNev(parameterek[0]);
-					jatekMester.kisrobotok.add(uj);
-				}
-				else if(parancs.equals("UjRagacs") && running){
-					int kord[] = {Integer.parseInt(parameterek[1]),Integer.parseInt(parameterek[2])};
-					
-					Ragacs uj = new Ragacs(jatekMester.navigator.getMezo(kord[0], kord[1]), Integer.parseInt(parameterek[3]), kord);
-					uj.setPozicio(jatekMester.navigator.getMezo(kord[0], kord[1]));
-					uj.setNev(parameterek[0]);
-					uj.getPozicio().beregisztral(uj);
-				}
-				else if(parancs.equals("UjOlajfolt") && running){
-					
-					int kord[] = {Integer.parseInt(parameterek[1]),Integer.parseInt(parameterek[2])};
-					
-					Olajfolt uj = new Olajfolt(jatekMester.navigator.getMezo(kord[0], kord[1]), Integer.parseInt(parameterek[3]), "", kord);
-					uj.setPozicio(jatekMester.navigator.getMezo(kord[0], kord[1]));
-					uj.setNev(parameterek[0]);
-					uj.getPozicio().beregisztral(uj);
-				}
-				
-				else if(parancs.equals("ModositRobotHely") && running){
-					
-					String uj = parameterek[0];
-					Integer x = Integer.parseInt(parameterek[1]);
-					Integer y = Integer.parseInt(parameterek[2]);
-					
-					for(Robot r : jatekMester.robotok){
-						String vizsgalt = r.getNev();
-						if(vizsgalt.equals(uj)){
-							r.getPozicio().leregisztral(r);
-							r.setPozicio(jatekMester.navigator.getMezo(x, y));
-							r.getPozicio().beregisztral(r);
-						}
-					}
-				}
-				
-				else if(parancs.equals("ModositRobotSebesseg") && running){
-					
-					String uj = parameterek[0];
-					Integer vx = Integer.parseInt(parameterek[1]);
-					Integer vy = Integer.parseInt(parameterek[2]);
-					Sebesseg s = new Sebesseg(vx,vy);
-					if(parameterek[3].equals("true")){
-						s.modosithato();
-					}
-					else if(parameterek[3].equals("false")){
-						s.modosithatatlan();
-					}
-					for(Robot r : jatekMester.robotok){
-						String vizsgalt = r.getNev();
-						if(vizsgalt.equals(uj)){
-							r.setSebesseg(s);
-						}
-					}
-				}
-				
-				else if(parancs.equals("ModositRobotKeszlet") && running){
-					
-					String uj = parameterek[0];
-					Integer ragacs = Integer.parseInt(parameterek[1]);
-					Integer olaj = Integer.parseInt(parameterek[2]);
-					
-					for(Robot r : jatekMester.robotok){
-						String vizsgalt = r.getNev();
-						if(vizsgalt.equals(uj)){
-							r.setOlajDb(olaj);
-							r.setRagacsDb(ragacs);
-						}
-					}
-				}
-				
-				else if(parancs.equals("ModositRobotVesztett") && running){
-					
-					String uj = parameterek[0];
-					
-					for(Robot r : jatekMester.robotok){
-						String vizsgalt = r.getNev();
-						if(vizsgalt.equals(uj)){
-							if(parameterek[1].equals("true")){
-								r.setVesztett(true);
+					BufferedReader be = new BufferedReader(new InputStreamReader(System.in)); 
+					String bemenet;
+					while((bemenet=be.readLine())!=null && bemenet.length()!=0){ //soronként beolvassuk a bemeneteket, attól függően, hogy van.
+						String parancs = bemenet;
+						String[] parameterek = new String[10];
+						
+						/*for(index=0; index<bemenet.length(); index++){
+							char c = bemenet.charAt(index);
+							if(c=='('){ //Ha zárójelet is beolvastunk, akkor paraméter is van két részre bontjuk
+								parancs = bemenet.substring(0, index); //Parancs részre, ami alapján értelnezzük a bemenetet.
+								kezdo = index + 1;
 							}
-							else if(parameterek[1].equals("false")){
-								r.setVesztett(false);
+							
+							else if(c==',' || c==')'){ //illetve paraméter részre, amiket tömben tárolunk, mert lehet több is (max 10)
+								parameterek[tobbparameter] = bemenet.substring(kezdo, index); 
+								tobbparameter++;
+								kezdo = index + 1;
+								if(c==')') break;
+							}
+						}*/
+						// This is kinda not perfect yet
+						if(parancs.contains(")")){
+							parancs = bemenet.substring(0, bemenet.indexOf(")"));
+						}
+						String[] darabolo = parancs.split("\\(");
+						if(darabolo.length > 1){
+							// Vannak paraméterek
+							parancs = darabolo[0];
+							darabolo = darabolo[1].split(",");
+							int i = 0;
+							for(String darab: darabolo){
+								parameterek[i] = darab;
+								i++;
+							}
+						}else{
+							// Nincsnenek paraméterek
+							parancs = darabolo[0];
+						}
+						// Until like this part
+						
+						if(parancs.equals("Start")){ //Elindítja a játékot
+							running = true;
+							System.out.println("[Jatek] indulás.");
+						}
+						else if(parancs.equals("Stop")){ //Megállítja a játékot, startal újraindítható
+							running = false;
+							System.out.println("[Jatek] megállás.");
+						}
+						else if(parancs.equals("Exit")){ //Leáll a program futása
+							running = false;
+							System.exit(0);
+						}
+						else if(parancs.equals("Tick") && running){ //Meghívja a játékmester tick függvényét
+							jatekMester.tick();
+						}
+						else if(parancs.equals("AdatokMindenki") && running){
+							
+							//Ha a lenti TODO-k kész vannak az alábbi sor kommentezése feloldható:
+							//navigator.adatKiirasa("");
+							
+							// TODO:
+							// Navigator: adatKiirasa(String) Kiírja a saját adatait (ha a param =  ""), majd ha param= " meghívja minden Mezőre az adatKiirasa(param) függvényt ami benne van.
+							// Mezo: adatKiirasa(String param) Kiírja a saját adatait (ha a param =  a nevével, vagy "") majd meghívja minden Mezonallora az adatKiirasa(param) függvényt ami benne van.
+							// Mezonallok: adatKiirasa(String param) Kiírja a saját adatait (ha a param = a nevével, vagy "").
+						}
+						else if(parancs.equals("AdatokNev") && running){
+							
+							
+							//Ha a függvény implementálva van az alábbi sor kommentezése feloldható:
+							//navigator.adatKiirasa(parameterek[0]);
+							
+						}
+						else if(parancs.equals("AdatokMezo") && running){
+							
+							//int x = Integer.parseInt(parameterek[0]);
+							//int y = Integer.parseInt(parameterek[1]);
+							
+							//Ha a lenti TODO-k kész vannak az alábbi sor kommentezése feloldható:
+							navigator.adatokKiirasa(parameterek[0]);
+							
+							//TODO:
+							//Navigator: adatKiirasa(int x, int y) meghívja az (x,y) kordinátán lévő mezőre az adatKiirasa("") függvényt.
+							
+							
+						}
+						else if(parancs.equals("Torol") && running){ // Törli a pályán lévő összes elemet
+							
+
+							ArrayList<Mezonallo> elemek;
+							elemek = navigator.getOsszesElem(); //Visszaadja az összes elemet, ami a pályán van és egy listába menti.
+							
+							for(Mezonallo m : elemek){
+								m.getPozicio().leregisztral(m);
+								if(jatekMester.robotok.contains(m)) jatekMester.robotok.remove(m);
+								else if(jatekMester.kisrobotok.contains(m)) jatekMester.kisrobotok.remove(m);
 							}
 						}
-					}
-				}
-				else if(parancs.equals("ModositRobotMegtettUt") && running){
-					
-					String uj = parameterek[0];
-					Integer ut = Integer.parseInt(parameterek[1]);
-					
-					for(Robot r : jatekMester.robotok){
-						String vizsgalt = r.getNev();
-						if(vizsgalt.equals(uj)){
-							r.setmegtettUt(ut);
+						else if(parancs.equals("Palya") && running){ //
+							
+							Integer n = Integer.parseInt(parameterek[0]);
+							Integer k = Integer.parseInt(parameterek[1]);
+							navigator = new Navigator();
+							navigator.palyaKeszites(n,k);
+							
 						}
-					}
-				}
-				else if(parancs.equals("ModositKisrobot") && running){
-					
-					String uj = parameterek[0];
-					Integer x = Integer.parseInt(parameterek[1]);
-					Integer y = Integer.parseInt(parameterek[2]);
-					
-					for(Kisrobot kr : jatekMester.kisrobotok){
-						String vizsgalt = kr.getNev();
-						if(vizsgalt.equals(uj)){
-							kr.getPozicio().leregisztral(kr);
-							kr.setPozicio(jatekMester.navigator.getMezo(x,y));
-							kr.getPozicio().beregisztral(kr);
-						}
-					}
-				}
-				else if((parancs.equals("ModositRagacs")|| parancs.equals("ModositOlajfolt")) && running){
-					
-					String uj = parameterek[0];
-					Integer x = Integer.parseInt(parameterek[1]);
-					Integer y = Integer.parseInt(parameterek[2]);
-					Integer kop = Integer.parseInt(parameterek[3]);
-					ArrayList<Mezonallo> elemek;
-					elemek = jatekMester.navigator.getOsszesElem();
-					
-					for(Mezonallo m : elemek){
-						String vizsgalt = m.getNev();
-						if(vizsgalt.equals(uj)){
-							m.getPozicio().leregisztral(m);
-							m.setPozicio(jatekMester.navigator.getMezo(x, y));
-							m.getPozicio().beregisztral(m);
-							if(m.szennyezodesVagyok()){
-								m.setkopas(kop);
+						else if(parancs.equals("TorolMezonallo") && running){ //törli a paraméterként kapott mezőnállót
+							
+							String uj = parameterek[0];
+							ArrayList<Mezonallo> elemek;
+							elemek = navigator.getOsszesElem(); //Visszaadja az összes elemet, ami a pályán van és egy listába menti.
+							
+							for(Mezonallo m : elemek){
+								String vizsgalt = m.getNev();
+								if(vizsgalt.equals(uj)){
+									m.getPozicio().leregisztral(m);
+									if(jatekMester.robotok.contains(m)) jatekMester.robotok.remove(m);
+									else if(jatekMester.kisrobotok.contains(m)) jatekMester.kisrobotok.remove(m);
+								}
 							}
 						}
-					}
-				}
-				else if(parancs.equals("LeteszRagacs") && running){
-					
-					String uj = parameterek[0];
-					
-					for(Robot r : jatekMester.robotok){
-						String vizsgalt = r.getNev();
-						if(vizsgalt.equals(uj)){
-							r.ragacsotTesz();
+						else if(parancs.equals("TorolMezo") && running){
+							
+							int x = Integer.parseInt(parameterek[0]);
+							int y = Integer.parseInt(parameterek[1]);
+							ArrayList<Mezonallo> elemek;
+							Mezo torlendo = navigator.getMezo(x, y);
+							elemek = torlendo.getRajtamAllok();
+							for(Mezonallo m : elemek){
+									m.getPozicio().leregisztral(m);
+									if(jatekMester.robotok.contains(m)) jatekMester.robotok.remove(m);
+									else if(jatekMester.kisrobotok.contains(m)) jatekMester.kisrobotok.remove(m);
+							}
+							
 						}
-					}
-				}
-				
-				else if(parancs.equals("LeteszOlajfolt") && running){
-					
-					String uj = parameterek[0];
-					
-					for(Robot r : jatekMester.robotok){
-						String vizsgalt = r.getNev();
-						if(vizsgalt.equals(uj)){
-							r.olajfoltotTesz();
+						
+						else if((parancs.equals("Kulso") || parancs.equals("Belso")) && running){
+							
+							int x = Integer.parseInt(parameterek[0]);
+							int y = Integer.parseInt(parameterek[1]);
+								if(parancs.equals("Kulso")){
+									navigator.setKulsoMezo(x,y,true);
+								}
+								else{
+									navigator.setKulsoMezo(x,y,false);
+								}
 						}
-					}
-				}
-				
-				else if(parancs.equals("Ugrik") && running){
-					
-					String uj = parameterek[0];
-					
-					for(Robot r : jatekMester.robotok){
-						String vizsgalt = r.getNev();
-						if(vizsgalt.equals(uj)){
-							r.ugrik();
+						
+						else if(parancs.equals("UjRobot") && running){ 
+							// Itt nem tudom hogy hogyan kéne a parameter[0]-t a robot nevének adni, ha nincs név paramétere,
+							// változó nevű változót pedig nem tudom hogy kéne létrehozni
+							Integer x = Integer.parseInt(parameterek[1]);
+							Integer y = Integer.parseInt(parameterek[2]);
+							Robot uj = new Robot("UJRobot"+x+y,navigator.getMezo(x, y), navigator,new Sebesseg(1,1),0,0,false,0,jatekMester.nagygyar);
+
+							uj.getPozicio().beregisztral(uj);
+							
+							Integer vx = Integer.parseInt(parameterek[3]);
+							Integer vy = Integer.parseInt(parameterek[4]);
+							Sebesseg s = new Sebesseg(vx,vy);
+							if(parameterek[5].equals("true")){
+								s.modosithato();
+							}
+							else if(parameterek[5].equals("false")){
+								s.modosithatatlan();
+							}
+							uj.sebessegvaltozas(s);
+							
+							Integer ragacsDB = Integer.parseInt(parameterek[6]);
+							Integer olajDB = Integer.parseInt(parameterek[7]);
+							uj.setRagacsDb(ragacsDB);
+							uj.setOlajDb(olajDB);
+							
+							if(parameterek[8].equals("true")){
+								uj.setVesztett(true);
+							}
+							else if (parameterek[8].equals("false")){
+								uj.setVesztett(false);
+							}
+							
+							Integer ut = Integer.parseInt(parameterek[9]);
+							uj.setmegtettUt(ut);
+							uj.setNev(parameterek[0]);
+							jatekMester.robotok.add(uj);
+						}
+						
+						else if(parancs.equals("UjKisrobot") && running){
+							Integer x = Integer.parseInt(parameterek[1]);
+							Integer y = Integer.parseInt(parameterek[2]);
+							KisRobotGyar gyar = new KisRobotGyar(kepernyo);
+							Kisrobot uj = new Kisrobot(navigator.getMezo(x, y), navigator,gyar);
+							uj.setPozicio(navigator.getMezo(x, y));
+							uj.getPozicio().beregisztral(uj);
+							uj.setNev(parameterek[0]);
+							jatekMester.kisrobotok.add(uj);
+						}
+						else if(parancs.equals("UjRagacs") && running){
+
+							int kord[] = {Integer.parseInt(parameterek[1]),Integer.parseInt(parameterek[2])};
+							
+							Ragacs uj = new Ragacs(navigator.getMezo(kord[0], kord[1]), Integer.parseInt(parameterek[3]), kord,kepernyo);
+							uj.setPozicio(navigator.getMezo(kord[0], kord[1]));
+							uj.setNev(parameterek[0]);
+							uj.getPozicio().beregisztral(uj);
+						}
+						else if(parancs.equals("UjOlajfolt") && running){
+							
+							int kord[] = {Integer.parseInt(parameterek[1]),Integer.parseInt(parameterek[2])};
+							
+							Olajfolt uj = new Olajfolt(navigator.getMezo(kord[0], kord[1]), Integer.parseInt(parameterek[3]), "", kord,kepernyo);
+							uj.setPozicio(navigator.getMezo(kord[0], kord[1]));
+							uj.setNev(parameterek[0]);
+							uj.getPozicio().beregisztral(uj);
+						}
+						
+						else if(parancs.equals("ModositRobotHely") && running){
+							
+							String uj = parameterek[0];
+							Integer x = Integer.parseInt(parameterek[1]);
+							Integer y = Integer.parseInt(parameterek[2]);
+							
+							for(Robot r : jatekMester.robotok){
+								String vizsgalt = r.getNev();
+								if(vizsgalt.equals(uj)){
+									r.getPozicio().leregisztral(r);
+									r.setPozicio(navigator.getMezo(x, y));
+									r.getPozicio().beregisztral(r);
+								}
+							}
+						}
+						
+						else if(parancs.equals("ModositRobotSebesseg") && running){
+							
+							String uj = parameterek[0];
+							Integer vx = Integer.parseInt(parameterek[1]);
+							Integer vy = Integer.parseInt(parameterek[2]);
+							Sebesseg s = new Sebesseg(vx,vy);
+							if(parameterek[3].equals("true")){
+								s.modosithato();
+							}
+							else if(parameterek[3].equals("false")){
+								s.modosithatatlan();
+							}
+							for(Robot r : jatekMester.robotok){
+								String vizsgalt = r.getNev();
+								if(vizsgalt.equals(uj)){
+									r.setSebesseg(s);
+								}
+							}
+						}
+						
+						else if(parancs.equals("ModositRobotKeszlet") && running){
+							
+							String uj = parameterek[0];
+							Integer ragacs = Integer.parseInt(parameterek[1]);
+							Integer olaj = Integer.parseInt(parameterek[2]);
+							
+							for(Robot r : jatekMester.robotok){
+								String vizsgalt = r.getNev();
+								if(vizsgalt.equals(uj)){
+									r.setOlajDb(olaj);
+									r.setRagacsDb(ragacs);
+								}
+							}
+						}
+						
+						else if(parancs.equals("ModositRobotVesztett") && running){
+							
+							String uj = parameterek[0];
+							
+							for(Robot r : jatekMester.robotok){
+								String vizsgalt = r.getNev();
+								if(vizsgalt.equals(uj)){
+									if(parameterek[1].equals("true")){
+										r.setVesztett(true);
+									}
+									else if(parameterek[1].equals("false")){
+										r.setVesztett(false);
+									}
+								}
+							}
+						}
+						else if(parancs.equals("ModositRobotMegtettUt") && running){
+							
+							String uj = parameterek[0];
+							Integer ut = Integer.parseInt(parameterek[1]);
+							
+							for(Robot r : jatekMester.robotok){
+								String vizsgalt = r.getNev();
+								if(vizsgalt.equals(uj)){
+									r.setmegtettUt(ut);
+								}
+							}
+						}
+						else if(parancs.equals("ModositKisrobot") && running){
+							
+							String uj = parameterek[0];
+							Integer x = Integer.parseInt(parameterek[1]);
+							Integer y = Integer.parseInt(parameterek[2]);
+							
+							for(Kisrobot kr : jatekMester.kisrobotok){
+								String vizsgalt = kr.getNev();
+								if(vizsgalt.equals(uj)){
+									kr.getPozicio().leregisztral(kr);
+									kr.setPozicio(navigator.getMezo(x,y));
+									kr.getPozicio().beregisztral(kr);
+								}
+							}
+						}
+						else if((parancs.equals("ModositRagacs")|| parancs.equals("ModositOlajfolt")) && running){
+							
+							String uj = parameterek[0];
+							Integer x = Integer.parseInt(parameterek[1]);
+							Integer y = Integer.parseInt(parameterek[2]);
+							Integer kop = Integer.parseInt(parameterek[3]);
+							ArrayList<Mezonallo> elemek;
+							elemek = navigator.getOsszesElem();
+							
+							for(Mezonallo m : elemek){
+								String vizsgalt = m.getNev();
+								if(vizsgalt.equals(uj)){
+									m.getPozicio().leregisztral(m);
+									m.setPozicio(navigator.getMezo(x, y));
+									m.getPozicio().beregisztral(m);
+									if(m.szennyezodesVagyok()){
+										m.setkopas(kop);
+									}
+								}
+							}
+						}
+						else if(parancs.equals("LeteszRagacs") && running){
+							
+							String uj = parameterek[0];
+							
+							for(Robot r : jatekMester.robotok){
+								String vizsgalt = r.getNev();
+								if(vizsgalt.equals(uj)){
+									r.ragacsotTesz(r.getNev()+"ragacsa");
+								}
+							}
+						}
+						
+						else if(parancs.equals("LeteszOlajfolt") && running){
+							
+							String uj = parameterek[0];
+							
+							for(Robot r : jatekMester.robotok){
+								String vizsgalt = r.getNev();
+								if(vizsgalt.equals(uj)){
+									r.olajfoltotTesz(r.getNev()+"ragacsa");
+								}
+							}
+						}
+						
+						else if(parancs.equals("Ugrik") && running){
+							
+							String uj = parameterek[0];
+							
+							for(Robot r : jatekMester.robotok){
+								String vizsgalt = r.getNev();
+								if(vizsgalt.equals(uj)){
+									r.ugrik();
+								}
+							}
 						}
 					}
 				}
 			}
+			else if(szam == 1){
+				Jatekmester.getKepernyo().Menu(true);
+				GrafikusPalya ge = new GrafikusPalya(0,0,20,"gfx/rajz2.png","gfx/rajz3.png",getKepernyo());
+				navigator.setGrafika(ge);
+				jatekMester.menukezeles();
+			}
+		}catch(Exception ex){
+			System.out.println("Exception.");
 		}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		*/
-		//parancskezelõ rész vége
 		
 	}
 	private JButton jatekosok = new JButton("OK");
@@ -441,20 +450,20 @@ public class Jatekmester extends JFrame implements KeyListener{
 		p2.add(jszam,BorderLayout.WEST);
 		p2.add(limit,BorderLayout.EAST);
 		p2.add(jatekosok,BorderLayout.SOUTH);
-		//A jatekosok nevû gombra definiálunk egy ActionListenert
+		//A jatekosok nevű gombra definiálunk egy ActionListenert
 		jatekosok.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-					//n a PalyaX, m a PalyaY Textfield-bõl kerül beolvasásra.
+				
+					//n a PalyaX, m a PalyaY Textfield-ből kerül beolvasásra.
 					int n = Integer.parseInt(PalyaX.getText());
 					int m = Integer.parseInt(PalyaY.getText());
 					//a jatekosszam tagváltozót feltöltjük a jszam-ba beírt értékkel
 					jatekosszam = Integer.parseInt(jszam.getText());
-					//Megvizsgáljuk hogy a feltételeknek megfelelõ értékek kerültek a TextFieldekbe
+					//Megvizsgáljuk hogy a feltételeknek megfelelő értékek kerültek a TextFieldekbe
 					if((n > 0) && (m > 0) && (jatekosszam < 7) && (jatekosszam > 0)){
-						//Ha igen elkészítjük a megadott méretû pályát (Itt lehetne egy felsõ korlát is az n-re, m-re
+						//Ha igen elkészítjük a megadott méretű pályát (Itt lehetne egy felső korlát is az n-re, m-re
 						navigator.palyaKeszites(n,m);
 					}
 					
@@ -466,10 +475,11 @@ public class Jatekmester extends JFrame implements KeyListener{
 						navigator.palyaKeszites(n,m);
 						jatekosszam= 3;
 					}
-					//Töröljük az összes komponenst a frame-rõl
+					//Töröljük az összes komponenst a frame-ről
 					removeAll();
 					//Láthatatlanná tesszük
 					setVisible(false);
+					navigator.setKulsoMezo(1,1,true);
 					//inicializáljuk a megadott pályaméret mellett a robotokat
 					inicializal(navigator.getX(),navigator.getY());
 					//Meghívjuk a jatekosmegadas függvényt, ami felnyit egy új frame-t
@@ -497,7 +507,7 @@ public class Jatekmester extends JFrame implements KeyListener{
 		p2.removeAll();
 		p3.removeAll();
 		
-		//Minden korábban használt JTextField szövegét üresre állítjuk, mivel újrafelhasználjuk õket
+		//Minden korábban használt JTextField szövegét üresre állítjuk, mivel újrafelhasználjuk őket
 		jszam.setText("");
 		PalyaX.setText("");
 		PalyaY.setText("");
@@ -591,22 +601,23 @@ public class Jatekmester extends JFrame implements KeyListener{
 		panel.add(panel1,BorderLayout.NORTH);
 		panel.add(panel2,BorderLayout.SOUTH);
 		
-		//A frame pedig tárolja a panelt és a kezdes nevû gombot.
+		//A frame pedig tárolja a panelt és a kezdes nevű gombot.
 		frame.add(panel,BorderLayout.NORTH);
 		
-		//Létrehozunk egy kezdes nevû gombot, amit ha megnyomunk, akkor a frame eltûnik, elkezdõdik a játék és kirajzolódik a pálya
+		//Létrehozunk egy kezdes nevű gombot, amit ha megnyomunk, akkor a frame eltűnik, elkezdődik a játék és kirajzolódik a pálya
 		JButton kezdes = new JButton("Start!");
 		kezdes.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				frame.setVisible(false);
-				mainLoop();
+				getKepernyo().Menu(false);
+				getKepernyo().rajzol(getFrame());
+				mainloop();
 			}
 			
 		});
-
+		
 		frame.add(kezdes,BorderLayout.SOUTH);
 		//Ha kevesebb mint 6 játékso játszik, akkor letiltunk annyi TextFieldet
 		if(jatekosszam < 6) jatekos6.setEnabled(false);
@@ -615,7 +626,7 @@ public class Jatekmester extends JFrame implements KeyListener{
 		if(jatekosszam < 3) PalyaY.setEnabled(false);
 		if(jatekosszam < 2) PalyaX.setEnabled(false);
 		
-		//A robotoknak beállítjuk a nev attribútumát, attól függõen, hogy mennyi van.
+		//A robotoknak beállítjuk a nev attribútumát, attól függően, hogy mennyi van.
 		for(int i=0; i < jatekosszam; i++){
 			if(i==0) robotok.get(i).setNev(jszam.getText());
 			if(i==1) robotok.get(i).setNev(PalyaX.getText());
@@ -631,53 +642,131 @@ public class Jatekmester extends JFrame implements KeyListener{
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
-	
+	public JFrame getFrame(){
+		return this;
+	}
 	//Ezt a függvényt akkor hívjuk meg, ha a felhasználó megadta, hogy hány játékost szeretne egy n*m-es pályán
-	//És létrehozunk annyi robotot ahány játékos van, valamint elhelyezzük õket egy adott mezõre a pályán
+	//És létrehozunk annyi robotot ahány játékos van, valamint elhelyezzük őket egy adott mezőre a pályán
 	void inicializal(int n, int m){
 		if ( n > m ) n = m;
 		for(int i = 0; i < jatekosszam; i++){
 			int random = (int) (Math.random()*(n)); 
-			int random2 = random + i;
+			int random2 = random/2;
 			if(random2 > n) random2 = random2 - n;
+			if(random > n) random = random - n;
 			Mezo mezo = navigator.getMezo(random,random2);
-			while(navigator.kulsoMezo(mezo)){
+			while(navigator.getKulsoMezo(random,random2)){
 				random++;
 				random2--;
 				if(random > n) random -=n;
 				if(random2 < 0) random2 +=n;
 				mezo = navigator.getMezo(random,random2);
 			}
-			ujRobot(mezo);
+			ujRobot(mezo,i);
 		}
-		navigator.setKulsoMezo(2, 2, true);
 	}
 	
 	//A léptet függvény minden körben meghívódik és az összes robotot léptetjük, ehhez a felhasználó
 	//által megadott értékekre is szükség van(sebességváltoztatás,ragacsot v olajat le akar tenni).
 	//Ezenfelül a kisrobotokat is lépteti.
-	void leptet(){
-		for(Robot r : robotok){
-			Sebesseg sebesseg;
-			boolean ragacsle,olajle;
-			sebesseg = kepernyo.sebessegkerdezo();
-			ragacsle = kepernyo.ragacslekerdezo();
-			olajle = kepernyo.olajlekerdezo();
-			r.lep(sebesseg, ragacsle, olajle, kepernyo);
-			r.getGrafika().frissit(r);
+	public class Ugrasevent implements KeyListener{
+		Jatekmester jatekmester;
+		public Ugrasevent(Jatekmester jm){
+			this.jatekmester = jm;
 		}
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			char c = arg0.getKeyChar();
+			
+			if( c =='1' && !ujragacs){
+				jatekmester.ujolaj = true;
+			}
+			else if( c =='2' && !ujolaj){
+				jatekmester.ujragacs = true;
+			}
+		    if( c=='w' || c=='a' || c=='s' || c=='d'){
+		    	Sebesseg sebesseg = new Sebesseg(0,0);
+				if( c =='w'){
+					sebesseg.setx(0);
+					sebesseg.sety(-1);
+					jatekmester.ujsebesseg = sebesseg;
+				}
+				else if( c =='a'){
+					sebesseg.setx(-1);
+					sebesseg.sety(0);
+					jatekmester.ujsebesseg = sebesseg;
+				}
+				else if( c =='s'){
+					sebesseg.setx(0);
+					sebesseg.sety(+1);
+					jatekmester.ujsebesseg = sebesseg;
+				}
+				else if( c =='d'){
+					sebesseg.setx(1);
+					sebesseg.sety(0);
+					jatekmester.ujsebesseg = sebesseg;
+				}
+				if(korszam < 30){
+					leptet();
+				}
+				else{
+					System.out.println("A játék véget ért");
+				}
+			}
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent arg0) {
+			
+		}
+		
+	}
+	
+	void leptet(){
+		robotok.get(i).lep(ujsebesseg,ujolaj,ujragacs,kepernyo);
+		this.ujsebesseg = this.robot.getSebesseg();
+		robotok.get(i).setAktiv(false);
+		robotok.get(i).getGrafika().frissit(robotok.get(i));
+		getKepernyo().rajzol(getFrame());
+		i++;
+		if(i == jatekosszam){
+			i = 0;
+			tick();
+		}
+		this.robot = robotok.get(i);
+		this.ujsebesseg = this.robot.getSebesseg();
+		this.ujolaj = false;
+		this.ujragacs = false;
+		robotok.get(i).setAktiv(true);
+		robotok.get(i).getGrafika().frissit(robotok.get(i));
+		getKepernyo().rajzol(getFrame());
+	}
+	
+	void kisrobotlepteto(){
 		for(Kisrobot kr : kisrobotok){
 			kr.ugrik();
 		}
 	}
 	
-	//Létrehozunk egy kisrobotot, ha a 3-as számot kaptuk a pl: 6-7 koodinátára
+	private int i = 0;
+	private Robot robot;
+	private Sebesseg ujsebesseg;
+	private boolean ujragacs = false, ujolaj =false;
+	//Létrehozunk egy kisrobotot,  ha a 3-as számot kaptuk a pl: 6-7 koodinátára
 	/**Itt nincs lekezelve hogy mi van akkor ha 6-nál és 7-nél kisebb a pálya**/
+	
+	
 	void ujKisrobot(int n, int m){
 		if (n > m); n = m;
 		int random  = (int) (Math.random() * 6 + 1);
 		if (random == 3){
-			int random2 = random * random;
+			int random2 = random/2;
 			if(random2 > n) random2-=n;
 			Mezo kisrobotbelepes = navigator.getMezo(random,random2);
 			while(navigator.kulsoMezo(kisrobotbelepes)){
@@ -687,27 +776,29 @@ public class Jatekmester extends JFrame implements KeyListener{
 				if(random2 < 0) random2 +=n;
 				kisrobotbelepes = navigator.getMezo(random,random2);
 			}
-			KisRobotGyar krgy= new KisRobotGyar(kepernyo);
-			Kisrobot uj = new Kisrobot(kisrobotbelepes,navigator, krgy);
+			Kisrobot uj = new Kisrobot(kisrobotbelepes,navigator,kisgyar);
 			kisrobotok.add(uj);
+			getKepernyo().grafikusElemHozzaad(uj.getGrafika());
 		}
 	}
 	
 	//Törlünk egy megadott kisrobotot
 	void torolKisrobot(Kisrobot torolt){
-		kepernyo.grafikusElemKivesz(torolt.getGrafika());
+		getKepernyo().grafikusElemKivesz(torolt.getGrafika());
 		kisrobotok.remove(torolt);
 	}
 	
-	//Létrehozunk egy Robotot a megadott mezõre
-	void ujRobot(Mezo hova){
-		Robot uj = new Robot(hova,navigator);
+	//Létrehozunk egy Robotot a megadott mezőre
+	void ujRobot(Mezo hova, int i){
+		Sebesseg sebesseg = new Sebesseg(0,0);
+		Robot uj = new Robot("Robot"+i,hova,navigator,sebesseg,5,5,false,0,nagygyar);
+		getKepernyo().grafikusElemHozzaad(uj.getGrafika());
 		robotok.add(uj);
 	}
 	
 	//Törlünk egy megadott robotot
 	void torolRobot(Robot torolt){
-		kepernyo.grafikusElemKivesz(torolt.getGrafika());
+		getKepernyo().grafikusElemKivesz(torolt.getGrafika());
 		robotok.remove(torolt);
 	}
 	
@@ -724,40 +815,48 @@ public class Jatekmester extends JFrame implements KeyListener{
 	void tick(){
 		System.out.println("[Jatek] új kör.");	
 		korszam++;
+		for(Robot r : robotok){
+			r.tick();
+		}
 		ujKisrobot(navigator.getX(),navigator.getY());
+		kisrobotlepteto();
 		navigator.tick();
 	}
-	
-	
-	private void mainLoop(){
+	private void mainloop(){
 		this.removeAll();
 		this.add(kepernyo);
-		this.addKeyListener(this);
 		this.setFocusable(true);
 		this.setResizable(true);
-		this.setSize(12*64, 12*64);
+		this.setSize(12*64,12*64);
 		this.setResizable(false);
-		
 		this.setVisible(true);
-		
+		this.setLocationRelativeTo(null);
 		navigator.getGrafikusPalya().grafikusPalyaFelvevese(navigator);
-		
 		kepernyo.initFrame();
-		
-		navigator.getGrafikusPalya().frissit(navigator);
-		while(true){
-			robotok.get(0).setAktiv(true);
-			robotok.get(0).getGrafika().frissit(robotok.get(0));
-			kepernyo.rajzol(this);
-		}
-		
+		navigator.getGrafikusPalya().rajzol(this.getGraphics());
+		Ugrasevent e = new Ugrasevent(this);
+		this.addKeyListener(e);
+		this.robot = robotok.get(i);
+		this.ujsebesseg = robot.getSebesseg();
+		robotok.get(i).setAktiv(true);
+		robotok.get(i).getGrafika().frissit(robotok.get(i));
+		kepernyo.rajzol(this);
 	}
+
+	
 	/*boolean running = true;
 	while(running){
+<<<<<<< HEAD
+		main.useCaseTablaKiirasa();
+		bemenet = main.bemenetBekerese();
+		if(bemenet.equals("1")){
+			main.inditUseCase();
+=======
 		jatekMester.useCaseTablaKiirasa();
 		bemenet = jatekMester.bemenetBekerese();
 		if(bemenet.equals("1")){
 			jatekMester.inditUseCase();
+>>>>>>> branch 'master' of https://github.com/Freamy/Input_Coffee.git
 		}else if(bemenet.equals("kilepes")){
 			System.exit(0);
 		}
@@ -853,20 +952,6 @@ public class Jatekmester extends JFrame implements KeyListener{
 			return null;
 		}
 	}*/
-	@Override
-	public void keyPressed(KeyEvent e) {
-		System.out.println("!!");
-	}
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	
 }

@@ -12,7 +12,7 @@ public class GrafikusOlajfolt extends GrafikusElem {
 	public void rajzol(Graphics g){
 		if(!megsemmisult) {
 			Graphics2D g2 = (Graphics2D) g;
-			g2.drawImage(kep,x,y,null);
+			g2.drawImage(kep,x*64,y*64,null);
 		}
 	}
 	
@@ -20,6 +20,5 @@ public class GrafikusOlajfolt extends GrafikusElem {
 		x = olajfolt.getPozicio().getX();
 		y = olajfolt.getPozicio().getY();
 		megsemmisult = olajfolt.getMegsemmisult();
-		
 	}
 }

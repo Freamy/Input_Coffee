@@ -21,19 +21,15 @@ public class GrafikusRobot extends GrafikusElem {
 		Graphics2D g2 = (Graphics2D) g;
 		int meret = 64;
 		if(!megsemmisult){
+			g2.drawImage(kep,x*meret,y*meret,null);
 			if(aktiv){
 				int sebX = (sebesseg.getx()+x)*meret;
 				int sebY = (sebesseg.gety()+y)*meret;
-				BufferedImage bf = (BufferedImage) kep;
-				g2.drawImage(bf,x*meret,y*meret,null);
 				g2.setColor(Color.green);
 				g2.fillRect(sebX+meret,sebY, meret, meret);
 				g2.fillRect(sebX-meret,sebY, meret, meret);
 				g2.fillRect(sebX,sebY+meret, meret, meret);
 				g2.fillRect(sebX,sebY-meret, meret, meret);
-			}
-			else{
-				g2.drawImage(kep,x*meret,y*meret,null);
 			}
 		}
 	}
@@ -44,6 +40,5 @@ public class GrafikusRobot extends GrafikusElem {
 		this.megsemmisult = robot.getMegsemmisult();
 		this.sebesseg = robot.getSebesseg();
 		this.aktiv = robot.getAktiv();
-		//kepernyo.rajzol();
 	}
 }

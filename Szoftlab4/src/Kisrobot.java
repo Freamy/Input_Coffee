@@ -16,9 +16,9 @@ public class Kisrobot implements Mezonallo {
 
 	public Kisrobot(Mezo mezo, Navigator navigator, Gyar gyar){
 		grafikusGyar = gyar;
-		grafikusKisrobot = (GrafikusKisrobot) grafikusGyar.grafikaKeszitese(null,this);
+		
 	
-		this.nev = nev;
+		this.nev = "kisrobot" + autoincrement;
 		this.navigator = navigator;
 		this.pozicio = mezo;
 		this.lekoppant= false;
@@ -28,6 +28,7 @@ public class Kisrobot implements Mezonallo {
 		int[] kord = navigator.koordinataKonverter(mezo);
 		System.out.println("["+nev+"] létrejött x=("+kord[0]+","+kord[1]+").");
 		pozicio.beregisztral(this);
+		grafikusKisrobot = (GrafikusKisrobot) grafikusGyar.grafikaKeszitese(Jatekmester.getKepernyo(),this);
 	}
 	
 	//Navigátorral a kisrobot saját poziciója segítségével kiszámolja hova kell ugrania.
@@ -123,7 +124,7 @@ public class Kisrobot implements Mezonallo {
 		
 		int kord[] = navigator.koordinataKonverter(pozicio);
 		
-		new Olajfolt (pozicio, 1, nev, kord);
+		new Olajfolt (pozicio, 1, nev, kord,Jatekmester.getKepernyo());
 
 		
 		System.out.println("["+nev+"] megsemmisült.");

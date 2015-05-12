@@ -14,14 +14,14 @@ public class Olajfolt implements Mezonallo{
 
 	private static int autoincrement = 0;
 	
-	public Olajfolt(Mezo mezo,int kopas, String kisrobotneve, int kord[]){
+	public Olajfolt(Mezo mezo,int kopas, String kisrobotneve, int kord[], Kepernyo k){
 
 		this.pozicio = mezo;
 		this.kopas = kopas;
 		
-		grafikusGyar = new OlajGyar(Jatekmester.kepernyo);
+		grafikusGyar = new OlajGyar(k);
 		
-		grafika = (GrafikusOlajfolt) grafikusGyar.grafikaKeszitese(Jatekmester.kepernyo,this);
+		grafika = (GrafikusOlajfolt) grafikusGyar.grafikaKeszitese(k,this);
 		
 		if(kisrobotneve != "") {
 			nev = kisrobotneve+"olajfoltja";

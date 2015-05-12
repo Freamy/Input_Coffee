@@ -10,9 +10,8 @@ public class Ragacs implements Mezonallo {
 	private String nev;
 	
 	private GrafikusRagacs grafika;
-	
+	private int autoincrement;
 	private boolean megsemmisult;
-	private static int autoincrement = 0;
 	
 	public Ragacs(Mezo mezo,int kopas, int kord[], Kepernyo k){
 		pozicio = mezo;
@@ -95,7 +94,13 @@ public class Ragacs implements Mezonallo {
 	//Új kört kezd.
 	@Override
 	public void tick() {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub
+		kopas--;
+		if(kopas <= 0){
+			pozicio.leregisztral(this);
+			megsemmisult = true;
+			if(grafika!=null) grafika.frissit(this);
+		}
 	}
 	
 	public void tickend() {

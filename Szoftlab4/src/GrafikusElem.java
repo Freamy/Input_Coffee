@@ -3,13 +3,9 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
-import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 
 public abstract class GrafikusElem {
 	protected int x;
@@ -17,7 +13,7 @@ public abstract class GrafikusElem {
 	protected boolean megsemmisult;
 	protected Image kep;
 	protected Kepernyo kepernyo;
-	
+
 	public GrafikusElem(){
 		
 	}
@@ -27,6 +23,7 @@ public abstract class GrafikusElem {
 		this.y = y;
 		this.kep = kepBetoltese(utvonal);
 		this.kepernyo = kepernyo;
+		this.megsemmisult = false;
 	}
 	public Kepernyo getKepernyo(){
 		return kepernyo;

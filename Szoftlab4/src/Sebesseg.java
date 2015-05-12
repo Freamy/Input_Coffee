@@ -15,9 +15,7 @@ public class Sebesseg {
 		if(modosithato) {
 		x += sebesseg.x;
 		y += sebesseg.y;
-		} else {
-			//TODO
-		}
+		} 
 	}
 	//Felezi a sebességet ha módosítható.
 	public void felez(){

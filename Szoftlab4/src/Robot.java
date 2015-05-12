@@ -12,20 +12,17 @@ public class Robot implements Mezonallo{
 
 	private static int autoincrement=0;
 	
-	private Gyar grafikaGyar;
+	private Gyar grafikaGyar = new RobotGyar(Jatekmester.getKepernyo());
 	private GrafikusRobot grafikusRobot;
 	
 	private boolean aktiv;
 	
-	public Robot(Mezo mezo, Navigator navigator){
-		grafikaGyar = new RobotGyar(Jatekmester.kepernyo);
-	}
-
-
-	public Robot(String nev, Mezo mezo, Navigator navigator, Sebesseg sebesseg, int ragacsDb, int olajDb, boolean vesztettem, double megtettUt){
-		this.nev=nev;
-    	
-		this.pozicio = mezo;
+	/*public Robot(Mezo mezo, Navigator navigator){
+		grafikaGyar = 
+	}*/
+	public Robot(String nev, Mezo mezo, Navigator navigator, Sebesseg sebesseg, int ragacsDb, int olajDb, boolean vesztettem, double megtettUt, Gyar gyar){
+		
+		this.nev = nev;
 		this.navigator = navigator;
 		this.sebesseg = sebesseg;
 		this.vesztettem = vesztettem;
@@ -35,12 +32,11 @@ public class Robot implements Mezonallo{
 		this.ugrottMar = false;
 
 		sebesseg = new Sebesseg(0,0);
-		
-		grafikusRobot = (GrafikusRobot) grafikaGyar.grafikaKeszitese(Jatekmester.kepernyo, this);
 
 		megsemmisult = false;
 		
 		int[] kord = navigator.koordinataKonverter(mezo);
+		this.pozicio = mezo;
 		System.out.println("["+nev+"] létrejött, x=("+kord[0]+","+kord[1]+"), v=("
 						+sebesseg.getx()+","+sebesseg.gety()+"), "
 						+((sebesseg.getmodosithato()) ? "modosithato" : "modosithatatlan")+ ", "
@@ -51,6 +47,7 @@ public class Robot implements Mezonallo{
 		
 		mezo.beregisztral(this);
 		
+		grafikusRobot = (GrafikusRobot) gyar.grafikaKeszitese(Jatekmester.getKepernyo(), this);
 	}
 	
 	// Ha az olajfoltotTesz igaz, akkor meghívja az olajfoltotTesz függvényét,
@@ -67,25 +64,13 @@ public class Robot implements Mezonallo{
 			System.out.println("Hiba: ["+nev+"] ebben a körben már ugrott.");
 		} else {
 			if(olajfoltotTesz){
-				olajfoltotTesz("olajfolt");
+				olajfoltotTesz("Olajfolt"+autoincrement+olajDb);
 			}
-			if(ragacsotTesz){
-				ragacsotTesz("ragacs");
-			}
-			/*
-			 * 
-			 * if(!olajfoltNeve.equals("")){
-				olajfoltotTesz(olajfoltNeve);
-
 				//Nem itt vonunk ki az olajDb-bõl hanem a letevõ függvényen belül!
+			else if(ragacsotTesz){
+				ragacsotTesz("Ragacs"+autoincrement+ragacsDb);
 			}
-
-
-			else if(!ragacsNeve.equals("")){
-				ragacsotTesz(ragacsNeve);
-
 				//Nem itt vonunk ki a ragacsDb-bõl hanem a letevõ függvényen belül!
-			}*/
 			pozicio.leregisztral(this);
 			sebesseg.hozzaad(valtozas);
 			ugrik();
@@ -107,7 +92,7 @@ public class Robot implements Mezonallo{
 			System.out.println("Hiba: ["+nev+"] elfogyott a ragacskészlet.");
 		} else {
 		int kord[] = navigator.koordinataKonverter(pozicio);
-		Ragacs ragacs = new Ragacs(pozicio, 5, kord, Jatekmester.kepernyo);
+		Ragacs ragacs = new Ragacs(pozicio, 5, kord,Jatekmester.getKepernyo());
 		pozicio.beregisztral(ragacs);
 		ragacsDb--;
 		}
@@ -125,7 +110,7 @@ public class Robot implements Mezonallo{
 		} else {
 		int kord[] = navigator.koordinataKonverter(pozicio);
 
-		Olajfolt olajfolt = new Olajfolt(pozicio, 5, "", kord);
+		Olajfolt olajfolt = new Olajfolt(pozicio, 5, "", kord,Jatekmester.getKepernyo());
 		pozicio.beregisztral(olajfolt);
 
 		olajDb--;
@@ -215,7 +200,7 @@ public class Robot implements Mezonallo{
 	// meghívja a leregisztrál függvényét és a Kisrobot megsemmisül.
 	public void kisrobotraLeptem(Kisrobot kireLeptem){
 		System.out.println("["+nev+"] ütközött: "+kireLeptem.getNev()+".");
-		kireLeptem.robotMegsemmisiti(Jatekmester.kepernyo);
+		kireLeptem.robotMegsemmisiti(Jatekmester.getKepernyo());
 	}
 	
 	// Ilyenkor a robot a kireLeptem robottal ütközött.
@@ -323,7 +308,7 @@ public class Robot implements Mezonallo{
 	
 	// Új kört kezd.
 	public void tick(){
-		
+
 	}
 	
 	public void tickend() {
@@ -337,16 +322,23 @@ public class Robot implements Mezonallo{
 	public void setNev(String nev) {
 		this.nev = nev;
 	}
+	
+	public void setkopas(int kop) {
+		
+	}
 
 	public int getX() {
+		// TODO Auto-generated method stub
 		return pozicio.getX();
 	}
 
 	public int getY() {
+		// TODO Auto-generated method stub
 		return pozicio.getY();
 	}
 
 	public boolean getMegsemmisult() {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -377,13 +369,6 @@ public class Robot implements Mezonallo{
 					+"\nUgrottMar: "+ugrottMar
 					+"\n");
 		}
-	}
-
-
-	@Override
-	public void setkopas(int kop) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

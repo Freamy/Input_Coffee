@@ -6,15 +6,16 @@ public class GrafikusPalya extends GrafikusElem {
 	int mezomeret;
 	private boolean[][] palya;
 	private Image kulso;
-
+	private Image belso;
 	public GrafikusPalya(int x, int y, int mezomeret, String utvonalBelso, String utvonalKulso, Kepernyo kepernyo) {
 		super(x, y, utvonalBelso, kepernyo);
+		belso = this.kepBetoltese(utvonalBelso);
 		kulso = this.kepBetoltese(utvonalKulso);
 		this.mezomeret = 64;
 	}
 	
 	public void grafikusPalyaFelvevese(Navigator n){
-		kepernyo = Jatekmester.kepernyo;
+		kepernyo = Jatekmester.getKepernyo();
 		kepernyo.grafikusElemHozzaad(this);
 		palya = n.getPalya();
 	}
@@ -28,15 +29,15 @@ public class GrafikusPalya extends GrafikusElem {
 				int xoffset = i*mezomeret;
 				int yoffset = j*mezomeret;
 				if(!palya[i][j]){
-					g2.drawImage(kep,x+xoffset,y+yoffset,null);
+					g2.drawImage(belso,x+xoffset,y+yoffset,null);
 				}
 				else{
 					g2.drawImage(kulso,x+xoffset,y+yoffset,null);
 				}
 			}
 		}
+		
 	}
-	
 	
 	public void frissit(Navigator navigator){
 		for(int i=0; i<palya.length; i++) {
@@ -45,7 +46,6 @@ public class GrafikusPalya extends GrafikusElem {
 			}
 		}
 	}
-
 }
 
 
