@@ -850,7 +850,7 @@ public class Jatekmester extends JFrame{
 		this.add(kepernyo);
 		this.setFocusable(true);
 		this.setResizable(true);
-		this.setSize(12*64,12*64);
+		this.setSize(navigator.getX()*64,navigator.getY()*64);
 		this.setResizable(false);
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
