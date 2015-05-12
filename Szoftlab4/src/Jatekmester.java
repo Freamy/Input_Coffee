@@ -676,6 +676,10 @@ public class Jatekmester extends JFrame{
 		}
 		@Override
 		public void keyPressed(KeyEvent arg0) {
+		}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {
 			char c = arg0.getKeyChar();
 			
 			if( c =='1' && !ujragacs){
@@ -713,12 +717,6 @@ public class Jatekmester extends JFrame{
 					System.out.println("A játék véget ért");
 				}
 			}
-			
-		}
-
-		@Override
-		public void keyReleased(KeyEvent arg0) {
-			
 		}
 
 		@Override
@@ -733,8 +731,9 @@ public class Jatekmester extends JFrame{
 		this.ujsebesseg = this.robot.getSebesseg();
 		robotok.get(i).setAktiv(false);
 		robotok.get(i).getGrafika().frissit(robotok.get(i));
-		getKepernyo().rajzol(getFrame());
+		getKepernyo().rajzol(this);
 		i++;
+			
 		if(i == jatekosszam){
 			i = 0;
 			tick();
@@ -745,7 +744,7 @@ public class Jatekmester extends JFrame{
 		this.ujragacs = false;
 		robotok.get(i).setAktiv(true);
 		robotok.get(i).getGrafika().frissit(robotok.get(i));
-		getKepernyo().rajzol(getFrame());
+		getKepernyo().rajzol(this);
 	}
 	
 	void kisrobotlepteto(){

@@ -93,7 +93,6 @@ public class Robot implements Mezonallo{
 		} else {
 		int kord[] = navigator.koordinataKonverter(pozicio);
 		Ragacs ragacs = new Ragacs(pozicio, 5, kord,Jatekmester.getKepernyo());
-		pozicio.beregisztral(ragacs);
 		ragacsDb--;
 		}
 		}
@@ -111,7 +110,6 @@ public class Robot implements Mezonallo{
 		int kord[] = navigator.koordinataKonverter(pozicio);
 
 		Olajfolt olajfolt = new Olajfolt(pozicio, 5, "", kord,Jatekmester.getKepernyo());
-		pozicio.beregisztral(olajfolt);
 
 		olajDb--;
 		}
@@ -142,6 +140,7 @@ public class Robot implements Mezonallo{
 		}
 		} else {
 			System.out.println("["+nev+"] nem tud ugrani, mert a pálya szélén van.");
+			vesztettel();
 		}
 		}
 		}

@@ -8,7 +8,6 @@ import java.awt.*;
 public class Kepernyo extends JPanel{
 	private ArrayList<GrafikusElem> grafikak;
 	private boolean kijelez;
-	private JFrame frame;
 	
 	public Kepernyo(Navigator navigator){
 		grafikak = new ArrayList<GrafikusElem>();
@@ -33,8 +32,6 @@ public class Kepernyo extends JPanel{
 		}
 		*/
 	}
-	
-	
 	public void grafikusElemHozzaad(GrafikusElem grafikusElem){
 		grafikak.add(grafikusElem);
 	}	
