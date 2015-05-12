@@ -655,7 +655,7 @@ public class Jatekmester extends JFrame{
 			if(random2 > n) random2 = random2 - n;
 			if(random > n) random = random - n;
 			Mezo mezo = navigator.getMezo(random,random2);
-			while(navigator.getKulsoMezo(random,random2)){
+			while(navigator.getKulsoMezo(random,random2) || navigator.getMezo(random,random2).rajtamAllok.size()>0){
 				random++;
 				random2--;
 				if(random > n) random -=n;

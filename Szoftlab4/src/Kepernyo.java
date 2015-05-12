@@ -33,6 +33,8 @@ public class Kepernyo extends JPanel{
 		}
 		*/
 	}
+	
+	
 	public void grafikusElemHozzaad(GrafikusElem grafikusElem){
 		grafikak.add(grafikusElem);
 	}	
